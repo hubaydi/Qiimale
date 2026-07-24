@@ -1,5 +1,5 @@
-import { withPayload } from '@payloadcms/next/withPayload';
-import createNextIntlPlugin from 'next-intl/plugin';
+import { withPayload } from "@payloadcms/next/withPayload";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -7,7 +7,7 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   reactCompiler: true,
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '**' } as const],
+    remotePatterns: [{ protocol: "https", hostname: "**" } as const],
   },
 };
 

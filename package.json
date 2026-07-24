@@ -12,6 +12,8 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation biome check",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "format": "cross-env NODE_OPTIONS=--no-deprecation biome format --write"
   },
   "dependencies": {

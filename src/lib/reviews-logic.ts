@@ -26,7 +26,7 @@ export function canUpvote(
 }
 
 export function canPublishReview(
-  user: { _verified?: boolean } | null,
+  user: { _verified?: boolean | null } | null,
 ): boolean {
   return Boolean(user?._verified);
 }

@@ -5,6 +5,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Categories } from "./collections/Categories";
+import { Cities } from "./collections/Cities";
 import { Users } from "./collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
@@ -16,7 +17,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   editor: lexicalEditor(),
-  collections: [Users, Categories],
+  collections: [Users, Categories, Cities],
   localization: {
     locales: ["so", "en"],
     defaultLocale: "so",

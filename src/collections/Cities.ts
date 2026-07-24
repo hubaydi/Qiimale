@@ -2,8 +2,8 @@ import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 import { isAdmin } from "../access/isAdmin";
 
-export const Categories: CollectionConfig = {
-  slug: "categories",
+export const Cities: CollectionConfig = {
+  slug: "cities",
   admin: { useAsTitle: "name" },
   access: {
     read: () => true,
@@ -14,13 +14,5 @@ export const Categories: CollectionConfig = {
   fields: [
     { name: "name", type: "text", required: true, localized: true },
     slugField({ useAsSlug: "name", position: "sidebar" }),
-    {
-      name: "icon",
-      type: "text",
-      admin: {
-        position: "sidebar",
-        description: "lucide icon name, e.g. utensils, graduation-cap",
-      },
-    },
   ],
 };

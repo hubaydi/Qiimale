@@ -7,9 +7,11 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Categories } from "./collections/Categories";
 import { Cities } from "./collections/Cities";
+import { Flags } from "./collections/Flags";
 import { Media } from "./collections/Media";
 import { Places } from "./collections/Places";
 import { Reviews } from "./collections/Reviews";
+import { ReviewUpvotes } from "./collections/ReviewUpvotes";
 import { Users } from "./collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
@@ -21,7 +23,16 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   editor: lexicalEditor(),
-  collections: [Users, Categories, Cities, Media, Places, Reviews],
+  collections: [
+    Users,
+    Categories,
+    Cities,
+    Media,
+    Places,
+    Reviews,
+    ReviewUpvotes,
+    Flags,
+  ],
   localization: {
     locales: ["so", "en"],
     defaultLocale: "so",

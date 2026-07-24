@@ -73,6 +73,8 @@ export interface Config {
     media: Media;
     places: Place;
     reviews: Review;
+    'review-upvotes': ReviewUpvote;
+    flags: Flag;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +88,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    'review-upvotes': ReviewUpvotesSelect<false> | ReviewUpvotesSelect<true>;
+    flags: FlagsSelect<false> | FlagsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -272,6 +276,31 @@ export interface Review {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-upvotes".
+ */
+export interface ReviewUpvote {
+  id: string;
+  review: string | Review;
+  user: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flags".
+ */
+export interface Flag {
+  id: string;
+  review: string | Review;
+  reporter: string | User;
+  reason: 'fake' | 'offensive' | 'spam' | 'coi' | 'other';
+  note?: string | null;
+  status: 'open' | 'resolved';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -317,6 +346,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reviews';
         value: string | Review;
+      } | null)
+    | ({
+        relationTo: 'review-upvotes';
+        value: string | ReviewUpvote;
+      } | null)
+    | ({
+        relationTo: 'flags';
+        value: string | Flag;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -488,6 +525,29 @@ export interface ReviewsSelect<T extends boolean = true> {
   status?: T;
   upvoteCount?: T;
   flagCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-upvotes_select".
+ */
+export interface ReviewUpvotesSelect<T extends boolean = true> {
+  review?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flags_select".
+ */
+export interface FlagsSelect<T extends boolean = true> {
+  review?: T;
+  reporter?: T;
+  reason?: T;
+  note?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

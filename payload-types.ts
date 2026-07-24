@@ -72,6 +72,7 @@ export interface Config {
     cities: City;
     media: Media;
     places: Place;
+    reviews: Review;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     cities: CitiesSelect<false> | CitiesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -248,6 +250,28 @@ export interface Place {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  place: string | Place;
+  author: string | User;
+  rating: number;
+  text: string;
+  photos?:
+    | {
+        image: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'published' | 'hidden' | 'removed';
+  upvoteCount?: number | null;
+  flagCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -289,6 +313,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'places';
         value: string | Place;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: string | Review;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -439,6 +467,27 @@ export interface PlacesSelect<T extends boolean = true> {
   submittedBy?: T;
   ratingAvg?: T;
   reviewCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  place?: T;
+  author?: T;
+  rating?: T;
+  text?: T;
+  photos?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  status?: T;
+  upvoteCount?: T;
+  flagCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }

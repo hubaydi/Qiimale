@@ -1,0 +1,102 @@
+{
+  "App": { "name": "Qiimale", "tagline": "Qiimayn goobo & adeegyo Soomaaliya" },
+  "Nav": {
+    "home": "Bogga Hore",
+    "search": "Raadi",
+    "addPlace": "Ku dar goob",
+    "account": "Akoonkayga",
+    "login": "Geli",
+    "logout": "Ka bax",
+    "language": "English"
+  },
+  "Search": {
+    "placeholder": "Raadi goob ama adeeg...",
+    "results": "Natiijooyinka",
+    "empty": "Wax goob ah lama helin.",
+    "allCities": "Dhamaan magaalooyinka",
+    "allCategories": "Dhamaan qaybaha"
+  },
+  "Place": {
+    "reviews": "{count, plural, one {# qiimayn} other {# qiimayn}}",
+    "noReviews": "Wax qiimayn ah weli ma jirto.",
+    "noReviewsHint": "Noqo qofka u hor ee qiimaynka!",
+    "rating": "Cabbir guud",
+    "writeReview": "Qor qiimayn",
+    "editReview": "Wax ka beddel qiimayntaada",
+    "pending": "Goobtaada waa la sugayaa oggolaanshaha maamulka.",
+    "address": "Cinwaan",
+    "approved": "La oggolaaday"
+  },
+  "Review": {
+    "rating": "Xiddig",
+    "comment": "Faallo",
+    "commentPlaceholder": "Sheeg sida aad ku aragto adeegga...",
+    "minLength": "Faallada waa in ay noqoto ugu yaraan 20 xaraf.",
+    "photos": "Sawiro (ila 3)",
+    "submit": "Soo gudbi",
+    "upvote": "Taageer",
+    "upvoted": "Waad taageertay",
+    "flag": "Calaamad",
+    "flagged": "Waad calaamadeysay",
+    "selfUpvote": "Qiimayntaada ma taageeri kartid.",
+    "alreadyFlagged": "Hadii aad horay u calaamadaysay.",
+    "by": "{name}",
+    "sortRecent": "Ugu dambeeya",
+    "sortTop": "Ugu taageer badan",
+    "sortHigh": "Ugu sarreya",
+    "sortLow": "Ugu hooseya",
+    "delete": "Tirtir",
+    "confirmDelete": "Ma hubtaa in aad tirtirayso qiimayntaada?"
+  },
+  "Auth": {
+    "register": "Diiwaan geli",
+    "login": "Geli akoonka",
+    "email": "Iimayl",
+    "password": "Erey sir ah",
+    "name": "Magacaaga",
+    "google": "Soo geli Google-ga",
+    "verifyEmail": "Furi iimaylka si aad qiimayn u qortid.",
+    "emailSent": "Waxaanu ku soo dirnay iimayl xaqiijin ah.",
+    "verifySuccess": "Iimaylkaaga waa la xaqiijiyay. Hadda waxaad qori kartaa qiimayn.",
+    "verifyFail": "Xaqiijinta ayaa fashilantay.",
+    "noAccount": "Ma leedahay akoon? Diiwaan geli.",
+    "haveAccount": "Akoon ma leedahay? Soo geli."
+  },
+  "Account": {
+    "myReviews": "Qiimaynkaaga",
+    "myPlaces": "Goobooyinkaaga",
+    "statusPending": "Sugitaan",
+    "statusApproved": "La oggolaaday"
+  },
+  "Flag": {
+    "title": "Calaamad qiimayntan",
+    "reason": "Sababta",
+    "fake": "Been abuur",
+    "offensive": "Caajib xumo",
+    "spam": "Spam",
+    "coi": "Khilaaf mudnaan",
+    "other": "Kale",
+    "note": "Faallo (ixtiyaac)",
+    "submit": "Calaamad"
+  },
+  "AddPlace": {
+    "title": "Ku dar goob cusub",
+    "name": "Magaca goobta",
+    "category": "Qayb",
+    "city": "Magaalada",
+    "address": "Cinwaan (ixtiyaac)",
+    "description": "Faahfaahin (ixtiyaac)",
+    "submit": "Soo gudbi",
+    "success": "Mahadsanid! Goobka waa la soo gudbiyay, maamulku ayaa hubin doona."
+  },
+  "Errors": {
+    "UNAUTHENTICATED": "Fadlan hore u geli.",
+    "UNVERIFIED": "Furi iimaylkaaga kahor qiimayn qoridda.",
+    "NOT_FOUND": "Lama helin.",
+    "FORBIDDEN": "Lama oggola.",
+    "ALREADY_FLAGGED": "Hadii aad horay u calaamadaysay.",
+    "SELF_UPVOTE": "Qiimayntaada ma taageeri kartid.",
+    "VALIDATION": "Xog aan saxnayn.",
+    "CONFLICT": "Khilaaf ah."
+  }
+}

@@ -15,5 +15,5 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || "",
   }),
-  sharp,
+  sharp: sharp as unknown as never,
 });

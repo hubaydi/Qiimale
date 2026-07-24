@@ -9,6 +9,7 @@ import {
   error,
   setSessionCookie,
 } from "@/lib/types";
+import type { User } from "@/payload-types";
 
 const registerSchema = z.object({
   name: z.string().min(2),
@@ -79,7 +80,7 @@ export async function loginUser(
     );
   }
   const payload = await getPayloadClient();
-  let res;
+  let res: Awaited<ReturnType<typeof payload.login>>;
   try {
     res = await payload.login({ collection: "users", data: parsed.data });
   } catch {
@@ -90,7 +91,10 @@ export async function loginUser(
   setSessionCookie(cookieStore, res.token);
   return {
     ok: true,
-    data: { token: res.token, verified: Boolean(res.user?._verified) },
+    data: {
+      token: res.token,
+      verified: Boolean((res.user as User)?._verified),
+    },
   };
 }
 

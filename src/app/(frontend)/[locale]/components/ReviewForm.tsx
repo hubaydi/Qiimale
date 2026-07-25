@@ -60,7 +60,7 @@ export function ReviewForm({
     setErr(null);
 
     if (rating < 1) {
-      setErr(t("rating") + " waa qasab.");
+      setErr(`${t("rating")} waa qasab.`);
       return;
     }
     if (text.trim().length < 20) {
@@ -140,6 +140,7 @@ export function ReviewForm({
               key={src}
               className="relative aspect-square rounded-xl overflow-hidden border group"
             >
+              {/* biome-ignore lint/performance/noImgElement: local object url preview */}
               <img
                 src={src}
                 alt={`Preview ${i + 1}`}

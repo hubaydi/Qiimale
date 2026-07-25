@@ -3,7 +3,6 @@ import {
   CheckCircle2,
   Clock,
   MessageSquare,
-  Star,
   User as UserIcon,
 } from "lucide-react";
 import Link from "next/link";

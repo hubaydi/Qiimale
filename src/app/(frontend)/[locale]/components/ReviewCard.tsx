@@ -95,6 +95,7 @@ export async function ReviewCard({
                 rel="noreferrer"
                 className="group relative block h-20 w-20 overflow-hidden rounded-lg border bg-muted"
               >
+                {/* biome-ignore lint/performance/noImgElement: media upload preview */}
                 <img
                   src={url}
                   alt={img?.alt || "Review photo"}

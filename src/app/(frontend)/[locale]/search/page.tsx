@@ -1,5 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import type { Where } from "payload";
 import { getPayloadClient } from "@/lib/get-payload";
+import type { Place } from "@/payload-types";
 import { PlaceCard } from "../components/PlaceCard";
 
 export default async function SearchPage({
@@ -12,11 +14,11 @@ export default async function SearchPage({
   const params = await searchParams;
   const payload = await getPayloadClient();
 
-  const and: any[] = [{ status: { equals: "approved" } }];
-  if (params.q) and.push({ name: { contains: params.q } });
+  const andConditions: Where[] = [{ status: { equals: "approved" } }];
+  if (params.q) andConditions.push({ name: { contains: params.q } });
   const placeDocs = await payload.find({
     collection: "places",
-    where: { and },
+    where: { and: andConditions },
     limit: 40,
     overrideAccess: true,
     depth: 1,
@@ -24,7 +26,7 @@ export default async function SearchPage({
     fallbackLocale: "so",
   });
 
-  let filtered = placeDocs.docs;
+  let filtered: Place[] = placeDocs.docs;
   if (params.category) {
     filtered = (
       await payload.find({
@@ -42,14 +44,19 @@ export default async function SearchPage({
         fallbackLocale: "so",
       })
     ).docs;
-    if (params.q)
-      filtered = filtered.filter((p: any) =>
-        p.name.toLowerCase().includes(params.q!.toLowerCase()),
+    if (params.q) {
+      const q = params.q.toLowerCase();
+      filtered = filtered.filter((p: Place) =>
+        p.name.toLowerCase().includes(q),
       );
+    }
   }
   if (params.city)
     filtered = filtered.filter(
-      (p: any) => typeof p.city === "object" && p.city?.slug === params.city,
+      (p: Place) =>
+        typeof p.city === "object" &&
+        p.city !== null &&
+        (p.city as { slug?: string }).slug === params.city,
     );
 
   return (
@@ -59,7 +66,7 @@ export default async function SearchPage({
         <p className="text-muted-foreground">{t("empty")}</p>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-          {filtered.map((p: any) => (
+          {filtered.map((p: Place) => (
             <PlaceCard key={p.id} place={p} locale={locale} />
           ))}
         </div>

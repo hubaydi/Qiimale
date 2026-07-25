@@ -1,11 +1,32 @@
 import * as Icons from "lucide-react";
 import Link from "next/link";
+import type { Category, City, Place } from "@/payload-types";
 import { StarRating } from "./StarRating";
 
-export function PlaceCard({ place, locale }: { place: any; locale: string }) {
-  const category = typeof place.category === "object" ? place.category : null;
-  const city = typeof place.city === "object" ? place.city : null;
-  const Icon = category?.icon ? (Icons as any)[category.icon] : Icons.MapPin;
+export function PlaceCard({
+  place,
+  locale,
+}: {
+  place: Place;
+  locale?: string;
+}) {
+  const _currentLocale = locale;
+  const category =
+    typeof place.category === "object" && place.category !== null
+      ? (place.category as Category)
+      : null;
+  const city =
+    typeof place.city === "object" && place.city !== null
+      ? (place.city as City)
+      : null;
+  const iconName = category?.icon as keyof typeof Icons | undefined;
+  // biome-ignore lint/performance/noDynamicNamespaceImportAccess: lucide icon lookup
+  const iconComponent = iconName ? Icons[iconName] : null;
+  const Icon =
+    (iconComponent as React.ComponentType<{
+      size?: number;
+      className?: string;
+    }>) || Icons.MapPin;
   return (
     <Link
       href={`/place/${place.slug}`}
@@ -15,8 +36,7 @@ export function PlaceCard({ place, locale }: { place: any; locale: string }) {
         <div>
           <div className="font-semibold">{place.name}</div>
           <div className="text-sm text-muted-foreground">
-            {category?.name?.[locale] ?? category?.name} ·{" "}
-            {city?.name?.[locale] ?? city?.name}
+            {category?.name} · {city?.name}
           </div>
         </div>
         {Icon ? (

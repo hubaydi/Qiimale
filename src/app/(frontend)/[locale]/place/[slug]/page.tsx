@@ -1,11 +1,4 @@
-import {
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  MessageSquare,
-  Plus,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, MapPin, MessageSquare, Plus, Star } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -214,7 +207,13 @@ export default async function PlacePage({
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {tReview(`sort${s[0].toUpperCase()}${s.slice(1)}` as any)}
+                  {tReview(
+                    `sort${s[0].toUpperCase()}${s.slice(1)}` as
+                      | "sortRecent"
+                      | "sortTop"
+                      | "sortHigh"
+                      | "sortLow",
+                  )}
                 </Link>
               ))}
             </div>

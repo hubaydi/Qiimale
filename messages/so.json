@@ -1,5 +1,12 @@
 {
   "App": { "name": "Qiimale", "tagline": "Qiimayn goobo & adeegyo Soomaaliya" },
+  "Home": {
+    "categories": "Raadi qayb ahaan",
+    "topRated": "Goobaha ugu qiimaha badan",
+    "latestReviews": "Qiimaynaha ugu dambeeya",
+    "viewAll": "Arag dhamaan",
+    "searchButton": "Raadi"
+  },
   "Nav": {
     "home": "Bogga Hore",
     "search": "Raadi",

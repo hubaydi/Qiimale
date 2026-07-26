@@ -1,5 +1,12 @@
 {
   "App": { "name": "Qiimale", "tagline": "Review Somali places & services" },
+  "Home": {
+    "categories": "Browse by category",
+    "topRated": "Top rated places",
+    "latestReviews": "Latest reviews",
+    "viewAll": "View all",
+    "searchButton": "Search"
+  },
   "Nav": {
     "home": "Home",
     "search": "Search",

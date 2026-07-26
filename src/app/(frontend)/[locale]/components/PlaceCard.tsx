@@ -30,22 +30,29 @@ export function PlaceCard({
   return (
     <Link
       href={`/place/${place.slug}`}
-      className="block rounded-lg border p-4 hover:bg-muted/50"
+      className="group block rounded-xl border bg-card p-5 ring-1 ring-foreground/5 transition-all hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <div className="font-semibold">{place.name}</div>
-          <div className="text-sm text-muted-foreground">
-            {category?.name} · {city?.name}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="font-semibold leading-snug group-hover:text-primary">
+            {place.name}
+          </div>
+          <div className="mt-0.5 truncate text-sm text-muted-foreground">
+            {category?.name}
+            {city?.name ? ` · ${city.name}` : null}
           </div>
         </div>
         {Icon ? (
-          <Icon size={18} className="text-muted-foreground shrink-0" />
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+            <Icon size={18} className="text-muted-foreground" />
+          </div>
         ) : null}
       </div>
-      <div className="mt-2 flex items-center gap-2 text-sm">
+      <div className="mt-3 flex items-center gap-2 border-t pt-3 text-sm">
         <StarRating value={Math.round(place.ratingAvg || 0)} />
-        <span className="text-muted-foreground">{place.reviewCount || 0}</span>
+        <span className="text-muted-foreground">
+          {place.reviewCount || 0}
+        </span>
       </div>
     </Link>
   );

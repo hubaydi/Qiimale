@@ -9,7 +9,13 @@ export const Flags: CollectionConfig = {
     defaultColumns: ["review", "reporter", "reason", "status", "createdAt"],
   },
   access: {
-    read: isAdmin,
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+      if (user.role === "admin") return true;
+      return {
+        reporter: { equals: user.id },
+      };
+    },
     create: authenticated,
     update: isAdmin,
     delete: isAdmin,

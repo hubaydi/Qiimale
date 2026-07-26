@@ -1,3 +1,4 @@
+import * as Icons from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Where } from "payload";
 import { getPayloadClient } from "@/lib/get-payload";
@@ -60,7 +61,20 @@ export default async function SearchPage({
     );
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <form action="/search" className="relative">
+        <Icons.Search
+          className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground"
+          aria-hidden
+        />
+        <input
+          name="q"
+          defaultValue={params.q ?? ""}
+          placeholder={t("placeholder")}
+          className="w-full rounded-xl border bg-background py-3 pl-12 pr-4 text-base shadow-sm transition-shadow placeholder:text-muted-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring/50"
+          aria-label={t("placeholder")}
+        />
+      </form>
       <h1 className="text-xl font-semibold">{t("results")}</h1>
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">{t("empty")}</p>

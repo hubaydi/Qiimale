@@ -58,6 +58,7 @@
   "Auth": {
     "register": "Sign up",
     "login": "Log in",
+    "logout": "Log out",
     "email": "Email",
     "password": "Password",
     "name": "Your name",

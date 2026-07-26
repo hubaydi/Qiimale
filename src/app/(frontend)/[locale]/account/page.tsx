@@ -11,6 +11,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import type { Place, Review } from "@/payload-types";
+import { LogoutButton } from "../components/LogoutButton";
 import { StarRating } from "../components/StarRating";
 
 export default async function AccountPage() {
@@ -53,7 +54,7 @@ export default async function AccountPage() {
             <UserIcon size={32} />
           )}
         </div>
-        <div className="text-center sm:text-left space-y-1">
+        <div className="flex-1 text-center sm:text-left space-y-1">
           <h1 className="text-2xl font-extrabold tracking-tight">
             {user.name}
           </h1>
@@ -76,6 +77,9 @@ export default async function AccountPage() {
               </span>
             )}
           </div>
+        </div>
+        <div className="shrink-0">
+          <LogoutButton />
         </div>
       </div>
 

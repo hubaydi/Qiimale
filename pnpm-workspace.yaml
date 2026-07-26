@@ -1,7 +1,8 @@
 allowBuilds:
-  esbuild: set this to true or false
-  msw: set this to true or false
-  sharp: set this to true or false
-ignoredBuiltDependencies:
+  '@parcel/watcher': false
+  '@swc/core': false
+  esbuild: false
+  msw: false
+  sharp: true
+onlyBuiltDependencies:
   - sharp
-  - unrs-resolver

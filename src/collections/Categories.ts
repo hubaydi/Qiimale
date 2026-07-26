@@ -1,11 +1,10 @@
 import type { CollectionConfig } from "payload";
+import { slugField } from "payload";
 import { isAdmin } from "../access/isAdmin";
 
 export const Categories: CollectionConfig = {
   slug: "categories",
-  admin: {
-    useAsTitle: "name",
-  },
+  admin: { useAsTitle: "name" },
   access: {
     read: () => true,
     create: isAdmin,
@@ -13,19 +12,14 @@ export const Categories: CollectionConfig = {
     delete: isAdmin,
   },
   fields: [
+    { name: "name", type: "text", required: true, localized: true },
+    slugField({ useAsSlug: "name", position: "sidebar" }),
     {
-      name: "name",
+      name: "icon",
       type: "text",
-      required: true,
-      unique: true,
-    },
-    {
-      name: "slug",
-      type: "text",
-      required: true,
-      unique: true,
       admin: {
         position: "sidebar",
+        description: "lucide icon name, e.g. utensils, graduation-cap",
       },
     },
   ],

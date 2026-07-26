@@ -1,0 +1,110 @@
+{
+  "App": { "name": "Qiimale", "tagline": "Review Somali places & services" },
+  "Home": {
+    "categories": "Browse by category",
+    "topRated": "Top rated places",
+    "latestReviews": "Latest reviews",
+    "viewAll": "View all",
+    "searchButton": "Search"
+  },
+  "Nav": {
+    "home": "Home",
+    "search": "Search",
+    "addPlace": "Add a place",
+    "account": "My account",
+    "login": "Log in",
+    "logout": "Log out",
+    "language": "Soomaali"
+  },
+  "Search": {
+    "placeholder": "Search a place or service...",
+    "results": "Results",
+    "empty": "No places found.",
+    "allCities": "All cities",
+    "allCategories": "All categories"
+  },
+  "Place": {
+    "reviews": "{count, plural, one {# review} other {# reviews}}",
+    "noReviews": "No reviews yet.",
+    "noReviewsHint": "Be the first to review!",
+    "rating": "Overall rating",
+    "writeReview": "Write a review",
+    "editReview": "Edit your review",
+    "pending": "Your place is awaiting admin approval.",
+    "address": "Address",
+    "approved": "Approved"
+  },
+  "Review": {
+    "rating": "Stars",
+    "comment": "Comment",
+    "commentPlaceholder": "Tell us how you experienced the service...",
+    "minLength": "Comment must be at least 20 characters.",
+    "photos": "Photos (up to 3)",
+    "submit": "Submit",
+    "upvote": "Agree",
+    "upvoted": "You agreed",
+    "flag": "Flag",
+    "flagged": "You flagged this",
+    "selfUpvote": "You can't upvote your own review.",
+    "alreadyFlagged": "You already flagged this review.",
+    "by": "{name}",
+    "sortRecent": "Most recent",
+    "sortTop": "Most helpful",
+    "sortHigh": "Highest",
+    "sortLow": "Lowest",
+    "delete": "Delete",
+    "confirmDelete": "Delete your review?"
+  },
+  "Auth": {
+    "register": "Sign up",
+    "login": "Log in",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "name": "Your name",
+    "google": "Continue with Google",
+    "verifyEmail": "Verify your email before reviewing.",
+    "emailSent": "We sent you a verification email.",
+    "verifySuccess": "Your email is verified. You can review now.",
+    "verifyFail": "Verification failed.",
+    "noAccount": "No account? Sign up.",
+    "haveAccount": "Have an account? Log in."
+  },
+  "Account": {
+    "myReviews": "My reviews",
+    "myPlaces": "My places",
+    "statusPending": "Pending",
+    "statusApproved": "Approved"
+  },
+  "Flag": {
+    "title": "Flag this review",
+    "reason": "Reason",
+    "fake": "Fake",
+    "offensive": "Offensive",
+    "spam": "Spam",
+    "coi": "Conflict of interest",
+    "other": "Other",
+    "note": "Note (optional)",
+    "submit": "Flag"
+  },
+  "AddPlace": {
+    "title": "Add a new place",
+    "name": "Place name",
+    "category": "Category",
+    "city": "City",
+    "address": "Address (optional)",
+    "description": "Description (optional)",
+    "submit": "Submit",
+    "success": "Thanks! Your place was submitted and is pending admin review."
+  },
+  "Errors": {
+    "UNAUTHENTICATED": "Please log in first.",
+    "UNVERIFIED": "Verify your email before reviewing.",
+    "NOT_FOUND": "Not found.",
+    "FORBIDDEN": "Not allowed.",
+    "ALREADY_FLAGGED": "You already flagged this review.",
+    "SELF_UPVOTE": "You can't upvote your own review.",
+    "VALIDATION": "Invalid data.",
+    "CONFLICT": "Conflict."
+  }
+}

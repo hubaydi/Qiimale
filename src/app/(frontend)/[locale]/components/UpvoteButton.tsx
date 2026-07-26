@@ -2,6 +2,7 @@
 
 import { ThumbsUp } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toggleUpvote } from "@/lib/actions/upvotes";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ export function UpvoteButton({
   upvoted: boolean;
 }) {
   const t = useTranslations("Review");
+  const router = useRouter();
   const [pending, start] = useTransition();
 
   return (
@@ -25,6 +27,7 @@ export function UpvoteButton({
       onClick={() =>
         start(async () => {
           await toggleUpvote({ reviewId });
+          router.refresh();
         })
       }
       className={cn(

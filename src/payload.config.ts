@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { r2Storage } from "@payloadcms/storage-r2";
+import { s3Storage } from "@payloadcms/storage-s3";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Categories } from "./collections/Categories";
@@ -47,16 +47,24 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "../payload-types.ts"),
   },
   plugins: [
-    // ponytail: 3.86 storage-r2 expects a Cloudflare R2Bucket binding, not
-    // AWS-style credentials. Wiring the real binding is a deploy-time task;
-    // in dev the Media collection falls back to Payload's local-disk storage.
-    ...(process.env.R2_BUCKET
-      ? [
-          r2Storage({
-            collections: { media: true },
-            bucket: process.env.R2_BUCKET,
-          } as unknown as Parameters<typeof r2Storage>[0]),
-        ]
-      : []),
+    s3Storage({
+      collections: {
+        media: {
+          prefix: "uploads",
+          generateFileURL: ({ filename, prefix }) => {
+            return `${process.env.S3_CUSTOM_DOMAIN}/${prefix}/${filename}`;
+          },
+        },
+      },
+      bucket: process.env.S3_BUCKET || "",
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.S3_SECRET || "",
+        },
+        region: "auto",
+        endpoint: process.env.S3_ENDPOINT || "",
+      },
+    }),
   ],
 });

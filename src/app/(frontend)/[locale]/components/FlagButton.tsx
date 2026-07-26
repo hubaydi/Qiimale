@@ -76,7 +76,7 @@ export function FlagButton({
                   }
                 })
               }
-              className="block w-full px-2 py-1.5 text-left hover:bg-muted rounded transition-colors disabled:opacity-50 cursor-pointer"
+              className="block w-full px-2 py-1.5 text-left hover:bg-muted rounded-md transition-colors disabled:opacity-50 cursor-pointer"
             >
               {t(`Flag.${r}`)}
             </button>

@@ -45,8 +45,8 @@ export default async function AccountPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-4">
       {/* Profile Header */}
-      <div className="rounded-2xl border bg-card p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6 shadow-xs">
-        <div className="h-20 w-20 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl shrink-0">
+      <div className="rounded-2xl border border-border bg-white p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
+        <div className="h-20 w-20 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-2xl shrink-0">
           {user.name ? (
             user.name.slice(0, 2).toUpperCase()
           ) : (
@@ -91,7 +91,7 @@ export default async function AccountPage() {
           </h2>
 
           {reviewDocs.length === 0 ? (
-            <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground space-y-2">
+            <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground space-y-2">
               <p className="text-sm">
                 {locale === "so"
                   ? "Weli qiimayn ma samayn."
@@ -114,7 +114,7 @@ export default async function AccountPage() {
                 return (
                   <div
                     key={r.id}
-                    className="rounded-xl border bg-card p-4 space-y-2 hover:border-primary/50 transition-colors shadow-2xs"
+                    className="rounded-xl border border-border bg-white p-4 space-y-2 hover:border-blue-200 hover:shadow-sm transition-all"
                   >
                     <div className="flex items-center justify-between">
                       {place ? (
@@ -152,7 +152,7 @@ export default async function AccountPage() {
           </h2>
 
           {placeDocs.length === 0 ? (
-            <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground space-y-2">
+            <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground space-y-2">
               <p className="text-sm">
                 {locale === "so"
                   ? "Weli goob ma soo gudbin."
@@ -170,7 +170,7 @@ export default async function AccountPage() {
               {placeDocs.map((p) => (
                 <div
                   key={p.id}
-                  className="rounded-xl border bg-card p-4 flex items-center justify-between hover:border-primary/50 transition-colors shadow-2xs"
+                  className="rounded-xl border border-border bg-white p-4 flex items-center justify-between hover:border-blue-200 hover:shadow-sm transition-all"
                 >
                   <div>
                     {p.status === "approved" ? (

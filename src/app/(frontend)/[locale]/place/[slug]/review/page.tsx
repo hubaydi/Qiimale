@@ -18,7 +18,7 @@ export default async function ReviewPage({
 
   if (!user._verified) {
     return (
-      <div className="max-w-md mx-auto my-12 p-6 rounded-2xl border bg-card text-center space-y-4 shadow-xs">
+      <div className="max-w-md mx-auto my-12 p-6 rounded-2xl border border-border bg-white text-center space-y-4">
         <h2 className="text-xl font-bold">{t("Auth.verifyEmail")}</h2>
         <p className="text-sm text-muted-foreground">{t("Auth.verifyEmail")}</p>
       </div>
@@ -51,7 +51,7 @@ export default async function ReviewPage({
   return (
     <div className="max-w-xl mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold tracking-tight">
+        <h1 className="text-2xl font-bold font-[family-name:var(--font-jakarta)] tracking-tight">
           {existing ? t("Place.editReview") : t("Place.writeReview")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">{place.name}</p>

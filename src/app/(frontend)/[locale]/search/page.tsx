@@ -71,11 +71,14 @@ export default async function SearchPage({
           name="q"
           defaultValue={params.q ?? ""}
           placeholder={t("placeholder")}
-          className="w-full rounded-xl border bg-background py-3 pl-12 pr-4 text-base shadow-sm transition-shadow placeholder:text-muted-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring/50"
+          className="w-full rounded-2xl border border-border bg-white py-3.5 pl-12 pr-4 text-base shadow-sm transition-shadow placeholder:text-muted-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           aria-label={t("placeholder")}
         />
       </form>
-      <h1 className="text-xl font-semibold">{t("results")}</h1>
+      <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600" />
+        {t("results")}
+      </h1>
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">{t("empty")}</p>
       ) : (

@@ -95,7 +95,7 @@ export function ReviewForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-6 max-w-xl bg-card border rounded-2xl p-6 sm:p-8 shadow-xs"
+      className="space-y-6 max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
     >
       <div className="space-y-2">
         <span className="block text-sm font-semibold text-foreground">
@@ -122,7 +122,7 @@ export function ReviewForm({
           onChange={(e) => setText(e.target.value)}
           placeholder={t("commentPlaceholder")}
           rows={5}
-          className="w-full rounded-xl border border-input bg-background p-3.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{t("minLength")}</span>
@@ -158,7 +158,7 @@ export function ReviewForm({
           ))}
 
           {files.length < 3 && (
-            <label className="flex flex-col items-center justify-center aspect-square rounded-xl border border-dashed border-input hover:border-primary/50 hover:bg-muted/50 cursor-pointer transition-all text-center p-2">
+            <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 cursor-pointer transition-all text-center p-2">
               <Upload size={20} className="text-muted-foreground mb-1" />
               <span className="text-xs text-muted-foreground font-medium">
                 Ku dar sawir
@@ -186,7 +186,7 @@ export function ReviewForm({
         <button
           type="submit"
           disabled={pending}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
         >
           {pending ? (
             <>

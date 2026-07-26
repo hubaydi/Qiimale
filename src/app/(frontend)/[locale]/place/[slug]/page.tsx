@@ -93,7 +93,7 @@ export default async function PlacePage({
       </div>
 
       {/* Main Info Card */}
-      <div className="rounded-2xl border bg-card text-card-foreground p-6 sm:p-8 shadow-xs relative overflow-hidden">
+      <div className="rounded-2xl border border-border bg-white text-card-foreground p-6 sm:p-8 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           <div className="space-y-4">
@@ -143,7 +143,7 @@ export default async function PlacePage({
         <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
           <Link
             href={`/place/${slug}/review`}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all shadow-sm hover:shadow-md cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all shadow-sm hover:shadow-md cursor-pointer"
           >
             <Plus size={16} />
             {t("writeReview")}
@@ -155,7 +155,7 @@ export default async function PlacePage({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Rating distribution sidebar */}
         <div className="md:col-span-1 space-y-6">
-          <div className="rounded-xl border bg-card p-5 space-y-4">
+          <div className="rounded-xl border border-border bg-white p-5 space-y-4">
             <h3 className="font-bold text-sm tracking-wide uppercase text-muted-foreground">
               {locale === "so" ? "Qiimaynta" : "Rating breakdown"}
             </h3>
@@ -196,7 +196,7 @@ export default async function PlacePage({
             </h2>
 
             {/* Sort options */}
-            <div className="flex items-center gap-3 text-xs bg-muted/50 p-1 rounded-lg border">
+            <div className="flex items-center gap-3 text-xs bg-muted p-1 rounded-lg border border-border">
               {SORTS.map((s) => (
                 <Link
                   key={s}
@@ -220,7 +220,7 @@ export default async function PlacePage({
           </div>
 
           {reviewDocs.length === 0 ? (
-            <div className="text-center py-12 rounded-xl border border-dashed p-6 text-muted-foreground space-y-2">
+            <div className="text-center py-12 rounded-xl border border-dashed border-border p-6 text-muted-foreground space-y-2">
               <p className="font-semibold text-foreground">{t("noReviews")}</p>
               <p className="text-sm">{t("noReviewsHint")}</p>
             </div>

@@ -79,7 +79,7 @@ export function AddPlaceForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-6 max-w-xl bg-card border rounded-2xl p-6 sm:p-8 shadow-xs"
+      className="space-y-6 max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
     >
       <div className="space-y-2">
         <label
@@ -97,7 +97,7 @@ export function AddPlaceForm() {
               ? "Tusaale: Maqaayadda Hiran"
               : "Example: Hiran Restaurant"
           }
-          className="w-full rounded-xl border border-input bg-background p-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
         />
       </div>
 
@@ -114,7 +114,7 @@ export function AddPlaceForm() {
             id="category"
             name="category"
             required
-            className="w-full rounded-xl border border-input bg-background p-3 text-sm ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
+            className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
           >
             <option value="">-- Doorasho --</option>
             {cats.map((c) => (
@@ -137,7 +137,7 @@ export function AddPlaceForm() {
             id="city"
             name="city"
             required
-            className="w-full rounded-xl border border-input bg-background p-3 text-sm ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
+            className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
           >
             <option value="">-- Doorasho --</option>
             {cities.map((c) => (
@@ -165,7 +165,7 @@ export function AddPlaceForm() {
               ? "Kawaanka Bari, Wadada Degmada..."
               : "East Market, District Street..."
           }
-          className="w-full rounded-xl border border-input bg-background p-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
         />
       </div>
 
@@ -185,7 +185,7 @@ export function AddPlaceForm() {
               ? "Sharaxaad kooban oo ku saabsan goobtan..."
               : "Short description about this place..."
           }
-          className="w-full rounded-xl border border-input bg-background p-3.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all resize-y"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all resize-y"
         />
       </div>
 
@@ -200,7 +200,7 @@ export function AddPlaceForm() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
         >
           {pending ? (
             <>

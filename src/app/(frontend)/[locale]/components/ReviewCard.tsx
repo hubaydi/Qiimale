@@ -52,10 +52,10 @@ export async function ReviewCard({
   }
 
   return (
-    <article className="border rounded-xl p-6 bg-card text-card-foreground shadow-xs transition-shadow hover:shadow-sm space-y-4">
+    <article className="border border-border bg-white rounded-xl p-6 text-card-foreground space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">
             {author?.name ? author.name.charAt(0).toUpperCase() : "?"}
           </div>
           <div>
@@ -93,7 +93,7 @@ export async function ReviewCard({
                 href={url}
                 target="_blank"
                 rel="noreferrer"
-                className="group relative block h-20 w-20 overflow-hidden rounded-lg border bg-muted"
+                className="group relative block h-20 w-20 overflow-hidden rounded-lg ring-1 ring-border bg-muted"
               >
                 {/* biome-ignore lint/performance/noImgElement: media upload preview */}
                 <img
@@ -107,7 +107,7 @@ export async function ReviewCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between border-t pt-4">
+      <div className="flex items-center justify-between border-t border-border pt-4">
         <div className="flex items-center gap-4">
           <UpvoteButton
             reviewId={review.id}

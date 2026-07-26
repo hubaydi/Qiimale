@@ -27,7 +27,7 @@ export function StarRating({
               size={size}
               className={cn(
                 value >= n
-                  ? "fill-amber-400 text-amber-400"
+                  ? "fill-amber-500 text-amber-500"
                   : "text-muted-foreground",
               )}
             />
@@ -44,7 +44,7 @@ export function StarRating({
           size={size}
           className={cn(
             value >= n
-              ? "fill-amber-400 text-amber-400"
+              ? "fill-amber-500 text-amber-500"
               : "text-muted-foreground",
           )}
         />

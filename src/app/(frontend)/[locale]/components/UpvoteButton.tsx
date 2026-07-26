@@ -1,8 +1,8 @@
 "use client";
 
 import { ThumbsUp } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { toggleUpvote } from "@/lib/actions/upvotes";
 import { cn } from "@/lib/utils";

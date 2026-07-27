@@ -133,6 +133,6 @@
     "ALREADY_FLAGGED": "You already flagged this review.",
     "SELF_UPVOTE": "You can't upvote your own review.",
     "VALIDATION": "Invalid data.",
-    "CONFLICT": "Conflict."
+    "CONFLICT": "This email is already registered."
   }
 }

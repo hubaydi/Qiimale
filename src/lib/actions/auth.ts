@@ -43,11 +43,15 @@ export async function registerUser(
       draft: false,
     });
   } catch (e) {
+    const msg = (e as Error)?.message || "";
+    const isDuplicate = /duplicate|already exists|unique/i.test(msg);
     return {
       ok: false,
       error: {
-        code: "CONFLICT",
-        message: (e as Error)?.message || "Email already in use",
+        code: isDuplicate ? "CONFLICT" : "VALIDATION",
+        message: isDuplicate
+          ? "Email already registered."
+          : msg || "Registration failed.",
       },
     };
   }

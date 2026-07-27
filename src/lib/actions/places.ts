@@ -39,7 +39,7 @@ export async function addPlace(
       city: parsed.data.cityId,
       address: parsed.data.address,
       description: parsed.data.description,
-      status: "pending",
+      status: "approved",
       submittedBy: user.id,
     } as RequiredDataFromCollectionSlug<"places">,
     overrideAccess: false,

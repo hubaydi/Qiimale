@@ -146,8 +146,7 @@ export function AddPlaceForm() {
 
     if (!open) return null;
 
-    async function handleSubmit(e: React.FormEvent) {
-      e.preventDefault();
+    async function handleModalSubmit() {
       setModalErr(null);
       if (!name.trim()) {
         setModalErr(label);
@@ -178,10 +177,7 @@ export function AddPlaceForm() {
 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-xl"
-        >
+        <div className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">{title}</h3>
             <button
@@ -236,7 +232,8 @@ export function AddPlaceForm() {
               {t("cancel")}
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={handleModalSubmit}
               disabled={modalPending || !name.trim()}
               className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
             >
@@ -250,7 +247,7 @@ export function AddPlaceForm() {
               )}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     );
   }

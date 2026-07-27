@@ -10,6 +10,7 @@
   "Nav": {
     "home": "Home",
     "search": "Search",
+    "categories": "Categories",
     "addPlace": "Add a place",
     "account": "My account",
     "login": "Log in",
@@ -112,6 +113,15 @@
     "create": "Create",
     "cancel": "Cancel",
     "saving": "Saving..."
+  },
+  "Categories": {
+    "title": "Categories",
+    "empty": "No categories yet."
+  },
+  "Cities": {
+    "title": "Cities",
+    "empty": "No cities yet.",
+    "placesIn": "Places in {city}"
   },
   "Errors": {
     "UNAUTHENTICATED": "Please log in first.",

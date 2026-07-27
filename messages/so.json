@@ -10,6 +10,7 @@
   "Nav": {
     "home": "Bogga Hore",
     "search": "Raadi",
+    "categories": "Qaybaha",
     "addPlace": "Ku dar goob",
     "account": "Akoonkayga",
     "login": "Gal",
@@ -112,6 +113,15 @@
     "create": "Abuur",
     "cancel": "Jooji",
     "saving": "Kaydinaya..."
+  },
+  "Categories": {
+    "title": "Qaybaha",
+    "empty": "Weli qaybo ma jiraan."
+  },
+  "Cities": {
+    "title": "Magaalooyinka",
+    "empty": "Weli magaalooyin ma jiraan.",
+    "placesIn": "Goobaha ku yaala {city}"
   },
   "Errors": {
     "UNAUTHENTICATED": "Fadlan Marka hore akoonkaaga soo gal.",

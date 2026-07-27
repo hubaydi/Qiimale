@@ -1,11 +1,11 @@
-import { LayoutGrid, LogIn, Plus, Search, User } from "lucide-react";
+import { LayoutGrid, LogIn, MapPin, Plus, Search, User } from "lucide-react";
 import Link from "next/link";
 import type { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
 interface NavLinksProps {
   labels: Record<
-    "search" | "categories" | "addPlace" | "account" | "login",
+    "search" | "categories" | "cities" | "addPlace" | "account" | "login",
     string
   >;
   user: Awaited<ReturnType<typeof getCurrentUser>>;
@@ -40,6 +40,16 @@ export function NavLinks({
       >
         <LayoutGrid size={16} />
         {labels.categories}
+      </Link>
+      <Link
+        href="/cities"
+        className={cn(
+          "inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg px-3 py-1.5 transition-colors",
+          linkClassName,
+        )}
+      >
+        <MapPin size={16} />
+        {labels.cities}
       </Link>
       <Link
         href="/add-place"

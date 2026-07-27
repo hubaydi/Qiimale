@@ -12,6 +12,7 @@ export async function Header() {
   const labels = {
     search: t("search"),
     categories: t("categories"),
+    cities: t("cities"),
     addPlace: t("addPlace"),
     account: t("account"),
     login: t("login"),

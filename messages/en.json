@@ -5,7 +5,8 @@
     "topRated": "Top rated places",
     "latestReviews": "Latest reviews",
     "viewAll": "View all",
-    "searchButton": "Search"
+    "searchButton": "Search",
+    "cities": "Browse by city"
   },
   "Nav": {
     "home": "Home",

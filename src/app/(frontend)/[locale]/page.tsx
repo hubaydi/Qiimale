@@ -2,7 +2,7 @@ import * as Icons from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getPayloadClient } from "@/lib/get-payload";
-import type { Category, Place, Review } from "@/payload-types";
+import type { Category, City, Place, Review } from "@/payload-types";
 import { PlaceCard } from "./components/PlaceCard";
 
 function SectionHeader({
@@ -40,6 +40,12 @@ export default async function HomePage() {
 
   const categories = await payload.find({
     collection: "categories",
+    limit: 50,
+    locale,
+    fallbackLocale: "so",
+  });
+  const cities = await payload.find({
+    collection: "cities",
     limit: 50,
     locale,
     fallbackLocale: "so",
@@ -135,6 +141,27 @@ export default async function HomePage() {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        {/* Cities */}
+        <section>
+          <SectionHeader title={t("Home.cities")} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {cities.docs.map((city: City) => (
+              <Link
+                key={city.id}
+                href={`/cities/${city.slug}`}
+                className="group flex flex-col items-center gap-2.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
+              >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
+                  <Icons.MapPin size={20} />
+                </div>
+                <span className="text-sm font-medium text-foreground leading-tight">
+                  {city.name}
+                </span>
+              </Link>
+            ))}
           </div>
         </section>
 

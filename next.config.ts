@@ -9,6 +9,7 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "**" } as const],
   },
+  allowedDevOrigins: ["100.113.62.59"],
 };
 
 export default withPayload(withNextIntl(nextConfig));

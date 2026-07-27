@@ -89,7 +89,7 @@ export default async function LocaleLayout({
                     </li>
                     <li>
                       <a
-                        href="/search"
+                        href="/categories"
                         className="hover:text-white transition-colors"
                       >
                         Categories

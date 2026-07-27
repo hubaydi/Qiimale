@@ -95,7 +95,22 @@
     "address": "Cinwaan (ixtiyaac)",
     "description": "Faahfaahin (ikhtiyaar)",
     "submit": "Soo gudbi",
-    "success": "Mahadsanid! Goobka waa la soo gudbiyay, maamulku ayaa hubin doona."
+    "success": "Mahadsanid! Goobka waa la soo gudbiyay, maamulku ayaa hubin doona.",
+    "stepCity": "Magaalada",
+    "stepCategory": "Qaybta",
+    "stepDetails": "Faahfaahinta",
+    "selectCity": "Dooro magaalo",
+    "createCity": "Ku dar magaalo cusub",
+    "cityName": "Magaca magaalada",
+    "selectCategory": "Dooro qayb",
+    "createCategory": "Ku dar qayb cusub",
+    "categoryName": "Magaca qaybta",
+    "categoryIcon": "Astaanta (ikhtiyaar)",
+    "back": "Dib",
+    "next": "Xiga",
+    "create": "Abuur",
+    "cancel": "Jooji",
+    "saving": "Kaydinaya..."
   },
   "Errors": {
     "UNAUTHENTICATED": "Fadlan Marka hore akoonkaaga soo gal.",

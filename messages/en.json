@@ -95,7 +95,22 @@
     "address": "Address (optional)",
     "description": "Description (optional)",
     "submit": "Submit",
-    "success": "Thanks! Your place was submitted and is pending admin review."
+    "success": "Thanks! Your place was submitted and is pending admin review.",
+    "stepCity": "City",
+    "stepCategory": "Category",
+    "stepDetails": "Details",
+    "selectCity": "Select a city",
+    "createCity": "Create new city",
+    "cityName": "City name",
+    "selectCategory": "Select a category",
+    "createCategory": "Create new category",
+    "categoryName": "Category name",
+    "categoryIcon": "Icon (optional)",
+    "back": "Back",
+    "next": "Next",
+    "create": "Create",
+    "cancel": "Cancel",
+    "saving": "Saving..."
   },
   "Errors": {
     "UNAUTHENTICATED": "Please log in first.",

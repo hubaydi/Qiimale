@@ -13,30 +13,31 @@ export function RegisterForm() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr(null);
     setMsg(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    const fd = new FormData(e.currentTarget);
     setPending(true);
-    const res = await registerUser({
-      name: String(fd.get("name")),
-      email: String(fd.get("email")),
-      password: String(fd.get("password")),
-    });
-    setPending(false);
-    if (!res.ok) {
-      try {
+    try {
+      const res = await registerUser({
+        name: String(fd.get("name") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        password: String(fd.get("password") ?? ""),
+      });
+      if (!res.ok) {
         setErr(
           tErr(res.error.code as Parameters<typeof tErr>[0]) ||
             res.error.message,
         );
-      } catch {
-        setErr(res.error.message);
+        return;
       }
-      return;
+      setMsg(t("emailSent"));
+    } catch {
+      setErr(tErr("VALIDATION"));
+    } finally {
+      setPending(false);
     }
-    setMsg(t("emailSent"));
   }
 
   return (

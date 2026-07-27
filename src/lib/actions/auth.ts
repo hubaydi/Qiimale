@@ -56,20 +56,18 @@ export async function registerUser(
     };
   }
   const cookieStore = await cookies();
-  const res = await payload.login({
-    collection: "users",
-    data: { email: parsed.data.email, password: parsed.data.password },
-  });
-  if (!res.token || !res.user) {
-    return {
-      ok: false,
-      error: {
-        code: "VALIDATION",
-        message: "Registered; please verify your email then log in.",
-      },
-    };
+  let res: Awaited<ReturnType<typeof payload.login>>;
+  try {
+    res = await payload.login({
+      collection: "users",
+      data: { email: parsed.data.email, password: parsed.data.password },
+    });
+  } catch {
+    return { ok: true, data: { message: "registered" } };
   }
-  setSessionCookie(cookieStore, res.token);
+  if (res.token && res.user) {
+    setSessionCookie(cookieStore, res.token);
+  }
   return { ok: true, data: { message: "registered" } };
 }
 

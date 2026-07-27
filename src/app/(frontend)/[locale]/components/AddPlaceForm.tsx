@@ -429,8 +429,8 @@ export function AddPlaceForm() {
     startTransition(async () => {
       const res = await addPlace({
         name: String(fd.get("name") || ""),
-        categoryId: selectedCatId!,
-        cityId: selectedCityId!,
+        categoryId: String(selectedCatId),
+        cityId: String(selectedCityId),
         address: String(fd.get("address") || ""),
         description: String(fd.get("description") || ""),
       });

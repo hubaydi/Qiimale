@@ -11,7 +11,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = await params;
+  const { slug, locale: rawLocale } = await params;
+  const locale = rawLocale as "so" | "en";
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "cities",

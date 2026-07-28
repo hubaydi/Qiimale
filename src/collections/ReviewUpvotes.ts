@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { authenticated } from "../access/authenticated";
+import { verifiedOnly } from "../access/verifiedOnly";
 import {
   recomputeOnUpvoteChange,
   recomputeOnUpvoteDelete,
@@ -10,7 +11,7 @@ export const ReviewUpvotes: CollectionConfig = {
   admin: { useAsTitle: "review", hidden: true },
   access: {
     read: () => true,
-    create: authenticated,
+    create: verifiedOnly,
     update: () => false,
     delete: authenticated,
   },

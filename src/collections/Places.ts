@@ -3,6 +3,7 @@ import { slugField } from "payload";
 import { authenticated } from "../access/authenticated";
 import { isAdmin } from "../access/isAdmin";
 import { publishedPlaces } from "../access/publishedPlaces";
+import { verifiedOnly } from "../access/verifiedOnly";
 
 export const Places: CollectionConfig = {
   slug: "places",
@@ -19,7 +20,7 @@ export const Places: CollectionConfig = {
   },
   access: {
     read: publishedPlaces,
-    create: authenticated,
+    create: verifiedOnly,
     update: isAdmin,
     delete: isAdmin,
   },

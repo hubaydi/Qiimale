@@ -72,7 +72,22 @@
     "verifySuccess": "Iimaylkaaga waa la xaqiijiyay. Hadda waxaad qori kartaa qiimayn.",
     "verifyFail": "Xaqiijinta ayaa fashilantay.",
     "noAccount": "Ma lihid akoon Miyaa?  Isdiiwaan geli.",
-    "haveAccount": "Akoon ma leedahay? Soo gal."
+    "haveAccount": "Akoon ma leedahay? Soo gal.",
+    "verifyEmailTitle": "Xaqiiji iimaylkaaga",
+    "verifyEmailHint": "Waxaan kuu soo dirnay xiriiriye xaqiijin ah {email}. Hubi sanduuqa iimaylkaaga.",
+    "resendVerification": "Dib u soo dir",
+    "resendSuccess": "Waxaan dib u soo dirnay iimaylka xaqiijinta.",
+    "resendCooldown": "Dib u soo dir ({seconds}s)",
+    "checkSpam": "Haddii aadan helin, hubi spam-ka.",
+    "forgotPassword": "Erey sirkaa waa la illaaway?",
+    "forgotPasswordTitle": "Soo celi ereyga sirta ah",
+    "forgotPasswordSent": "Haddii akoonkaagu uu jiro, waxaanu kuu soo dirnay erey sir cusub.",
+    "resetPassword": "Samee erey sir cusub",
+    "resetPasswordSuccess": "Ereyga sirta ah waa la cusboonaysiiyay. Hadda soo gal.",
+    "resetPasswordError": "Ereyga sirta ah ayaa fashilmay ama wuu dhacay.",
+    "verifiedSuccess": "Iimaylkaaga waa la xaqiijiyay! Hadda soo gal.",
+    "passwordResetSuccess": "Ereyga sirta ah waa la beddelay! Hadda soo gal.",
+    "notVerifiedWarning": "Fadlan xaqiiji iimaylkaaga si aad u qortid qiimayn."
   },
   "Account": {
     "myReviews": "Qiimaynahaaaga",

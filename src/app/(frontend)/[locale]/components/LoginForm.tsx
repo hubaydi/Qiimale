@@ -49,10 +49,7 @@ export function LoginForm({ existingUser }: { existingUser?: boolean }) {
     setPending(false);
     if (!res.ok) {
       try {
-        setErr(
-          tErr(res.error.code as Parameters<typeof tErr>[0]) ||
-            res.error.message,
-        );
+        setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
       } catch {
         setErr(res.error.message);
       }

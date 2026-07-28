@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { buildConfig } from "payload";
@@ -38,6 +39,11 @@ export default buildConfig({
     defaultLocale: "so",
     fallback: true,
   },
+  email: resendAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM || "",
+    defaultFromName: "Qiimale",
+    apiKey: process.env.RESEND_API_KEY || "",
+  }),
   secret: process.env.PAYLOAD_SECRET || "",
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || "",

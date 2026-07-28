@@ -26,10 +26,7 @@ export function RegisterForm() {
         password: String(fd.get("password") ?? ""),
       });
       if (!res.ok) {
-        setErr(
-          tErr(res.error.code as Parameters<typeof tErr>[0]) ||
-            res.error.message,
-        );
+        setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
         return;
       }
       setMsg(t("emailSent"));

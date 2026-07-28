@@ -1,6 +1,12 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, Loader2, LogIn, LogOut } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+  LogIn,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -57,7 +63,10 @@ export function LoginForm({
     setPending(false);
     if (!res.ok) {
       try {
-        setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+        setErr(
+          res.error.message ||
+            tErr(res.error.code as Parameters<typeof tErr>[0]),
+        );
       } catch {
         setErr(res.error.message);
       }
@@ -79,12 +88,14 @@ export function LoginForm({
 
         {showVerified && (
           <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
-            <CheckCircle2 size={16} />{t("verifiedSuccess")}
+            <CheckCircle2 size={16} />
+            {t("verifiedSuccess")}
           </div>
         )}
         {showReset && (
           <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
-            <CheckCircle2 size={16} />{t("passwordResetSuccess")}
+            <CheckCircle2 size={16} />
+            {t("passwordResetSuccess")}
           </div>
         )}
         <form onSubmit={onSubmit} className="space-y-4">
@@ -123,7 +134,10 @@ export function LoginForm({
           </div>
 
           <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-primary hover:underline font-medium">
+            <Link
+              href="/forgot-password"
+              className="text-xs text-primary hover:underline font-medium"
+            >
               {t("forgotPassword")}
             </Link>
           </div>

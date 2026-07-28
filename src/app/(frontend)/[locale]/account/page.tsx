@@ -77,9 +77,7 @@ export default async function AccountPage() {
                 </span>
               </span>
             )}
-            {!user._verified && (
-              <ResendButton email={user.email} />
-            )}
+            {!user._verified && <ResendButton email={user.email} />}
           </div>
         </div>
         <div className="shrink-0">

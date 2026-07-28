@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
-import { authenticated } from "../access/authenticated";
 import { isAdmin } from "../access/isAdmin";
 import { publishedPlaces } from "../access/publishedPlaces";
 import { verifiedOnly } from "../access/verifiedOnly";

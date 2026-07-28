@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
-import { isAdmin } from "../access/isAdmin";
 import { authenticated } from "../access/authenticated";
+import { isAdmin } from "../access/isAdmin";
 
 export const Cities: CollectionConfig = {
   slug: "cities",

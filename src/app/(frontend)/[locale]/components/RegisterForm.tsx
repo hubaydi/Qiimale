@@ -26,10 +26,15 @@ export function RegisterForm() {
         password: String(fd.get("password") ?? ""),
       });
       if (!res.ok) {
-        setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+        setErr(
+          res.error.message ||
+            tErr(res.error.code as Parameters<typeof tErr>[0]),
+        );
         return;
       }
-      router.push(`/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`);
+      router.push(
+        `/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`,
+      );
     } catch {
       setErr(tErr("VALIDATION"));
     } finally {

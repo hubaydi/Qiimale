@@ -1,10 +1,10 @@
 "use server";
 
+import type { RequiredDataFromCollectionSlug } from "payload";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
-import type { RequiredDataFromCollectionSlug } from "payload";
 import type { City } from "@/payload-types";
 
 const schema = z.object({

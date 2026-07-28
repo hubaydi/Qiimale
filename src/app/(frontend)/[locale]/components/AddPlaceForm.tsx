@@ -12,9 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { addPlace } from "@/lib/actions/places";
 import { createCategory } from "@/lib/actions/categories";
 import { createCity } from "@/lib/actions/cities";
+import { addPlace } from "@/lib/actions/places";
 
 interface CategoryOption {
   id: string;
@@ -160,7 +160,10 @@ export function AddPlaceForm() {
       setModalPending(false);
       if (!res.ok) {
         try {
-          setModalErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+          setModalErr(
+            res.error.message ||
+              tErr(res.error.code as Parameters<typeof tErr>[0]),
+          );
         } catch {
           setModalErr(res.error.message);
         }
@@ -433,7 +436,10 @@ export function AddPlaceForm() {
       });
       if (!res.ok) {
         try {
-          setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+          setErr(
+            res.error.message ||
+              tErr(res.error.code as Parameters<typeof tErr>[0]),
+          );
         } catch {
           setErr(res.error.message);
         }

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
-import { isAdmin } from "../access/isAdmin";
+import { isAdmin, isAdminAccess } from "../access/isAdmin";
 import { publishedPlaces } from "../access/publishedPlaces";
 import { verifiedOnly } from "../access/verifiedOnly";
 
@@ -22,6 +22,7 @@ export const Places: CollectionConfig = {
     create: verifiedOnly,
     update: isAdmin,
     delete: isAdmin,
+    admin: isAdminAccess,
   },
   fields: [
     { name: "name", type: "text", required: true },

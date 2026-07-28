@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { authenticated } from "../access/authenticated";
-import { isAdmin } from "../access/isAdmin";
+import { isAdmin, isAdminAccess } from "../access/isAdmin";
 
 export const Media: CollectionConfig = {
   slug: "media",
@@ -10,6 +10,7 @@ export const Media: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: isAdmin,
+    admin: isAdminAccess,
   },
   upload: {
     mimeTypes: ["image/*"],

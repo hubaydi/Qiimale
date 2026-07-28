@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { isAdminAccess } from "../access/isAdmin";
 import { isAdminOrSelf } from "../access/isAdminOrSelf";
 import { verifiedOnly } from "../access/verifiedOnly";
 import {
@@ -24,6 +25,7 @@ export const Reviews: CollectionConfig = {
     create: verifiedOnly,
     update: isAdminOrSelf,
     delete: isAdminOrSelf,
+    admin: isAdminAccess,
   },
   hooks: {
     afterChange: [recomputeOnReviewChange],

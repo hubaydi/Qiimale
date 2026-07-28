@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload";
-import { isAdmin } from "../access/isAdmin";
+import { isAdmin, isAdminAccess } from "../access/isAdmin";
 import { isAdminOrSelf } from "../access/isAdminOrSelf";
 
 export const Users: CollectionConfig = {
@@ -29,6 +29,7 @@ export const Users: CollectionConfig = {
     create: () => true,
     update: isAdminOrSelf,
     delete: isAdmin,
+    admin: isAdminAccess,
   },
   fields: [
     { name: "name", type: "text", required: true },

@@ -104,6 +104,12 @@ export function LoginForm({ existingUser }: { existingUser?: boolean }) {
             />
           </div>
 
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-xs text-primary hover:underline font-medium">
+              {t("forgotPassword")}
+            </Link>
+          </div>
+
           {err && (
             <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
               <AlertCircle size={16} className="shrink-0" />

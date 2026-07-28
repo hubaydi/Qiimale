@@ -189,10 +189,10 @@ export default async function PlacePage({
 
         {/* Reviews List */}
         <div className="md:col-span-2 space-y-6">
-          <div className="flex items-center justify-between border-b pb-4">
+          <div className="flex flex-col items-start justify-between border-b pb-4 gap-2">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <MessageSquare size={20} className="text-primary" />
-              <span>{locale === "so" ? "Faallooyinka" : "Reviews"}</span>
+              <span>{locale === "so" ? "Faallooyin" : "Reviews"}</span>
             </h2>
 
             {/* Sort options */}

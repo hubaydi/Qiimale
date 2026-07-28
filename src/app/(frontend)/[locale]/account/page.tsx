@@ -12,6 +12,7 @@ import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import type { Place, Review } from "@/payload-types";
 import { LogoutButton } from "../components/LogoutButton";
+import { ResendButton } from "../components/ResendButton";
 import { StarRating } from "../components/StarRating";
 
 export default async function AccountPage() {
@@ -75,6 +76,9 @@ export default async function AccountPage() {
                   {locale === "so" ? "Aan la xaqiijin" : "Unverified"}
                 </span>
               </span>
+            )}
+            {!user._verified && (
+              <ResendButton email={user.email} />
             )}
           </div>
         </div>

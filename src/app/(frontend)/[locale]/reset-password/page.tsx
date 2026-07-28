@@ -3,6 +3,7 @@ import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { PasswordInput } from "../components/PasswordInput";
 
 export default function ResetPasswordPage({
   searchParams,
@@ -45,13 +46,11 @@ export default function ResetPasswordPage({
           {t("resetPassword")}
         </h1>
         <form onSubmit={onSubmit} className="space-y-4">
-          <input
+          <PasswordInput
             name="password"
-            type="password"
             placeholder={t("password")}
             required
             minLength={8}
-            className="w-full rounded-lg border px-4 py-3"
           />
           {err && (
             <div className="flex items-center gap-2 text-xs text-destructive">

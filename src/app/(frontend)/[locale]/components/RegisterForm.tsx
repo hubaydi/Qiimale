@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { registerUser } from "@/lib/actions/auth";
+import { PasswordInput } from "./PasswordInput";
 
 export function RegisterForm() {
   const t = useTranslations("Auth");
@@ -95,14 +96,12 @@ export function RegisterForm() {
             >
               {t("password")}
             </label>
-            <input
+            <PasswordInput
               id="register-password"
               name="password"
-              type="password"
               placeholder="••••••••"
               required
               minLength={6}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
             />
           </div>
 

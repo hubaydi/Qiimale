@@ -1,24 +1,17 @@
 "use client";
 
-import {
-  AlertCircle,
-  CheckCircle2,
-  Loader2,
-  LogIn,
-  LogOut,
-} from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loginUser, logoutUser } from "@/lib/actions/auth";
+import { loginUser } from "@/lib/actions/auth";
+import { PasswordInput } from "./PasswordInput";
 
 export function LoginForm({
-  existingUser,
   showVerified,
   showReset,
 }: {
-  existingUser?: boolean;
   showVerified?: boolean;
   showReset?: boolean;
 }) {
@@ -27,29 +20,6 @@ export function LoginForm({
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-
-  async function onLogout() {
-    await logoutUser();
-    router.refresh();
-  }
-
-  if (existingUser) {
-    return (
-      <div className="bg-white border border-border rounded-2xl p-6 max-w-sm mx-auto text-center space-y-4">
-        <p className="text-sm text-muted-foreground font-medium">
-          Waad ku dhex jirtaa akoonkaaga
-        </p>
-        <button
-          type="button"
-          onClick={onLogout}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-destructive text-destructive-foreground px-4 py-2.5 text-sm font-semibold hover:bg-destructive/90 transition-all shadow-xs cursor-pointer"
-        >
-          <LogOut size={16} />
-          <span>{t("logout") || "Ka bax"}</span>
-        </button>
-      </div>
-    );
-  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -123,13 +93,11 @@ export function LoginForm({
             >
               {t("password")}
             </label>
-            <input
+            <PasswordInput
               id="login-password"
               name="password"
-              type="password"
               placeholder="••••••••"
               required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
             />
           </div>
 

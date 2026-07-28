@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/session";
+import { redirect } from "next/navigation";
 import { LoginForm } from "../components/LoginForm";
 
 export default async function LoginPage({
@@ -7,10 +8,10 @@ export default async function LoginPage({
   searchParams: Promise<{ verified?: string; reset?: string }>;
 }) {
   const user = await getCurrentUser();
+  if (user) redirect("/");
   const params = await searchParams;
   return (
     <LoginForm
-      existingUser={Boolean(user)}
       showVerified={params.verified === "true"}
       showReset={params.reset === "true"}
     />

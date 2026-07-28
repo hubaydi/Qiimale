@@ -2,7 +2,6 @@ import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getFieldsToSign, jwtSign } from "payload";
 import { getPayloadClient } from "@/lib/get-payload";
-import { SESSION_COOKIE } from "@/lib/types";
 import type { User } from "@/payload-types";
 
 async function exchangeCode(
@@ -97,13 +96,5 @@ export async function GET(req: Request) {
     tokenExpiration: collectionConfig.auth.tokenExpiration ?? 7200,
   });
 
-  const res = NextResponse.redirect(`${serverUrl}/`);
-  res.cookies.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    path: "/",
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7200,
-  });
-  return res;
+  return NextResponse.redirect(`${serverUrl}/auth/callback?token=${token}`);
 }

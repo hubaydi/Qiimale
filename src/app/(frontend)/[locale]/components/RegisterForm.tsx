@@ -1,22 +1,22 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, Loader2, UserPlus } from "lucide-react";
+import { AlertCircle, Loader2, UserPlus } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { registerUser } from "@/lib/actions/auth";
 
 export function RegisterForm() {
   const t = useTranslations("Auth");
+  const router = useRouter();
   const tErr = useTranslations("Errors");
   const [pending, setPending] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr(null);
-    setMsg(null);
     const fd = new FormData(e.currentTarget);
     setPending(true);
     try {
@@ -29,7 +29,7 @@ export function RegisterForm() {
         setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
         return;
       }
-      setMsg(t("emailSent"));
+      router.push(`/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`);
     } catch {
       setErr(tErr("VALIDATION"));
     } finally {
@@ -105,13 +105,6 @@ export function RegisterForm() {
             <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
               <AlertCircle size={16} className="shrink-0" />
               <span>{err}</span>
-            </div>
-          )}
-
-          {msg && (
-            <div className="flex items-center gap-2 rounded-xl bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-              <CheckCircle2 size={16} className="shrink-0" />
-              <span>{msg}</span>
             </div>
           )}
 

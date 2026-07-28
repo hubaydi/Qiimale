@@ -1,5 +1,6 @@
 "use server";
 
+import crypto from "node:crypto";
 import { cookies } from "next/headers";
 import { getFieldsToSign, jwtSign } from "payload";
 import { z } from "zod";
@@ -160,13 +161,15 @@ export async function resendVerificationEmail(
   const user = users.docs[0] as User;
   if (user._verified) return { ok: true, data: true };
 
-  const { token } = await jwtSign({
-    fieldsToSign: { id: user.id, email: user.email },
-    secret: process.env.PAYLOAD_SECRET || "",
-    tokenExpiration: 86400,
+  const verificationToken = crypto.randomUUID();
+  await payload.update({
+    collection: "users",
+    id: user.id,
+    data: { _verificationToken: verificationToken },
+    overrideAccess: true,
   });
 
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/verify?token=${token}`;
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/verify?token=${verificationToken}`;
   await payload.sendEmail({
     to: email,
     subject: "Xaqiiji iimaylkaaga Qiimale",

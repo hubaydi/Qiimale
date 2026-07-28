@@ -1,13 +1,21 @@
 "use client";
 
-import { AlertCircle, Loader2, LogIn, LogOut } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { loginUser, logoutUser } from "@/lib/actions/auth";
 
-export function LoginForm({ existingUser }: { existingUser?: boolean }) {
+export function LoginForm({
+  existingUser,
+  showVerified,
+  showReset,
+}: {
+  existingUser?: boolean;
+  showVerified?: boolean;
+  showReset?: boolean;
+}) {
   const t = useTranslations("Auth");
   const tErr = useTranslations("Errors");
   const router = useRouter();
@@ -69,6 +77,16 @@ export function LoginForm({ existingUser }: { existingUser?: boolean }) {
           <p className="text-sm text-muted-foreground">Ku soo dhowaw Qiimale</p>
         </div>
 
+        {showVerified && (
+          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
+            <CheckCircle2 size={16} />{t("verifiedSuccess")}
+          </div>
+        )}
+        {showReset && (
+          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
+            <CheckCircle2 size={16} />{t("passwordResetSuccess")}
+          </div>
+        )}
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
             <label

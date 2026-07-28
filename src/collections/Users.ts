@@ -12,6 +12,13 @@ export const Users: CollectionConfig = {
         return `<p>Fadlan xaqiiji iimaylkaaga qiimaynta Qiimale:</p><p><a href="${url}">${url}</a></p>`;
       },
     },
+    forgotPassword: {
+      generateEmailSubject: () => "Qiimale — erey sir cusub",
+      generateEmailHTML: ({ token } = {}) => {
+        const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/reset-password?token=${token}`;
+        return `<p>Waxaa la codsaday in ereyga sirta ah ee akoonkaaga Qiimale la beddelo. Haddii adiga uu yahay codsiga, fadlan guji xiriiriyaha hoose:</p><p><a href="${url}">${url}</a></p><p>Haddii aadan codsan, fadlan iska indhatir iimaylkan.</p>`;
+      },
+    },
   },
   admin: {
     useAsTitle: "name",

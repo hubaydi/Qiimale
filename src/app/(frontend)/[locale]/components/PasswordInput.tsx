@@ -3,12 +3,18 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-export function PasswordInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+export function PasswordInput(
+  props: React.InputHTMLAttributes<HTMLInputElement>,
+) {
   const [visible, setVisible] = useState(false);
 
   return (
     <div className="relative">
-      <input {...props} type={visible ? "text" : "password"} className={`w-full rounded-lg border border-slate-300 bg-white px-4 py-3 pr-10 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all ${props.className ?? ""}`} />
+      <input
+        {...props}
+        type={visible ? "text" : "password"}
+        className={`w-full rounded-lg border border-slate-300 bg-white px-4 py-3 pr-10 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all ${props.className ?? ""}`}
+      />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}

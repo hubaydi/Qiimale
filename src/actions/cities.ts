@@ -8,23 +8,31 @@ import { type ActionResult, error } from "@/lib/types";
 import type { City } from "@/payload-types";
 
 const schema = z.object({
-  name: z.string().min(1, "City name is required"),
+  name: z
+    .string()
+    .min(5, "City name is required")
+    .max(50, "City name is too long"),
 });
 
 export async function createCity(
   name: string,
 ): Promise<ActionResult<{ id: string }>> {
   const parsed = schema.safeParse({ name });
+
   if (!parsed.success) {
     return error(
       "VALIDATION",
       parsed.error.issues[0]?.message || "City name is required",
     );
   }
+
   const user = await getCurrentUser();
+
   if (!user) return error("UNAUTHENTICATED", "Please log in first.");
+
   const payload = await getPayloadClient();
-  const created = (await payload.create({
+
+  const created: City = await payload.create({
     collection: "cities",
     data: {
       name: parsed.data.name,
@@ -32,6 +40,6 @@ export async function createCity(
     } as RequiredDataFromCollectionSlug<"cities">,
     overrideAccess: true,
     user,
-  })) as City;
+  });
   return { ok: true, data: { id: created.id } };
 }

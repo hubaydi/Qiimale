@@ -7,14 +7,14 @@ import { s3Storage } from "@payloadcms/storage-s3";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import {
-  Users,
   Categories,
   Cities,
+  Flags,
   Media,
   Places,
   Reviews,
   ReviewUpvotes,
-  Flags,
+  Users,
 } from "./collections";
 
 const filename = fileURLToPath(import.meta.url);
@@ -27,14 +27,14 @@ export default buildConfig({
   },
   editor: lexicalEditor(),
   collections: [
-    Users,
     Categories,
     Cities,
+    Flags,
     Media,
     Places,
     Reviews,
     ReviewUpvotes,
-    Flags,
+    Users,
   ],
   localization: {
     locales: ["so", "en"],

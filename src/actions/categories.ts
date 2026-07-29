@@ -8,7 +8,10 @@ import { type ActionResult, error } from "@/lib/types";
 import type { Category } from "@/payload-types";
 
 const schema = z.object({
-  name: z.string().min(1, "Category name is required"),
+  name: z
+    .string()
+    .min(5, "Category name is required")
+    .max(50, "Category name is too long"),
   icon: z.string().optional(),
 });
 
@@ -23,9 +26,13 @@ export async function createCategory(
       parsed.error.issues[0]?.message || "Category name is required",
     );
   }
+
   const user = await getCurrentUser();
+
   if (!user) return error("UNAUTHENTICATED", "Please log in first.");
+
   const payload = await getPayloadClient();
+
   const data: Record<string, unknown> = {
     name: parsed.data.name,
     generateSlug: true,
@@ -33,11 +40,12 @@ export async function createCategory(
   if (parsed.data.icon) {
     data.icon = parsed.data.icon;
   }
-  const created = (await payload.create({
+
+  const created: Category = await payload.create({
     collection: "categories",
     data: data as RequiredDataFromCollectionSlug<"categories">,
     overrideAccess: true,
     user,
-  })) as Category;
+  });
   return { ok: true, data: { id: created.id } };
 }

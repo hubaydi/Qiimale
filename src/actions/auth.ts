@@ -14,14 +14,14 @@ import {
 import type { User } from "@/payload-types";
 
 const registerSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().min(5).max(50),
   email: z.email(),
   password: z.string().min(8),
 });
 
 const loginSchema = z.object({
   email: z.email(),
-  password: z.string().min(1),
+  password: z.string().min(8),
 });
 
 export async function registerUser(
@@ -55,11 +55,11 @@ export async function registerUser(
     };
   }
 
-  const user = (await payload.create({
+  const user = await payload.create({
     collection: "users",
     data: { ...parsed.data, role: "reviewer" },
     draft: false,
-  })) as User;
+  });
 
   const collectionConfig = payload.collections.users.config;
   const fieldsToSign = getFieldsToSign({
@@ -148,6 +148,7 @@ export async function resendVerificationEmail(
   email: string,
 ): Promise<ActionResult<true>> {
   if (!email) return error("VALIDATION", "Missing email");
+
   const payload = await getPayloadClient();
   const users = await payload.find({
     collection: "users",
@@ -155,6 +156,7 @@ export async function resendVerificationEmail(
     limit: 1,
     overrideAccess: true,
   });
+
   if (!users.docs.length) return { ok: true, data: true };
 
   const user = users.docs[0] as User;

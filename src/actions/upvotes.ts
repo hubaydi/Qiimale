@@ -6,7 +6,7 @@ import { getPayloadClient } from "@/lib/get-payload";
 import { canUpvote } from "@/lib/reviews-logic";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
-import type { Place, Review, ReviewUpvote } from "@/payload-types";
+import type { ReviewUpvote } from "@/payload-types";
 
 const schema = z.object({ reviewId: z.string() });
 
@@ -19,11 +19,11 @@ export async function toggleUpvote(
   if (!user) return error("UNAUTHENTICATED", "Login required");
 
   const payload = await getPayloadClient();
-  const review = (await payload.findByID({
+  const review = await payload.findByID({
     collection: "reviews",
     id: parsed.data.reviewId,
     overrideAccess: true,
-  })) as Review | null;
+  });
   if (!review) return error("NOT_FOUND", "Review not found");
 
   const authorId =
@@ -36,11 +36,11 @@ export async function toggleUpvote(
     typeof review.place === "string" ? review.place : review.place?.id;
   let placeSlug: string | undefined;
   if (placeId) {
-    const place = (await payload.findByID({
+    const place = await payload.findByID({
       collection: "places",
       id: placeId,
       overrideAccess: true,
-    })) as Place | null;
+    });
     placeSlug = place?.slug;
   }
 

@@ -5,7 +5,6 @@ import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
-import type { Flag, Review } from "@/payload-types";
 
 const schema = z.object({
   reviewId: z.string(),
@@ -27,24 +26,24 @@ export async function flagReview(
   if (!user) return error("UNAUTHENTICATED", "Login required");
 
   const payload = await getPayloadClient();
-  const review = (await payload.findByID({
+  const review = await payload.findByID({
     collection: "reviews",
     id: parsed.data.reviewId,
     overrideAccess: true,
     user,
-  })) as Review | null;
+  });
   if (!review) return error("NOT_FOUND", "Review not found");
 
   const placeId =
     typeof review.place === "string" ? review.place : review.place?.id;
   let placeSlug: string | undefined;
   if (placeId) {
-    const place = (await payload.findByID({
+    const place = await payload.findByID({
       collection: "places",
       id: placeId,
       overrideAccess: true,
       user,
-    })) as { slug?: string } | null;
+    });
     placeSlug = place?.slug;
   }
 
@@ -64,7 +63,7 @@ export async function flagReview(
     return error("ALREADY_FLAGGED", "You already flagged this review");
   }
 
-  const flag = (await payload.create({
+  const flag = await payload.create({
     collection: "flags",
     data: {
       review: review.id,
@@ -75,7 +74,7 @@ export async function flagReview(
     },
     overrideAccess: true,
     user,
-  })) as Flag;
+  });
 
   await payload.update({
     collection: "reviews",

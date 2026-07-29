@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loginUser } from "@/lib/actions/auth";
+import { loginUser } from "@/actions/auth";
 import { PasswordInput } from "./PasswordInput";
 
 export function LoginForm({

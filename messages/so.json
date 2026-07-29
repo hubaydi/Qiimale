@@ -70,8 +70,8 @@
     "verifyEmail": "Fur iimaylka si aad qiimayn u qortid.",
     "emailSent": "Waxaanu kuu soo dirnay iimayl xaqiijin ah.",
     "verifySuccess": "Iimaylkaaga waa la xaqiijiyay. Hadda waxaad qori kartaa qiimayn.",
-    "verifyFail": "Xaqiijinta ayaa fashilantay.",
-    "noAccount": "Ma lihid akoon Miyaa?  Isdiiwaan geli.",
+    "verifyFail": "Xaqiijinta Email way fashilantay.",
+    "noAccount": "Akoon ma lihid  Miyaa?  Isdiiwaan geli.",
     "haveAccount": "Akoon ma leedahay? Soo gal.",
     "verifyEmailTitle": "Xaqiiji iimaylkaaga",
     "verifyEmailHint": "Waxaan kuu soo dirnay xiriiriye xaqiijin ah {email}. Hubi sanduuqa iimaylkaaga.",
@@ -79,14 +79,14 @@
     "resendSuccess": "Waxaan dib u soo dirnay iimaylka xaqiijinta.",
     "resendCooldown": "Dib u soo dir ({seconds}s)",
     "checkSpam": "Haddii aadan helin, hubi spam-ka.",
-    "forgotPassword": "Erey sirkaa waa la illaaway?",
+    "forgotPassword": "Ereyga sirta waan ilaaway?",
     "forgotPasswordTitle": "Soo celi ereyga sirta ah",
-    "forgotPasswordSent": "Haddii akoonkaagu uu jiro, waxaanu kuu soo dirnay erey sir cusub.",
+    "forgotPasswordSent": "Haddii akoonkaagu uu jiro, waxaanu kuu soo dirnay link aad u isticmaasho si aad u cusboonaysiiso ereyga sirta ah.",
     "resetPassword": "Samee erey sir cusub",
-    "resetPasswordSuccess": "Ereyga sirta ah waa la cusboonaysiiyay. Hadda soo gal.",
+    "resetPasswordSuccess": "Ereyga sirta ah waa la cusboonaysiiyay. Fadlan soo gal akoonkaaga.",
     "resetPasswordError": "Ereyga sirta ah ayaa fashilmay ama wuu dhacay.",
-    "verifiedSuccess": "Iimaylkaaga waa la xaqiijiyay! Hadda soo gal.",
-    "passwordResetSuccess": "Ereyga sirta ah waa la beddelay! Hadda soo gal.",
+    "verifiedSuccess": "Iimaylkaaga waa la xaqiijiyay! Fadlan soo gal akoonkaaga.",
+    "passwordResetSuccess": "Ereyga sirta ah waa la beddelay! Fadlan soo gal akoonkaaga.",
     "notVerifiedWarning": "Fadlan xaqiiji iimaylkaaga si aad u qortid qiimayn."
   },
   "Account": {
@@ -111,10 +111,10 @@
     "name": "Magaca goobta",
     "category": "Qayb",
     "city": "Magaalada",
-    "address": "Cinwaan (ixtiyaac)",
+    "address": "Cinwaan (ikhtiyaar)",
     "description": "Faahfaahin (ikhtiyaar)",
     "submit": "Soo gudbi",
-    "success": "Mahadsanid! Goobka waa la soo gudbiyay, maamulku ayaa hubin doona.",
+    "success": "Mahadsanid! Goobta waa la soo gudbiyay, maamulka ayaa hubin doona.",
     "stepCity": "Magaalada",
     "stepCategory": "Qaybta",
     "stepDetails": "Faahfaahinta",
@@ -125,7 +125,7 @@
     "createCategory": "Ku dar qayb cusub",
     "categoryName": "Magaca qaybta",
     "categoryIcon": "Astaanta (ikhtiyaar)",
-    "back": "Dib",
+    "back": "Laabo",
     "next": "Xiga",
     "create": "Abuur",
     "cancel": "Jooji",
@@ -141,13 +141,13 @@
     "placesIn": "Goobaha ku yaala {city}"
   },
   "Errors": {
-    "UNAUTHENTICATED": "Fadlan Marka hore akoonkaaga soo gal.",
+    "UNAUTHENTICATED": "Fadlan marka hore akoon samayso ama gal akoonka.",
     "UNVERIFIED": "verify garee iimaylkaaga kahor qiimayn qoridda.",
     "NOT_FOUND": "Lama helin.",
     "FORBIDDEN": "Lama oggola.",
     "ALREADY_FLAGGED": "Horey ayaad u dacwaysay.",
     "SELF_UPVOTE": "Qiimayntaada ma taageeri kartid.",
     "VALIDATION": "Xog aan saxnayn.",
-    "CONFLICT": "Iimaylkan waa la diiwaan geliyay hore."
+    "CONFLICT": "Iimaylkan waa mid diiwaan-gashan."
   }
 }

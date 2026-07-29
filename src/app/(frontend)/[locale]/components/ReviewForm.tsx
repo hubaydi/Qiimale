@@ -4,7 +4,7 @@ import { AlertCircle, Loader2, Upload, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { submitReview } from "@/lib/actions/reviews";
+import { submitReview } from "@/actions/reviews";
 import type { ActionResult } from "@/lib/types";
 import { StarRating } from "./StarRating";
 

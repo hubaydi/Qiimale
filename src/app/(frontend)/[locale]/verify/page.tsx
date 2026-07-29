@@ -1,7 +1,7 @@
 import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { verifyEmail } from "@/lib/actions/auth";
+import { verifyEmail } from "@/actions/auth";
 
 export default async function VerifyPage({
   searchParams,

@@ -12,9 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { createCategory } from "@/lib/actions/categories";
-import { createCity } from "@/lib/actions/cities";
-import { addPlace } from "@/lib/actions/places";
+import { createCategory } from "@/actions/categories";
+import { createCity } from "@/actions/cities";
+import { addPlace } from "@/actions/places";
 
 interface CategoryOption {
   id: string;

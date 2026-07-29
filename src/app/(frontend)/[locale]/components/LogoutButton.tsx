@@ -4,7 +4,7 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { logoutUser } from "@/lib/actions/auth";
+import { logoutUser } from "@/actions/auth";
 
 export function LogoutButton() {
   const t = useTranslations("Auth");

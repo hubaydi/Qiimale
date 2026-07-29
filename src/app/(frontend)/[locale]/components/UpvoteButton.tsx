@@ -4,7 +4,7 @@ import { ThumbsUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { toggleUpvote } from "@/lib/actions/upvotes";
+import { toggleUpvote } from "@/actions/upvotes";
 import { cn } from "@/lib/utils";
 
 export function UpvoteButton({

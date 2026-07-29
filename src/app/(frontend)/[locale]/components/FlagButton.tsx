@@ -3,7 +3,7 @@
 import { Flag } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { flagReview } from "@/lib/actions/flags";
+import { flagReview } from "@/actions/flags";
 
 export function FlagButton({
   reviewId,

@@ -6,14 +6,16 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { buildConfig } from "payload";
 import sharp from "sharp";
-import { Categories } from "./collections/Categories";
-import { Cities } from "./collections/Cities";
-import { Flags } from "./collections/Flags";
-import { Media } from "./collections/Media";
-import { Places } from "./collections/Places";
-import { Reviews } from "./collections/Reviews";
-import { ReviewUpvotes } from "./collections/ReviewUpvotes";
-import { Users } from "./collections/Users";
+import {
+  Users,
+  Categories,
+  Cities,
+  Media,
+  Places,
+  Reviews,
+  ReviewUpvotes,
+  Flags,
+} from "./collections";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

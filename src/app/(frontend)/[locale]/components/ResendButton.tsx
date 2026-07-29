@@ -1,7 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { resendVerificationEmail } from "@/lib/actions/auth";
+import { resendVerificationEmail } from "@/actions/auth";
 
 export function ResendButton({ email }: { email: string }) {
   const t = useTranslations("Auth");

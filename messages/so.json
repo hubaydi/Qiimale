@@ -1,12 +1,12 @@
 {
   "App": { "name": "Qiimale", "tagline": "Qiimayn goobo & adeegyo Soomaaliya" },
   "Home": {
-    "categories": "Raadi qayb",
+    "categories": "Dooro qayb",
     "topRated": "Goobaha ugu qiimaha badan",
     "latestReviews": "Qiimaynaha ugu dambeeyay",
     "viewAll": "Arag dhamaan",
     "searchButton": "Raadi",
-    "cities": "Raadi magaalo"
+    "cities": "Dooro magaalo"
   },
   "Nav": {
     "home": "Bogga Hore",
@@ -15,7 +15,7 @@
     "cities": "Magaalooyinka",
     "addPlace": "Ku dar goob",
     "account": "Akoonkayga",
-    "login": "Gal",
+    "login": "Gal akoon",
     "logout": "Ka bax",
     "language": "English",
     "menu": "Menu"
@@ -30,11 +30,11 @@
   "Place": {
     "reviews": "{count, plural, one {# qiimayn} other {# qiimayn}}",
     "noReviews": "Wax qiimayn ah weli ma jirto.",
-    "noReviewsHint": "Noqo qofka u hor ee qiimeeya!",
+    "noReviewsHint": "Noqo qofka u horeeya ee qiimeeya!",
     "rating": "Cabbir guud",
     "writeReview": "Qor qiimayn",
     "editReview": "Wax ka beddel qiimayntaada",
-    "pending": "Goobtaada waa la sugayaa oggolaanshaha maamulka.",
+    "pending": "Goobtaada waxay sugaysaa oggolaanshaha maamulka.",
     "address": "Cinwaan",
     "approved": "La oggolaaday"
   },

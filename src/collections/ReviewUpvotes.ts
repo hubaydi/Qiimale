@@ -1,7 +1,5 @@
 import type { CollectionConfig } from "payload";
-import { authenticated } from "../access/authenticated";
-import { isAdminAccess } from "../access/isAdmin";
-import { verifiedOnly } from "../access/verifiedOnly";
+import { isAdmin, isAdminAccess } from "../access/isAdmin";
 import {
   recomputeOnUpvoteChange,
   recomputeOnUpvoteDelete,
@@ -11,10 +9,10 @@ export const ReviewUpvotes: CollectionConfig = {
   slug: "review-upvotes",
   admin: { useAsTitle: "review", hidden: true },
   access: {
-    read: () => true,
-    create: verifiedOnly,
+    read: isAdmin,
+    create: isAdmin,
     update: () => false,
-    delete: authenticated,
+    delete: isAdmin,
     admin: isAdminAccess,
   },
   hooks: {

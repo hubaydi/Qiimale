@@ -1,8 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 import { isAdmin, isAdminAccess } from "../access/isAdmin";
-import { publishedPlaces } from "../access/publishedPlaces";
-import { verifiedOnly } from "../access/verifiedOnly";
 
 export const Places: CollectionConfig = {
   slug: "places",
@@ -18,8 +16,8 @@ export const Places: CollectionConfig = {
     ],
   },
   access: {
-    read: publishedPlaces,
-    create: verifiedOnly,
+    read: isAdmin,
+    create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
     admin: isAdminAccess,

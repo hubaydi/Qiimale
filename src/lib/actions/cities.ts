@@ -30,7 +30,7 @@ export async function createCity(
       name: parsed.data.name,
       generateSlug: true,
     } as RequiredDataFromCollectionSlug<"cities">,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as City;
   return { ok: true, data: { id: created.id } };

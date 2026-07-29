@@ -50,14 +50,14 @@ export async function toggleUpvote(
       and: [{ review: { equals: review.id } }, { user: { equals: user.id } }],
     },
     limit: 1,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   });
   if (existing.docs.length) {
     await payload.delete({
       collection: "review-upvotes",
       id: (existing.docs[0] as ReviewUpvote).id,
-      overrideAccess: false,
+      overrideAccess: true,
       user,
     });
     if (placeSlug) revalidatePath(`/place/${placeSlug}`);
@@ -66,7 +66,7 @@ export async function toggleUpvote(
   await payload.create({
     collection: "review-upvotes",
     data: { review: review.id, user: user.id },
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   });
   if (placeSlug) revalidatePath(`/place/${placeSlug}`);

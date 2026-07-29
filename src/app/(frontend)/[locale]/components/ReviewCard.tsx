@@ -27,8 +27,7 @@ export async function ReviewCard({
         and: [{ review: { equals: review.id } }, { user: { equals: user.id } }],
       },
       limit: 1,
-      overrideAccess: false,
-      user,
+      overrideAccess: true,
     });
     upvoted = found.docs.length > 0;
   }
@@ -45,8 +44,7 @@ export async function ReviewCard({
         ],
       },
       limit: 1,
-      overrideAccess: false,
-      user,
+      overrideAccess: true,
     });
     flagged = f.docs.length > 0;
   }

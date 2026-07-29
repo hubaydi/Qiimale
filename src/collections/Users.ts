@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 import { isAdmin, isAdminAccess } from "../access/isAdmin";
-import { isAdminOrSelf } from "../access/isAdminOrSelf";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -25,13 +24,14 @@ export const Users: CollectionConfig = {
     defaultColumns: ["name", "email", "role", "_verified"],
   },
   access: {
-    read: () => true,
-    create: () => true,
-    update: isAdminOrSelf,
+    read: isAdmin,
+    create: isAdmin,
+    update: isAdmin,
     delete: isAdmin,
     admin: isAdminAccess,
   },
   fields: [
+    { name: "email", type: "email" },
     { name: "name", type: "text", required: true },
     {
       name: "role",

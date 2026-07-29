@@ -43,8 +43,7 @@ export default async function ReviewPage({
         and: [{ place: { equals: place.id } }, { author: { equals: user.id } }],
       },
       limit: 1,
-      overrideAccess: false,
-      user,
+      overrideAccess: true,
     })
   ).docs[0] as Review | undefined;
 

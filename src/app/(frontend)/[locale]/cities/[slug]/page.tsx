@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     limit: 1,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const city = result.docs[0] as City | undefined;
   return {
@@ -39,6 +40,7 @@ export default async function CityDetailPage({ params }: Props) {
     limit: 1,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const city = result.docs[0] as City | undefined;
   if (!city) notFound();

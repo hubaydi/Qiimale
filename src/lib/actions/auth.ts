@@ -87,53 +87,52 @@ export async function loginUser(
       parsed.error.issues[0]?.message || "Invalid data",
     );
   }
-  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "";
-  const loginRes = await fetch(`${serverUrl}/api/users/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: parsed.data.email,
-      password: parsed.data.password,
-    }),
-  });
 
   const payload = await getPayloadClient();
   const cookieStore = await cookies();
 
-  if (loginRes.ok) {
-    const data = await loginRes.json();
-    setSessionCookie(cookieStore, data.token);
-    return { ok: true, data: { token: data.token, verified: true } };
-  }
-
-  const errBody = await loginRes.json().catch(() => ({}));
-  const errMsg = errBody?.errors?.[0]?.message || errBody?.message || "";
-  if (/verify|verification|verified/i.test(errMsg)) {
-    const users = await payload.find({
+  try {
+    const result = await payload.login({
       collection: "users",
-      where: { email: { equals: parsed.data.email } },
-      limit: 1,
-      overrideAccess: true,
-    });
-    if (users.docs.length) {
-      const userDoc = users.docs[0] as User;
-      const collectionConfig = payload.collections.users.config;
-      const fieldsToSign = getFieldsToSign({
-        collectionConfig,
+      data: {
         email: parsed.data.email,
-        user: userDoc,
-      });
-      const { token } = await jwtSign({
-        fieldsToSign,
-        secret: process.env.PAYLOAD_SECRET || "",
-        tokenExpiration: collectionConfig.auth.tokenExpiration ?? 7200,
-      });
-      setSessionCookie(cookieStore, token);
-      return { ok: true, data: { token, verified: false } };
-    }
-  }
+        password: parsed.data.password,
+      },
+    });
 
-  return error("UNAUTHENTICATED", "Invalid credentials");
+    if (!result.token) {
+      return error("UNAUTHENTICATED", "Login failed");
+    }
+    setSessionCookie(cookieStore, result.token);
+    return { ok: true, data: { token: result.token, verified: true } };
+  } catch (err) {
+    const errMsg = err instanceof Error ? err.message : "";
+    if (/verify|verification|verified/i.test(errMsg)) {
+      const users = await payload.find({
+        collection: "users",
+        where: { email: { equals: parsed.data.email } },
+        limit: 1,
+        overrideAccess: true,
+      });
+      if (users.docs.length) {
+        const userDoc = users.docs[0] as User;
+        const collectionConfig = payload.collections.users.config;
+        const fieldsToSign = getFieldsToSign({
+          collectionConfig,
+          email: parsed.data.email,
+          user: userDoc,
+        });
+        const { token } = await jwtSign({
+          fieldsToSign,
+          secret: process.env.PAYLOAD_SECRET || "",
+          tokenExpiration: collectionConfig.auth.tokenExpiration ?? 7200,
+        });
+        setSessionCookie(cookieStore, token);
+        return { ok: true, data: { token, verified: false } };
+      }
+    }
+    return error("UNAUTHENTICATED", "Invalid credentials");
+  }
 }
 
 export async function setSessionFromToken(
@@ -186,8 +185,8 @@ export async function logoutUser(): Promise<ActionResult<true>> {
 
 export async function verifyEmail(token: string): Promise<ActionResult<true>> {
   if (!token) return error("VALIDATION", "Missing token");
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/api/users/verify/${token}`;
-  const res = await fetch(url, { method: "POST" });
-  if (!res.ok) return error("VALIDATION", "Verification failed");
+  const payload = await getPayloadClient();
+  const ok = await payload.verifyEmail({ collection: "users", token });
+  if (!ok) return error("VALIDATION", "Verification failed");
   return { ok: true, data: true };
 }

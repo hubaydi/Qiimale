@@ -26,8 +26,7 @@ export default async function AccountPage() {
   const reviews = await payload.find({
     collection: "reviews",
     where: { author: { equals: user.id } },
-    overrideAccess: false,
-    user,
+    overrideAccess: true,
     depth: 1,
     sort: "-createdAt",
   });
@@ -35,8 +34,7 @@ export default async function AccountPage() {
   const places = await payload.find({
     collection: "places",
     where: { submittedBy: { equals: user.id } },
-    overrideAccess: false,
-    user,
+    overrideAccess: true,
     depth: 1,
     sort: "-createdAt",
   });

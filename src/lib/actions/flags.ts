@@ -30,7 +30,7 @@ export async function flagReview(
   const review = (await payload.findByID({
     collection: "reviews",
     id: parsed.data.reviewId,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as Review | null;
   if (!review) return error("NOT_FOUND", "Review not found");
@@ -42,7 +42,7 @@ export async function flagReview(
     const place = (await payload.findByID({
       collection: "places",
       id: placeId,
-      overrideAccess: false,
+      overrideAccess: true,
       user,
     })) as { slug?: string } | null;
     placeSlug = place?.slug;
@@ -73,7 +73,7 @@ export async function flagReview(
       note: parsed.data.note || "",
       status: "open",
     },
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as Flag;
 

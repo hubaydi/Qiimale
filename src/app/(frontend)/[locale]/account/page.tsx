@@ -12,6 +12,7 @@ import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import type { Place, Review } from "@/payload-types";
 import { LogoutButton } from "../components/LogoutButton";
+import { ResendButton } from "../components/ResendButton";
 import { StarRating } from "../components/StarRating";
 
 export default async function AccountPage() {
@@ -25,8 +26,7 @@ export default async function AccountPage() {
   const reviews = await payload.find({
     collection: "reviews",
     where: { author: { equals: user.id } },
-    overrideAccess: false,
-    user,
+    overrideAccess: true,
     depth: 1,
     sort: "-createdAt",
   });
@@ -34,8 +34,7 @@ export default async function AccountPage() {
   const places = await payload.find({
     collection: "places",
     where: { submittedBy: { equals: user.id } },
-    overrideAccess: false,
-    user,
+    overrideAccess: true,
     depth: 1,
     sort: "-createdAt",
   });
@@ -76,6 +75,7 @@ export default async function AccountPage() {
                 </span>
               </span>
             )}
+            {!user._verified && <ResendButton email={user.email} />}
           </div>
         </div>
         <div className="shrink-0">

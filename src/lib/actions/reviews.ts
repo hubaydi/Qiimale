@@ -34,7 +34,7 @@ export async function submitReview(
   const place = (await payload.findByID({
     collection: "places",
     id: parsed.data.placeId,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as Place | null;
   if (!place || place.status !== "approved") {
@@ -50,7 +50,7 @@ export async function submitReview(
       ],
     },
     limit: 1,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   });
 
@@ -69,7 +69,7 @@ export async function submitReview(
       collection: "reviews",
       id: (existing.docs[0] as Review).id,
       data,
-      overrideAccess: false,
+      overrideAccess: true,
       user,
     })) as Review;
     reviewId = updated.id;
@@ -77,7 +77,7 @@ export async function submitReview(
     const created = (await payload.create({
       collection: "reviews",
       data,
-      overrideAccess: false,
+      overrideAccess: true,
       user,
     })) as Review;
     reviewId = created.id;

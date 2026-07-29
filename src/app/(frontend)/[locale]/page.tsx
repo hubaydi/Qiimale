@@ -43,12 +43,14 @@ export default async function HomePage() {
     limit: 50,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const cities = await payload.find({
     collection: "cities",
     limit: 50,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const topPlaces = await payload.find({
     collection: "places",

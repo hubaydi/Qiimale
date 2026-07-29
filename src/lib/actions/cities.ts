@@ -1,10 +1,10 @@
 "use server";
 
+import type { RequiredDataFromCollectionSlug } from "payload";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
-import type { RequiredDataFromCollectionSlug } from "payload";
 import type { City } from "@/payload-types";
 
 const schema = z.object({
@@ -30,7 +30,7 @@ export async function createCity(
       name: parsed.data.name,
       generateSlug: true,
     } as RequiredDataFromCollectionSlug<"cities">,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as City;
   return { ok: true, data: { id: created.id } };

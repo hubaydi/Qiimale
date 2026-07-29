@@ -36,7 +36,7 @@ export async function createCategory(
   const created = (await payload.create({
     collection: "categories",
     data: data as RequiredDataFromCollectionSlug<"categories">,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as Category;
   return { ok: true, data: { id: created.id } };

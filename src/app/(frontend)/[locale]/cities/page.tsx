@@ -14,6 +14,7 @@ export default async function CitiesPage() {
     limit: 100,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
 
   if (cities.docs.length === 0) {

@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     limit: 1,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const category = result.docs[0] as Category | undefined;
   return {
@@ -38,6 +39,7 @@ export default async function CategoryDetailPage({ params }: Props) {
     limit: 1,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
   const category = result.docs[0] as Category | undefined;
   if (!category) notFound();

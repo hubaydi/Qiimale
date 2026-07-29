@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
-import { authenticated } from "../access/authenticated";
-import { isAdmin } from "../access/isAdmin";
+import { isAdmin, isAdminAccess } from "../access/isAdmin";
 
 export const Flags: CollectionConfig = {
   slug: "flags",
@@ -9,16 +8,11 @@ export const Flags: CollectionConfig = {
     defaultColumns: ["review", "reporter", "reason", "status", "createdAt"],
   },
   access: {
-    read: ({ req: { user } }) => {
-      if (!user) return false;
-      if (user.role === "admin") return true;
-      return {
-        reporter: { equals: user.id },
-      };
-    },
-    create: authenticated,
+    read: isAdmin,
+    create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+    admin: isAdminAccess,
   },
   fields: [
     {

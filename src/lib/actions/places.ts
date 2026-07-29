@@ -42,7 +42,7 @@ export async function addPlace(
       status: "approved",
       submittedBy: user.id,
     } as RequiredDataFromCollectionSlug<"places">,
-    overrideAccess: false,
+    overrideAccess: true,
     user,
   })) as Place;
   return { ok: true, data: { placeId: created.id } };

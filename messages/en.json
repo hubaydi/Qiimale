@@ -72,7 +72,22 @@
     "verifySuccess": "Your email is verified. You can review now.",
     "verifyFail": "Verification failed.",
     "noAccount": "No account? Sign up.",
-    "haveAccount": "Have an account? Log in."
+    "haveAccount": "Have an account? Log in.",
+    "verifyEmailTitle": "Verify your email",
+    "verifyEmailHint": "We sent a verification link to {email}. Check your inbox.",
+    "resendVerification": "Resend",
+    "resendSuccess": "We resent the verification email.",
+    "resendCooldown": "Resend ({seconds}s)",
+    "checkSpam": "Didn't get it? Check your spam folder.",
+    "forgotPassword": "Forgot your password?",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordSent": "If your account exists, we sent you a new password.",
+    "resetPassword": "Set new password",
+    "resetPasswordSuccess": "Password updated. Log in now.",
+    "resetPasswordError": "Password reset link expired or invalid.",
+    "verifiedSuccess": "Email verified! Log in now.",
+    "passwordResetSuccess": "Password changed! Log in now.",
+    "notVerifiedWarning": "Please verify your email to write a review."
   },
   "Account": {
     "myReviews": "My reviews",

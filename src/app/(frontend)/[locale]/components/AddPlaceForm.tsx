@@ -12,9 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { addPlace } from "@/lib/actions/places";
 import { createCategory } from "@/lib/actions/categories";
 import { createCity } from "@/lib/actions/cities";
+import { addPlace } from "@/lib/actions/places";
 
 interface CategoryOption {
   id: string;
@@ -160,7 +160,10 @@ export function AddPlaceForm() {
       setModalPending(false);
       if (!res.ok) {
         try {
-          setModalErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+          setModalErr(
+            res.error.message ||
+              tErr(res.error.code as Parameters<typeof tErr>[0]),
+          );
         } catch {
           setModalErr(res.error.message);
         }
@@ -187,10 +190,14 @@ export function AddPlaceForm() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-foreground">
+            <label
+              htmlFor="create-name"
+              className="block text-sm font-semibold text-foreground"
+            >
               {label}
             </label>
             <input
+              id="create-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={label}
@@ -201,10 +208,14 @@ export function AddPlaceForm() {
 
           {showIcon && (
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">
+              <label
+                htmlFor="create-icon"
+                className="block text-sm font-semibold text-foreground"
+              >
                 {t("categoryIcon")}
               </label>
               <input
+                id="create-icon"
                 value={icon}
                 onChange={(e) => setIcon(e.target.value)}
                 placeholder={t("categoryIcon")}
@@ -253,10 +264,14 @@ export function AddPlaceForm() {
   function renderStep1() {
     return (
       <div className="space-y-4">
-        <label className="block text-sm font-semibold text-foreground">
+        <label
+          htmlFor="city-select"
+          className="block text-sm font-semibold text-foreground"
+        >
           {t("selectCity")}
         </label>
         <select
+          id="city-select"
           value={selectedCityId || ""}
           onChange={(e) => setSelectedCityId(e.target.value || null)}
           className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
@@ -284,10 +299,14 @@ export function AddPlaceForm() {
   function renderStep2() {
     return (
       <div className="space-y-4">
-        <label className="block text-sm font-semibold text-foreground">
+        <label
+          htmlFor="category-select"
+          className="block text-sm font-semibold text-foreground"
+        >
           {t("selectCategory")}
         </label>
         <select
+          id="category-select"
           value={selectedCatId || ""}
           onChange={(e) => setSelectedCatId(e.target.value || null)}
           className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
@@ -433,7 +452,10 @@ export function AddPlaceForm() {
       });
       if (!res.ok) {
         try {
-          setErr(res.error.message || tErr(res.error.code as Parameters<typeof tErr>[0]));
+          setErr(
+            res.error.message ||
+              tErr(res.error.code as Parameters<typeof tErr>[0]),
+          );
         } catch {
           setErr(res.error.message);
         }

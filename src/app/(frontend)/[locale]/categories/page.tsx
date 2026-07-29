@@ -14,6 +14,7 @@ export default async function CategoriesPage() {
     limit: 100,
     locale,
     fallbackLocale: "so",
+    overrideAccess: true,
   });
 
   if (categories.docs.length === 0) {

@@ -49,7 +49,9 @@ export function NavLinks({
             <span
               className={cn(
                 "flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors",
-                active ? "bg-blue-100 text-blue-600" : "bg-muted text-muted-foreground",
+                active
+                  ? "bg-blue-100 text-blue-600"
+                  : "bg-muted text-muted-foreground",
               )}
             >
               <Icon size={16} />

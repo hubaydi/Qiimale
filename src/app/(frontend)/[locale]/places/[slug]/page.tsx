@@ -5,7 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
-import type { Category, City, Place, Review } from "@/payload-types";
+import type { Place } from "@/payload-types";
 
 const SORTS = ["recent", "top", "high", "low"] as const;
 type SortKey = (typeof SORTS)[number];
@@ -27,6 +27,7 @@ export default async function PlacePage({
     : "recent";
 
   const payload = await getPayloadClient();
+
   const found = await payload.find({
     collection: "places",
     where: { slug: { equals: slug } },
@@ -36,12 +37,12 @@ export default async function PlacePage({
     locale: locale as "so" | "en",
     fallbackLocale: "so",
   });
+
   const place = found.docs[0] as Place | undefined;
   if (!place || place.status !== "approved") notFound();
 
-  const category =
-    typeof place.category === "object" ? (place.category as Category) : null;
-  const city = typeof place.city === "object" ? (place.city as City) : null;
+  const category = typeof place.category === "object" ? place.category : null;
+  const city = typeof place.city === "object" ? place.city : null;
 
   const sortField =
     sort === "recent"
@@ -66,7 +67,7 @@ export default async function PlacePage({
     depth: 2,
   });
 
-  const reviewDocs = reviews.docs as Review[];
+  const reviewDocs = reviews.docs;
 
   // Calculate rating distribution for visual details
   const ratingDistribution = [0, 0, 0, 0, 0]; // 5, 4, 3, 2, 1 stars

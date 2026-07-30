@@ -10,11 +10,11 @@ export default function ForgotPasswordPage() {
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
     setErr(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    const fd = new FormData(e.currentTarget);
     const email = fd.get("email");
     const res = await fetch("/api/users/forgot-password", {
       method: "POST",

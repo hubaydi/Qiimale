@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
-import type { Category, Place } from "@/payload-types";
+import type { Place } from "@/payload-types";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;
@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as "so" | "en";
   const payload = await getPayloadClient();
+
   const result = await payload.find({
     collection: "categories",
     where: { slug: { equals: slug } },
@@ -22,9 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     fallbackLocale: "so",
     overrideAccess: true,
   });
-  const category = result.docs[0] as Category | undefined;
+
+  const category = result.docs[0];
   return {
     title: category?.name ? `${category.name} — Qiimale` : "Qiimale",
+    description: `Eeg Goobaha ugu fiican dadkuna amaaneen ee Qaybta  ${category?.name}`,
   };
 }
 
@@ -41,7 +44,9 @@ export default async function CategoryDetailPage({ params }: Props) {
     fallbackLocale: "so",
     overrideAccess: true,
   });
-  const category = result.docs[0] as Category | undefined;
+
+  const category = result.docs[0];
+
   if (!category) notFound();
 
   const iconKey = category.icon as keyof typeof Icons | undefined;

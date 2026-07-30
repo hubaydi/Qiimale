@@ -21,11 +21,12 @@ export function LoginForm({
   const [pending, setPending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
     setErr(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
+
+    const fd = new FormData(e.currentTarget);
     const res = await loginUser({
       email: String(fd.get("email")),
       password: String(fd.get("password")),
@@ -125,7 +126,7 @@ export function LoginForm({
             {pending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                <span>Gelineysa...</span>
+                <span>Loading...</span>
               </>
             ) : (
               <>

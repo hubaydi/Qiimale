@@ -15,11 +15,11 @@ export default function ResetPasswordPage({
   const [pending, setPending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
     setErr(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    const fd = new FormData(e.currentTarget);
     const { token } = await searchParams;
     if (!token) {
       setErr(t("resetPasswordError"));

@@ -13,7 +13,9 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as "so" | "en";
+
   const payload = await getPayloadClient();
+
   const result = await payload.find({
     collection: "cities",
     where: { slug: { equals: slug } },
@@ -22,9 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     fallbackLocale: "so",
     overrideAccess: true,
   });
-  const city = result.docs[0] as City | undefined;
+  const city = result.docs[0];
   return {
-    title: city?.name ? `${city.name} — Qiimale` : "Qiimale",
+    title: city?.name
+      ? `${city.name} — Qiimaynta ganacsiyada kuyaalla Magaalada ${city.name}`
+      : "Qiimale",
+    description:
+      "Eeg Goobaha ugu fiican dadkuna amaaneen ee ku yaaalla Magaalada " +
+      city?.name,
   };
 }
 
@@ -42,6 +49,7 @@ export default async function CityDetailPage({ params }: Props) {
     fallbackLocale: "so",
     overrideAccess: true,
   });
+
   const city = result.docs[0] as City | undefined;
   if (!city) notFound();
 

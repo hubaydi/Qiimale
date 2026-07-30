@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ReviewForm } from "@/components/ReviewForm";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
-import type { Place, Review } from "@/payload-types";
+import type { Review } from "@/payload-types";
 
 export default async function ReviewPage({
   params,
@@ -32,7 +32,7 @@ export default async function ReviewPage({
       limit: 1,
       overrideAccess: true,
     })
-  ).docs[0] as Place | undefined;
+  ).docs[0];
 
   if (!place || place.status !== "approved") notFound();
 

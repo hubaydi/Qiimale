@@ -7,13 +7,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+
 import { getLocale, getTranslations } from "next-intl/server";
+
 import { LogoutButton } from "@/components/LogoutButton";
 import { ResendButton } from "@/components/ResendButton";
 import { StarRating } from "@/components/StarRating";
+
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
-import type { Place, Review } from "@/payload-types";
 
 export default async function AccountPage() {
   const t = await getTranslations("Account");
@@ -39,8 +41,8 @@ export default async function AccountPage() {
     sort: "-createdAt",
   });
 
-  const reviewDocs = reviews.docs as Review[];
-  const placeDocs = places.docs as Place[];
+  const reviewDocs = reviews.docs;
+  const placeDocs = places.docs;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-4">
@@ -71,7 +73,7 @@ export default async function AccountPage() {
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
                 <Clock size={13} />
                 <span>
-                  {locale === "so" ? "Aan la xaqiijin" : "Unverified"}
+                  {locale === "so" ? "Lama xaqiijin email-kaaga" : "Unverified"}
                 </span>
               </span>
             )}
@@ -106,15 +108,14 @@ export default async function AccountPage() {
                 className="inline-block text-xs text-primary hover:underline font-medium"
               >
                 {locale === "so"
-                  ? "Raadi goob si aad u qiamayso"
+                  ? "Raadi goob si aad u qiimayso"
                   : "Find a place to review"}
               </Link>
             </div>
           ) : (
             <div className="space-y-3">
               {reviewDocs.map((r) => {
-                const place =
-                  typeof r.place === "object" ? (r.place as Place) : null;
+                const place = typeof r.place === "object" ? r.place : null;
                 return (
                   <div
                     key={r.id}
@@ -159,7 +160,7 @@ export default async function AccountPage() {
             <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground space-y-2">
               <p className="text-sm">
                 {locale === "so"
-                  ? "Weli goob ma soo gudbin."
+                  ? "Weli goob ma aadan soo gudbin."
                   : "No places added yet."}
               </p>
               <Link

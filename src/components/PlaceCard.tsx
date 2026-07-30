@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react";
 import Link from "next/link";
 import { StarRating } from "@/components/StarRating";
-import type { Category, City, Place } from "@/payload-types";
+import type { Place } from "@/payload-types";
 
 export function PlaceCard({
   place,
@@ -13,15 +13,15 @@ export function PlaceCard({
   const _currentLocale = locale;
   const category =
     typeof place.category === "object" && place.category !== null
-      ? (place.category as Category)
+      ? place.category
       : null;
   const city =
-    typeof place.city === "object" && place.city !== null
-      ? (place.city as City)
-      : null;
+    typeof place.city === "object" && place.city !== null ? place.city : null;
+
   const iconName = category?.icon as keyof typeof Icons | undefined;
   // biome-ignore lint/performance/noDynamicNamespaceImportAccess: lucide icon lookup
   const iconComponent = iconName ? Icons[iconName] : null;
+
   const Icon =
     (iconComponent as React.ComponentType<{
       size?: number;

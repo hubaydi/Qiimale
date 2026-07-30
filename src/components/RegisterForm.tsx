@@ -51,7 +51,7 @@ export function RegisterForm() {
             {t("register")}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Abaabul akoon cusub si aad qiimayn u qortid
+            Sameyso akoon cusub si aad qiimayn u qortid
           </p>
         </div>
 
@@ -120,7 +120,7 @@ export function RegisterForm() {
             {pending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                <span>Diiwaan galinayaa...</span>
+                <span>Loading...</span>
               </>
             ) : (
               <>

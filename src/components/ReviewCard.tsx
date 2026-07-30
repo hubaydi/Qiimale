@@ -4,7 +4,7 @@ import { StarRating } from "@/components/StarRating";
 import { UpvoteButton } from "@/components/UpvoteButton";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
-import type { Media, Review, User } from "@/payload-types";
+import type { Media, Review } from "@/payload-types";
 
 export async function ReviewCard({
   review,
@@ -16,8 +16,8 @@ export async function ReviewCard({
   const t = await getTranslations("Review");
   const payload = await getPayloadClient();
   const user = await getCurrentUser();
-  const author =
-    typeof review.author === "object" ? (review.author as User) : null;
+
+  const author = typeof review.author === "object" ? review.author : null;
 
   let upvoted = false;
   if (user) {

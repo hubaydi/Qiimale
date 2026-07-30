@@ -1,9 +1,9 @@
 import * as Icons from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
+import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category, City, Place, Review } from "@/payload-types";
-import { PlaceCard } from "./components/PlaceCard";
 
 function SectionHeader({
   title,

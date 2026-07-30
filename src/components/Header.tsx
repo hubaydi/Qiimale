@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { MobileNav } from "@/components/MobileNav";
+import { NavLinks } from "@/components/NavLinks";
 import { getCurrentUser } from "@/lib/session";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { MobileNav } from "./MobileNav";
-import { NavLinks } from "./NavLinks";
 
 export async function Header() {
   const t = await getTranslations("Nav");
@@ -23,7 +23,7 @@ export async function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link
           href="/"
-          className="font-[family-name:var(--font-jakarta)] text-xl font-bold text-foreground"
+          className="font-jakarta text-xl font-bold text-foreground"
         >
           Qiimale
         </Link>

@@ -17,5 +17,5 @@ export async function resolveUser(
   const me = await payload.auth({
     headers: new Headers({ Cookie: `payload-token=${token}` }),
   });
-  return me.user as User | null;
+  return me.user;
 }

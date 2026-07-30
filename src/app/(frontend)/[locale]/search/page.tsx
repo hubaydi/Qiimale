@@ -1,9 +1,9 @@
 import * as Icons from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Where } from "payload";
+import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
-import { PlaceCard } from "../components/PlaceCard";
 
 export default async function SearchPage({
   searchParams,

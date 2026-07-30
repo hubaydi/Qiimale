@@ -4,7 +4,7 @@ import type {
   Payload,
   PayloadRequest,
 } from "payload";
-import { computeStats } from "../lib/reviews-logic";
+import { computeStats } from "@/lib/reviews-logic";
 
 async function resync(args: {
   payload: Payload;

@@ -3,7 +3,7 @@ import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { PasswordInput } from "../components/PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export default function ResetPasswordPage({
   searchParams,

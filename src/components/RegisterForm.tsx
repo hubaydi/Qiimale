@@ -1,49 +1,46 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, Loader2, LogIn } from "lucide-react";
+import { AlertCircle, Loader2, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loginUser } from "@/actions/auth";
-import { PasswordInput } from "./PasswordInput";
+import { registerUser } from "@/actions/auth";
+import { PasswordInput } from "@/components/PasswordInput";
 
-export function LoginForm({
-  showVerified,
-  showReset,
-}: {
-  showVerified?: boolean;
-  showReset?: boolean;
-}) {
+export function RegisterForm() {
   const t = useTranslations("Auth");
-  const tErr = useTranslations("Errors");
   const router = useRouter();
+  const tErr = useTranslations("Errors");
   const [pending, setPending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setPending(true);
     setErr(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
-    const res = await loginUser({
-      email: String(fd.get("email")),
-      password: String(fd.get("password")),
-    });
-    setPending(false);
-    if (!res.ok) {
-      try {
+    const fd = new FormData(e.currentTarget);
+    setPending(true);
+    try {
+      const res = await registerUser({
+        name: String(fd.get("name") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        password: String(fd.get("password") ?? ""),
+      });
+      if (!res.ok) {
         setErr(
           res.error.message ||
             tErr(res.error.code as Parameters<typeof tErr>[0]),
         );
-      } catch {
-        setErr(res.error.message);
+        return;
       }
-      return;
+      router.push(
+        `/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`,
+      );
+    } catch {
+      setErr(tErr("VALIDATION"));
+    } finally {
+      setPending(false);
     }
-    router.push("/account");
-    router.refresh();
   }
 
   return (
@@ -51,33 +48,39 @@ export function LoginForm({
       <div className="bg-card border rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
         <div className="text-center space-y-1">
           <h1 className="text-2xl font-extrabold tracking-tight">
-            {t("login")}
+            {t("register")}
           </h1>
-          <p className="text-sm text-muted-foreground">Ku soo dhowaw Qiimale</p>
+          <p className="text-sm text-muted-foreground">
+            Abaabul akoon cusub si aad qiimayn u qortid
+          </p>
         </div>
 
-        {showVerified && (
-          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
-            <CheckCircle2 size={16} />
-            {t("verifiedSuccess")}
-          </div>
-        )}
-        {showReset && (
-          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
-            <CheckCircle2 size={16} />
-            {t("passwordResetSuccess")}
-          </div>
-        )}
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
             <label
-              htmlFor="login-email"
+              htmlFor="register-name"
+              className="block text-sm font-semibold text-foreground"
+            >
+              {t("name")}
+            </label>
+            <input
+              id="register-name"
+              name="name"
+              placeholder="Magacaaga buuxa"
+              required
+              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="register-email"
               className="block text-sm font-semibold text-foreground"
             >
               {t("email")}
             </label>
             <input
-              id="login-email"
+              id="register-email"
               name="email"
               type="email"
               placeholder="iimayl@tusaale.so"
@@ -88,26 +91,18 @@ export function LoginForm({
 
           <div className="space-y-2">
             <label
-              htmlFor="login-password"
+              htmlFor="register-password"
               className="block text-sm font-semibold text-foreground"
             >
               {t("password")}
             </label>
             <PasswordInput
-              id="login-password"
+              id="register-password"
               name="password"
               placeholder="••••••••"
               required
+              minLength={6}
             />
-          </div>
-
-          <div className="text-right">
-            <Link
-              href="/forgot-password"
-              className="text-xs text-primary hover:underline font-medium"
-            >
-              {t("forgotPassword")}
-            </Link>
           </div>
 
           {err && (
@@ -125,12 +120,12 @@ export function LoginForm({
             {pending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                <span>Gelineysa...</span>
+                <span>Diiwaan galinayaa...</span>
               </>
             ) : (
               <>
-                <LogIn size={16} />
-                <span>{t("login")}</span>
+                <UserPlus size={16} />
+                <span>{t("register")}</span>
               </>
             )}
           </button>
@@ -138,10 +133,10 @@ export function LoginForm({
 
         <p className="text-center text-xs text-muted-foreground">
           <Link
-            href="/register"
+            href="/login"
             className="text-primary hover:underline font-semibold"
           >
-            {t("noAccount")}
+            {t("haveAccount")}
           </Link>
         </p>
       </div>

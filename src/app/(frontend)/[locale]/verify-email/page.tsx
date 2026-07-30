@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { ResendButton } from "../components/ResendButton";
+import { ResendButton } from "@/components/ResendButton";
 
 export default async function VerifyEmailPage({
   searchParams,

@@ -1,9 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { ReviewForm } from "@/components/ReviewForm";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import type { Place, Review } from "@/payload-types";
-import { ReviewForm } from "../../../components/ReviewForm";
 
 export default async function ReviewPage({
   params,

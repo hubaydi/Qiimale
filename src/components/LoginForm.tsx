@@ -1,46 +1,49 @@
 "use client";
 
-import { AlertCircle, Loader2, UserPlus } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { registerUser } from "@/actions/auth";
-import { PasswordInput } from "./PasswordInput";
+import { loginUser } from "@/actions/auth";
+import { PasswordInput } from "@/components/PasswordInput";
 
-export function RegisterForm() {
+export function LoginForm({
+  showVerified,
+  showReset,
+}: {
+  showVerified?: boolean;
+  showReset?: boolean;
+}) {
   const t = useTranslations("Auth");
-  const router = useRouter();
   const tErr = useTranslations("Errors");
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setErr(null);
-    const fd = new FormData(e.currentTarget);
     setPending(true);
-    try {
-      const res = await registerUser({
-        name: String(fd.get("name") ?? ""),
-        email: String(fd.get("email") ?? ""),
-        password: String(fd.get("password") ?? ""),
-      });
-      if (!res.ok) {
+    setErr(null);
+    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    const res = await loginUser({
+      email: String(fd.get("email")),
+      password: String(fd.get("password")),
+    });
+    setPending(false);
+    if (!res.ok) {
+      try {
         setErr(
           res.error.message ||
             tErr(res.error.code as Parameters<typeof tErr>[0]),
         );
-        return;
+      } catch {
+        setErr(res.error.message);
       }
-      router.push(
-        `/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`,
-      );
-    } catch {
-      setErr(tErr("VALIDATION"));
-    } finally {
-      setPending(false);
+      return;
     }
+    router.push("/account");
+    router.refresh();
   }
 
   return (
@@ -48,39 +51,33 @@ export function RegisterForm() {
       <div className="bg-card border rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
         <div className="text-center space-y-1">
           <h1 className="text-2xl font-extrabold tracking-tight">
-            {t("register")}
+            {t("login")}
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Abaabul akoon cusub si aad qiimayn u qortid
-          </p>
+          <p className="text-sm text-muted-foreground">Ku soo dhowaw Qiimale</p>
         </div>
 
+        {showVerified && (
+          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
+            <CheckCircle2 size={16} />
+            {t("verifiedSuccess")}
+          </div>
+        )}
+        {showReset && (
+          <div className="rounded-xl bg-emerald-500/10 p-3 text-xs font-medium text-emerald-600 text-center flex items-center justify-center gap-1">
+            <CheckCircle2 size={16} />
+            {t("passwordResetSuccess")}
+          </div>
+        )}
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
             <label
-              htmlFor="register-name"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("name")}
-            </label>
-            <input
-              id="register-name"
-              name="name"
-              placeholder="Magacaaga buuxa"
-              required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label
-              htmlFor="register-email"
+              htmlFor="login-email"
               className="block text-sm font-semibold text-foreground"
             >
               {t("email")}
             </label>
             <input
-              id="register-email"
+              id="login-email"
               name="email"
               type="email"
               placeholder="iimayl@tusaale.so"
@@ -91,18 +88,26 @@ export function RegisterForm() {
 
           <div className="space-y-2">
             <label
-              htmlFor="register-password"
+              htmlFor="login-password"
               className="block text-sm font-semibold text-foreground"
             >
               {t("password")}
             </label>
             <PasswordInput
-              id="register-password"
+              id="login-password"
               name="password"
               placeholder="••••••••"
               required
-              minLength={6}
             />
+          </div>
+
+          <div className="text-right">
+            <Link
+              href="/forgot-password"
+              className="text-xs text-primary hover:underline font-medium"
+            >
+              {t("forgotPassword")}
+            </Link>
           </div>
 
           {err && (
@@ -120,12 +125,12 @@ export function RegisterForm() {
             {pending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                <span>Diiwaan galinayaa...</span>
+                <span>Gelineysa...</span>
               </>
             ) : (
               <>
-                <UserPlus size={16} />
-                <span>{t("register")}</span>
+                <LogIn size={16} />
+                <span>{t("login")}</span>
               </>
             )}
           </button>
@@ -133,10 +138,10 @@ export function RegisterForm() {
 
         <p className="text-center text-xs text-muted-foreground">
           <Link
-            href="/login"
+            href="/register"
             className="text-primary hover:underline font-semibold"
           >
-            {t("haveAccount")}
+            {t("noAccount")}
           </Link>
         </p>
       </div>

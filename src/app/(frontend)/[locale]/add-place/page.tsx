@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AddPlaceForm } from "@/components/AddPlaceForm";
 import { getCurrentUser } from "@/lib/session";
-import { AddPlaceForm } from "../components/AddPlaceForm";
 
 export default async function AddPlacePage() {
   const t = await getTranslations("AddPlace");

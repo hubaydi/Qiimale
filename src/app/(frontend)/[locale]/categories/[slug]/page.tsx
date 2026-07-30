@@ -2,9 +2,9 @@ import * as Icons from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
+import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category, Place } from "@/payload-types";
-import { PlaceCard } from "../../components/PlaceCard";
 
 type Props = {
   params: Promise<{ slug: string; locale: string }>;

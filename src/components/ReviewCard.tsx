@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { FlagButton } from "@/components/FlagButton";
+import { StarRating } from "@/components/StarRating";
+import { UpvoteButton } from "@/components/UpvoteButton";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 import type { Media, Review, User } from "@/payload-types";
-import { FlagButton } from "./FlagButton";
-import { StarRating } from "./StarRating";
-import { UpvoteButton } from "./UpvoteButton";
 
 export async function ReviewCard({
   review,

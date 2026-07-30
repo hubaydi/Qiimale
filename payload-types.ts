@@ -67,14 +67,14 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
     categories: Category;
     cities: City;
+    flags: Flag;
     media: Media;
     places: Place;
     reviews: Review;
     'review-upvotes': ReviewUpvote;
-    flags: Flag;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,14 +82,14 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     cities: CitiesSelect<false> | CitiesSelect<true>;
+    flags: FlagsSelect<false> | FlagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     places: PlacesSelect<false> | PlacesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'review-upvotes': ReviewUpvotesSelect<false> | ReviewUpvotesSelect<true>;
-    flags: FlagsSelect<false> | FlagsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -131,35 +131,6 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  name: string;
-  role: 'admin' | 'reviewer';
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -191,6 +162,94 @@ export interface City {
   slug: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flags".
+ */
+export interface Flag {
+  id: string;
+  review: string | Review;
+  reporter: string | User;
+  reason: 'fake' | 'offensive' | 'spam' | 'coi' | 'other';
+  note?: string | null;
+  status: 'open' | 'resolved';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  place: string | Place;
+  author: string | User;
+  rating: number;
+  text: string;
+  photos?:
+    | {
+        image: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'published' | 'hidden' | 'removed';
+  upvoteCount?: number | null;
+  flagCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places".
+ */
+export interface Place {
+  id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  category: string | Category;
+  city: string | City;
+  address?: string | null;
+  description?: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  submittedBy?: (string | null) | User;
+  ratingAvg?: number | null;
+  reviewCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  name: string;
+  role: 'admin' | 'reviewer';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -232,71 +291,12 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "places".
- */
-export interface Place {
-  id: string;
-  name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  category: string | Category;
-  city: string | City;
-  address?: string | null;
-  description?: string | null;
-  status: 'pending' | 'approved' | 'rejected';
-  submittedBy?: (string | null) | User;
-  ratingAvg?: number | null;
-  reviewCount?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews".
- */
-export interface Review {
-  id: string;
-  place: string | Place;
-  author: string | User;
-  rating: number;
-  text: string;
-  photos?:
-    | {
-        image: string | Media;
-        id?: string | null;
-      }[]
-    | null;
-  status: 'published' | 'hidden' | 'removed';
-  upvoteCount?: number | null;
-  flagCount?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "review-upvotes".
  */
 export interface ReviewUpvote {
   id: string;
   review: string | Review;
   user: string | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "flags".
- */
-export interface Flag {
-  id: string;
-  review: string | Review;
-  reporter: string | User;
-  reason: 'fake' | 'offensive' | 'spam' | 'coi' | 'other';
-  note?: string | null;
-  status: 'open' | 'resolved';
   updatedAt: string;
   createdAt: string;
 }
@@ -325,16 +325,16 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
-      } | null)
-    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
     | ({
         relationTo: 'cities';
         value: string | City;
+      } | null)
+    | ({
+        relationTo: 'flags';
+        value: string | Flag;
       } | null)
     | ({
         relationTo: 'media';
@@ -353,8 +353,8 @@ export interface PayloadLockedDocument {
         value: string | ReviewUpvote;
       } | null)
     | ({
-        relationTo: 'flags';
-        value: string | Flag;
+        relationTo: 'users';
+        value: string | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -400,32 +400,6 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  _verified?: T;
-  _verificationToken?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
@@ -444,6 +418,19 @@ export interface CitiesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flags_select".
+ */
+export interface FlagsSelect<T extends boolean = true> {
+  review?: T;
+  reporter?: T;
+  reason?: T;
+  note?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -542,16 +529,29 @@ export interface ReviewUpvotesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "flags_select".
+ * via the `definition` "users_select".
  */
-export interface FlagsSelect<T extends boolean = true> {
-  review?: T;
-  reporter?: T;
-  reason?: T;
-  note?: T;
-  status?: T;
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  _verified?: T;
+  _verificationToken?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

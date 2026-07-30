@@ -2,10 +2,10 @@ import { ArrowLeft, MapPin, MessageSquare, Plus, Star } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { ReviewCard } from "@/components/ReviewCard";
+import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category, City, Place, Review } from "@/payload-types";
-import { ReviewCard } from "../../components/ReviewCard";
-import { StarRating } from "../../components/StarRating";
 
 const SORTS = ["recent", "top", "high", "low"] as const;
 type SortKey = (typeof SORTS)[number];

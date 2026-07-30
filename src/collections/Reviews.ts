@@ -1,10 +1,9 @@
 import type { CollectionConfig } from "payload";
-import { isAdmin, isAdminAccess } from "../access/isAdmin";
+import { isAdmin, isAdminAccess } from "@/access/isAdmin";
 import {
   recomputeOnReviewChange,
   recomputeOnReviewDelete,
-} from "../hooks/recomputePlaceStats";
-
+} from "@/hooks/recomputePlaceStats";
 export const Reviews: CollectionConfig = {
   slug: "reviews",
   admin: {

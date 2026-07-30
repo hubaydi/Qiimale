@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { submitReview } from "@/actions/reviews";
+import { StarRating } from "@/components/StarRating";
 import type { ActionResult } from "@/lib/types";
-import { StarRating } from "./StarRating";
 
 async function uploadPhoto(file: File): Promise<string | null> {
   const fd = new FormData();

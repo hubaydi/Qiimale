@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react";
 import Link from "next/link";
+import { StarRating } from "@/components/StarRating";
 import type { Category, City, Place } from "@/payload-types";
-import { StarRating } from "./StarRating";
 
 export function PlaceCard({
   place,

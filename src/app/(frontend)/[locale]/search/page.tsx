@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Where } from "payload";
+
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
@@ -16,7 +17,9 @@ export default async function SearchPage({
   const payload = await getPayloadClient();
 
   const andConditions: Where[] = [{ status: { equals: "approved" } }];
+
   if (params.q) andConditions.push({ name: { contains: params.q } });
+
   const placeDocs = await payload.find({
     collection: "places",
     where: { and: andConditions },
@@ -45,6 +48,7 @@ export default async function SearchPage({
         fallbackLocale: "so",
       })
     ).docs;
+
     if (params.q) {
       const q = params.q.toLowerCase();
       filtered = filtered.filter((p: Place) =>
@@ -52,12 +56,13 @@ export default async function SearchPage({
       );
     }
   }
+
   if (params.city)
     filtered = filtered.filter(
       (p: Place) =>
         typeof p.city === "object" &&
         p.city !== null &&
-        (p.city as { slug?: string }).slug === params.city,
+        p.city.slug === params.city,
     );
 
   return (
@@ -75,10 +80,12 @@ export default async function SearchPage({
           aria-label={t("placeholder")}
         />
       </form>
+
       <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">
         <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600" />
         {t("results")}
       </h1>
+
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">{t("empty")}</p>
       ) : (

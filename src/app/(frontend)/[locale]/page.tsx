@@ -129,7 +129,11 @@ export default async function HomePage() {
       <div className="mx-auto max-w-5xl space-y-14 px-4 py-12">
         {/* Categories */}
         <section>
-          <SectionHeader title={t("Home.categories")} href="/categories" linkLabel={t("Home.viewAll")} />
+          <SectionHeader
+            title={t("Home.categories")}
+            href="/categories"
+            linkLabel={t("Home.viewAll")}
+          />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {categories.docs.map((cat: Category) => {
               const iconKey = cat.icon as keyof typeof Icons | undefined;
@@ -158,7 +162,11 @@ export default async function HomePage() {
 
         {/* Cities */}
         <section>
-          <SectionHeader title={t("Home.cities")} href="/cities" linkLabel={t("Home.viewAll")} />
+          <SectionHeader
+            title={t("Home.cities")}
+            href="/cities"
+            linkLabel={t("Home.viewAll")}
+          />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {cities.docs.map((city: City) => (
               <Link

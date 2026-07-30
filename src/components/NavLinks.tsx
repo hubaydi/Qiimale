@@ -1,6 +1,14 @@
 "use client";
 
-import { Building2, LayoutGrid, LogIn, MapPin, Plus, Search, User } from "lucide-react";
+import {
+  Building2,
+  LayoutGrid,
+  LogIn,
+  MapPin,
+  Plus,
+  Search,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { getCurrentUser } from "@/lib/session";
@@ -8,7 +16,13 @@ import { cn } from "@/lib/utils";
 
 interface NavLinksProps {
   labels: Record<
-    "search" | "categories" | "cities" | "places" | "addPlace" | "account" | "login",
+    | "search"
+    | "categories"
+    | "cities"
+    | "places"
+    | "addPlace"
+    | "account"
+    | "login",
     string
   >;
   user: Awaited<ReturnType<typeof getCurrentUser>>;

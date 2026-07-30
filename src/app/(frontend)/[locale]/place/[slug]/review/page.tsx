@@ -50,7 +50,7 @@ export default async function ReviewPage({
   return (
     <div className="max-w-xl mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold font-[family-name:var(--font-jakarta)] tracking-tight">
+        <h1 className="text-2xl font-bold font-jakarta tracking-tight">
           {existing ? t("Place.editReview") : t("Place.writeReview")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">{place.name}</p>

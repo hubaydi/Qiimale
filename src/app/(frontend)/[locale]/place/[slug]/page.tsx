@@ -127,7 +127,7 @@ export default async function PlacePage({
             )}
           </div>
 
-          <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-[150px] shrink-0 text-center">
+          <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-37.5 shrink-0 text-center">
             <span className="text-4xl font-black text-foreground">
               {place.ratingAvg?.toFixed(1) ?? "0.0"}
             </span>

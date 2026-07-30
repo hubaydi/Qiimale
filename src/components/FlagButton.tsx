@@ -60,7 +60,7 @@ export function FlagButton({
         {t("Review.flag")}
       </button>
       {open && (
-        <div className="absolute left-0 bottom-full mb-1 z-10 rounded border bg-popover text-popover-foreground p-1 text-xs shadow-md min-w-[120px]">
+        <div className="absolute left-0 bottom-full mb-1 z-10 rounded border bg-popover text-popover-foreground p-1 text-xs shadow-md min-w-30">
           {reasons.map((r) => (
             <button
               key={r}

@@ -83,7 +83,7 @@ export default async function HomePage() {
           }}
         />
         <div className="relative mx-auto max-w-2xl text-center">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl font-[family-name:var(--font-jakarta)]">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl font-jakarta">
             {t("App.name")}
           </h1>
           <p className="mt-3 text-lg text-white/80 sm:text-xl">

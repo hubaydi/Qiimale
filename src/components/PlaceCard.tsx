@@ -29,7 +29,7 @@ export function PlaceCard({
     }>) || Icons.MapPin;
   return (
     <Link
-      href={`/place/${place.slug}`}
+      href={`/places/${place.slug}`}
       className="group block border border-border bg-white rounded-xl p-5 transition-all duration-200 hover:border-blue-200 hover:shadow-sm hover:border-l-2 hover:border-l-blue-500"
     >
       <div className="flex items-start justify-between gap-3">

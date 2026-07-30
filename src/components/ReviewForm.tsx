@@ -98,7 +98,7 @@ export function ReviewForm({
         setServerError(res.error.message);
         return;
       }
-      router.push(`/place/${placeSlug}`);
+      router.push(`/places/${placeSlug}`);
       router.refresh();
     });
   }

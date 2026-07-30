@@ -84,6 +84,6 @@ export async function flagReview(
     context: { skipStats: true },
   });
 
-  if (placeSlug) revalidatePath(`/place/${placeSlug}`);
+  if (placeSlug) revalidatePath(`/places/${placeSlug}`);
   return { ok: true, data: { flagId: flag.id } };
 }

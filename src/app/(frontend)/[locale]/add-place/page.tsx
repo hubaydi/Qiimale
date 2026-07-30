@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AddPlaceForm } from "@/components/AddPlaceForm";
+import { AddPlaceForm } from "./_component/AddPlaceForm";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 

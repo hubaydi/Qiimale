@@ -1,12 +1,24 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AddPlaceForm } from "@/components/AddPlaceForm";
+import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
 
 export default async function AddPlacePage() {
   const t = await getTranslations("AddPlace");
   const user = await getCurrentUser();
   if (!user) redirect("/login");
+
+  const payload = await getPayloadClient();
+
+  const [cities, cats] = await Promise.all([
+    payload.find({ collection: "cities", limit: 100, overrideAccess: true }),
+    payload.find({
+      collection: "categories",
+      limit: 100,
+      overrideAccess: true,
+    }),
+  ]);
 
   return (
     <div className="max-w-xl mx-auto py-6 space-y-6">
@@ -16,7 +28,14 @@ export default async function AddPlacePage() {
           {t("success").split(".")[0]}
         </p>
       </div>
-      <AddPlaceForm />
+      <AddPlaceForm
+        cities={cities.docs.map((c) => ({ id: c.id, name: c.name }))}
+        categories={cats.docs.map((c) => ({
+          id: c.id,
+          name: c.name,
+          icon: (c as { icon?: string | null }).icon,
+        }))}
+      />
     </div>
   );
 }

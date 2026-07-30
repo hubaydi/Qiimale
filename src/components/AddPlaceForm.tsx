@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
 import { addPlace } from "@/actions/places";
@@ -27,7 +27,13 @@ interface CityOption {
   name: string | { so?: string; en?: string };
 }
 
-export function AddPlaceForm() {
+export function AddPlaceForm({
+  cities: initialCities,
+  categories: initialCategories,
+}: {
+  cities: CityOption[];
+  categories: CategoryOption[];
+}) {
   const t = useTranslations("AddPlace");
   const tErr = useTranslations("Errors");
   const locale = useLocale();
@@ -36,27 +42,12 @@ export function AddPlaceForm() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
   const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
-  const [cities, setCities] = useState<CityOption[]>([]);
-  const [cats, setCats] = useState<CategoryOption[]>([]);
+  const [cities, setCities] = useState<CityOption[]>(initialCities);
+  const [cats, setCats] = useState<CategoryOption[]>(initialCategories);
   const [cityModalOpen, setCityModalOpen] = useState(false);
   const [catModalOpen, setCatModalOpen] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-
-  // Load cities and categories on mount
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/cities?limit=100").then((r) => r.json()),
-      fetch("/api/categories?limit=100").then((r) => r.json()),
-    ])
-      .then(([c, cat]) => {
-        setCities(c.docs || []);
-        setCats(cat.docs || []);
-      })
-      .catch(() => {
-        setErr("Failed to load data.");
-      });
-  }, []);
 
   function getLocalizedName(
     name: string | { so?: string; en?: string },
@@ -467,30 +458,14 @@ export function AddPlaceForm() {
   }
 
   // ---- Modal callbacks ----
-  function handleCityCreated(id: string) {
-    // Re-fetch cities to get the new one with full data
-    fetch("/api/cities?limit=100")
-      .then((r) => r.json())
-      .then((data) => {
-        setCities(data.docs || []);
-        setSelectedCityId(id);
-      })
-      .catch(() => {
-        // If re-fetch fails, at least update local state optimistically
-        setSelectedCityId(id);
-      });
+  function handleCityCreated(id: string, name: string) {
+    setCities((prev) => [...prev, { id, name }]);
+    setSelectedCityId(id);
   }
 
-  function handleCategoryCreated(id: string) {
-    fetch("/api/categories?limit=100")
-      .then((r) => r.json())
-      .then((data) => {
-        setCats(data.docs || []);
-        setSelectedCatId(id);
-      })
-      .catch(() => {
-        setSelectedCatId(id);
-      });
+  function handleCategoryCreated(id: string, name: string, icon?: string) {
+    setCats((prev) => [...prev, { id, name, icon }]);
+    setSelectedCatId(id);
   }
 
   return (
@@ -566,7 +541,7 @@ export function AddPlaceForm() {
         label={t("cityName")}
         onSubmitAction={async (name) => {
           const res = await createCity(name);
-          if (res.ok) handleCityCreated(res.data.id);
+          if (res.ok) handleCityCreated(res.data.id, name);
           return res;
         }}
       />
@@ -578,7 +553,7 @@ export function AddPlaceForm() {
         showIcon
         onSubmitAction={async (name, icon) => {
           const res = await createCategory(name, icon);
-          if (res.ok) handleCategoryCreated(res.data.id);
+          if (res.ok) handleCategoryCreated(res.data.id, name, icon);
           return res;
         }}
       />

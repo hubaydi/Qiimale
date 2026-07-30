@@ -1,12 +1,25 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Loader2, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { loginUser } from "@/actions/auth";
 import { PasswordInput } from "@/components/PasswordInput";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const loginSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm({
   showVerified,
@@ -18,33 +31,30 @@ export function LoginForm({
   const t = useTranslations("Auth");
   const tErr = useTranslations("Errors");
   const router = useRouter();
-  const [pending, setPending] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  async function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setPending(true);
-    setErr(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
 
-    const fd = new FormData(e.currentTarget);
-    const res = await loginUser({
-      email: String(fd.get("email")),
-      password: String(fd.get("password")),
-    });
-    setPending(false);
-    if (!res.ok) {
-      try {
-        setErr(
-          res.error.message ||
-            tErr(res.error.code as Parameters<typeof tErr>[0]),
-        );
-      } catch {
-        setErr(res.error.message);
+  function onSubmit(data: LoginFormValues) {
+    setServerError(null);
+    startTransition(async () => {
+      const res = await loginUser(data);
+      if (!res.ok) {
+        setServerError(tErr(res.error.code) || res.error.message);
+
+        return;
       }
-      return;
-    }
-    router.push("/account");
-    router.refresh();
+      router.push("/account");
+      router.refresh();
+    });
   }
 
   return (
@@ -69,37 +79,35 @@ export function LoginForm({
             {t("passwordResetSuccess")}
           </div>
         )}
-        <form onSubmit={onSubmit} className="space-y-4">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <label
-              htmlFor="login-email"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("email")}
-            </label>
-            <input
+            <Label htmlFor="login-email">{t("email")}</Label>
+            <Input
               id="login-email"
-              name="email"
               type="email"
               placeholder="iimayl@tusaale.so"
-              required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label
-              htmlFor="login-password"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("password")}
-            </label>
+            <Label htmlFor="login-password">{t("password")}</Label>
             <PasswordInput
               id="login-password"
-              name="password"
               placeholder="••••••••"
-              required
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <div className="text-right">
@@ -111,19 +119,20 @@ export function LoginForm({
             </Link>
           </div>
 
-          {err && (
+          {serverError && (
             <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
               <AlertCircle size={16} className="shrink-0" />
-              <span>{err}</span>
+              <span>{serverError}</span>
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
-            disabled={pending}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
+            className="w-full"
+            size="lg"
+            disabled={isPending}
           >
-            {pending ? (
+            {isPending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
                 <span>Loading...</span>
@@ -134,7 +143,7 @@ export function LoginForm({
                 <span>{t("login")}</span>
               </>
             )}
-          </button>
+          </Button>
         </form>
 
         <p className="text-center text-xs text-muted-foreground">

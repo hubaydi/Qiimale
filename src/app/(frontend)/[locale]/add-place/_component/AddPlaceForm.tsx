@@ -1,18 +1,30 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
 import { addPlace } from "@/actions/places";
-import type { CategoryOption, CityOption } from "./types";
-import { StepIndicator } from "./StepIndicator";
+import { Button } from "@/components/ui/button";
 import { CreateModal } from "./CreateModal";
-import { StepCitySelect } from "./StepCitySelect";
 import { StepCategorySelect } from "./StepCategorySelect";
+import { StepCitySelect } from "./StepCitySelect";
 import { StepDetails } from "./StepDetails";
+import { StepIndicator } from "./StepIndicator";
+import type { CategoryOption, CityOption } from "./types";
+
+const addPlaceSchema = z.object({
+  name: z.string().min(5).max(100),
+  address: z.string().optional(),
+  description: z.string().max(1000).optional(),
+});
+
+type AddPlaceFormValues = z.infer<typeof addPlaceSchema>;
 
 export function AddPlaceForm({
   cities: initialCities,
@@ -32,8 +44,21 @@ export function AddPlaceForm({
   const [cats, setCats] = useState<CategoryOption[]>(initialCategories);
   const [cityModalOpen, setCityModalOpen] = useState(false);
   const [catModalOpen, setCatModalOpen] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddPlaceFormValues>({
+    resolver: zodResolver(addPlaceSchema),
+    defaultValues: {
+      name: "",
+      address: "",
+      description: "",
+    },
+  });
 
   function canGoNext(): boolean {
     if (step === 1) return selectedCityId !== null;
@@ -43,38 +68,30 @@ export function AddPlaceForm({
 
   function handleNext() {
     if (!canGoNext()) return;
-    setErr(null);
+    setServerError(null);
     if (step === 1) setStep(2);
     else if (step === 2) setStep(3);
   }
 
   function handleBack() {
-    setErr(null);
+    setServerError(null);
     if (step === 2) setStep(1);
     else if (step === 3) setStep(2);
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setErr(null);
-    const fd = new FormData(e.currentTarget as HTMLFormElement);
+  function onSubmit(data: AddPlaceFormValues) {
+    setServerError(null);
+    if (!selectedCityId || !selectedCatId) return;
     startTransition(async () => {
       const res = await addPlace({
-        name: String(fd.get("name") || ""),
-        categoryId: String(selectedCatId),
-        cityId: String(selectedCityId),
-        address: String(fd.get("address") || ""),
-        description: String(fd.get("description") || ""),
+        name: data.name,
+        categoryId: selectedCatId,
+        cityId: selectedCityId,
+        address: data.address || "",
+        description: data.description || "",
       });
       if (!res.ok) {
-        try {
-          setErr(
-            res.error.message ||
-              tErr(res.error.code as Parameters<typeof tErr>[0]),
-          );
-        } catch {
-          setErr(res.error.message);
-        }
+        setServerError(tErr(res.error.code) || res.error.message);
         return;
       }
       router.push("/account");
@@ -94,7 +111,7 @@ export function AddPlaceForm({
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
     >
       <StepIndicator step={step} />
@@ -121,13 +138,15 @@ export function AddPlaceForm({
           selectedCatId={selectedCatId}
           cities={cities}
           categories={cats}
+          register={register}
+          errors={errors}
         />
       )}
 
-      {err && (
+      {serverError && (
         <div className="mt-4 flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
           <AlertCircle size={16} className="shrink-0" />
-          <span>{err}</span>
+          <span>{serverError}</span>
         </div>
       )}
 
@@ -136,7 +155,7 @@ export function AddPlaceForm({
           <button
             type="button"
             onClick={handleBack}
-            disabled={pending}
+            disabled={isPending}
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-gray-50 transition-all disabled:opacity-50 cursor-pointer"
           >
             <ChevronLeft size={16} />
@@ -150,19 +169,15 @@ export function AddPlaceForm({
           <button
             type="button"
             onClick={handleNext}
-            disabled={!canGoNext() || pending}
+            disabled={!canGoNext() || isPending}
             className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
           >
             <span>{t("next")}</span>
             <ChevronRight size={16} />
           </button>
         ) : (
-          <button
-            type="submit"
-            disabled={pending}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
-          >
-            {pending ? (
+          <Button type="submit" disabled={isPending}>
+            {isPending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
                 <span>{t("saving")}</span>
@@ -170,7 +185,7 @@ export function AddPlaceForm({
             ) : (
               <span>{t("submit")}</span>
             )}
-          </button>
+          </Button>
         )}
       </div>
 

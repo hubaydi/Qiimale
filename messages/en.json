@@ -67,6 +67,7 @@
     "logout": "Log out",
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Confirm password",
     "name": "Your name",
     "google": "Continue with Google",
     "verifyEmail": "Verify your email before reviewing.",
@@ -147,6 +148,7 @@
     "empty": "No places yet."
   },
   "Errors": {
+    "WRONG_PASSWORD": "Invalid email or password.",
     "UNAUTHENTICATED": "Please log in first.",
     "UNVERIFIED": "Verify your email before reviewing.",
     "NOT_FOUND": "Not found.",

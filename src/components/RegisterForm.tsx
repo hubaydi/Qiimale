@@ -1,46 +1,69 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { registerUser } from "@/actions/auth";
 import { PasswordInput } from "@/components/PasswordInput";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const registerSchema = z
+  .object({
+    name: z.string().min(5),
+    email: z.email(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const t = useTranslations("Auth");
-  const router = useRouter();
   const tErr = useTranslations("Errors");
-  const [pending, setPending] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setErr(null);
-    const fd = new FormData(e.currentTarget);
-    setPending(true);
-    try {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  function onSubmit(data: RegisterFormValues) {
+    setServerError(null);
+    startTransition(async () => {
       const res = await registerUser({
-        name: String(fd.get("name") ?? ""),
-        email: String(fd.get("email") ?? ""),
-        password: String(fd.get("password") ?? ""),
+        name: data.name,
+        email: data.email,
+        password: data.password,
       });
       if (!res.ok) {
-        setErr(
-          res.error.message ||
-            tErr(res.error.code as Parameters<typeof tErr>[0]),
-        );
+        setServerError(tErr(res.error.code) || res.error.message);
+
         return;
       }
-      router.push(
-        `/verify-email?email=${encodeURIComponent(String(fd.get("email") ?? ""))}`,
-      );
-    } catch {
-      setErr(tErr("VALIDATION"));
-    } finally {
-      setPending(false);
-    }
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
+    });
   }
 
   return (
@@ -55,69 +78,80 @@ export function RegisterForm() {
           </p>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <label
-              htmlFor="register-name"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("name")}
-            </label>
-            <input
+            <Label htmlFor="register-name">{t("name")}</Label>
+            <Input
               id="register-name"
-              name="name"
               placeholder="Magacaaga buuxa"
-              required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+              {...register("name")}
             />
+            {errors.name && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.name.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label
-              htmlFor="register-email"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("email")}
-            </label>
-            <input
+            <Label htmlFor="register-email">{t("email")}</Label>
+            <Input
               id="register-email"
-              name="email"
               type="email"
               placeholder="iimayl@tusaale.so"
-              required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label
-              htmlFor="register-password"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("password")}
-            </label>
+            <Label htmlFor="register-password">{t("password")}</Label>
             <PasswordInput
               id="register-password"
-              name="password"
               placeholder="••••••••"
-              required
-              minLength={6}
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
-          {err && (
+          <div className="space-y-2">
+            <Label htmlFor="register-confirm-password">
+              {t("confirmPassword")}
+            </Label>
+            <PasswordInput
+              id="register-confirm-password"
+              placeholder="••••••••"
+              {...register("confirmPassword")}
+            />
+            {errors.confirmPassword && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+          {serverError && (
             <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
               <AlertCircle size={16} className="shrink-0" />
-              <span>{err}</span>
+              <span>{serverError}</span>
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
-            disabled={pending}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
+            className="w-full"
+            size="lg"
+            disabled={isPending}
           >
-            {pending ? (
+            {isPending ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
                 <span>Loading...</span>
@@ -128,7 +162,7 @@ export function RegisterForm() {
                 <span>{t("register")}</span>
               </>
             )}
-          </button>
+          </Button>
         </form>
 
         <p className="text-center text-xs text-muted-foreground">

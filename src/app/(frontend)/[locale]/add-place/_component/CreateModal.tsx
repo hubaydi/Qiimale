@@ -1,8 +1,20 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const createSchema = z.object({
+  name: z.string().min(1),
+  icon: z.string().optional(),
+});
+
+type CreateFormValues = z.infer<typeof createSchema>;
 
 export function CreateModal({
   open,
@@ -27,38 +39,35 @@ export function CreateModal({
 }) {
   const t = useTranslations("AddPlace");
   const tErr = useTranslations("Errors");
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("");
-  const [modalErr, setModalErr] = useState<string | null>(null);
-  const [modalPending, setModalPending] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateFormValues>({
+    resolver: zodResolver(createSchema),
+    defaultValues: { name: "", icon: "" },
+  });
 
   if (!open) return null;
 
-  async function handleModalSubmit() {
-    setModalErr(null);
-    if (!name.trim()) {
-      setModalErr(label);
-      return;
-    }
-    setModalPending(true);
+  async function onSubmit(data: CreateFormValues) {
+    setModalError(null);
+    setIsPending(true);
     const res = await onSubmitAction(
-      name.trim(),
-      showIcon ? icon.trim() || undefined : undefined,
+      data.name.trim(),
+      showIcon ? data.icon?.trim() || undefined : undefined,
     );
-    setModalPending(false);
+    setIsPending(false);
     if (!res.ok) {
-      try {
-        setModalErr(
-          res.error.message ||
-            tErr(res.error.code as Parameters<typeof tErr>[0]),
-        );
-      } catch {
-        setModalErr(res.error.message);
-      }
+      setModalError(tErr(res.error.code) || res.error.message);
+
       return;
     }
-    setName("");
-    setIcon("");
+    reset();
     onClose();
   }
 
@@ -76,72 +85,59 @@ export function CreateModal({
           </button>
         </div>
 
-        <div className="space-y-2">
-          <label
-            htmlFor="create-name"
-            className="block text-sm font-semibold text-foreground"
-          >
-            {label}
-          </label>
-          <input
-            id="create-name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={label}
-            required
-            className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
-          />
-        </div>
-
-        {showIcon && (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <label
-              htmlFor="create-icon"
-              className="block text-sm font-semibold text-foreground"
-            >
-              {t("categoryIcon")}
-            </label>
-            <input
-              id="create-icon"
-              value={icon}
-              onChange={(e) => setIcon(e.target.value)}
-              placeholder={t("categoryIcon")}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
-            />
-          </div>
-        )}
-
-        {modalErr && (
-          <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
-            <AlertCircle size={16} className="shrink-0" />
-            <span>{modalErr}</span>
-          </div>
-        )}
-
-        <div className="flex gap-3 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 rounded-lg border border-slate-300 px-4 py-3 text-sm font-medium text-foreground hover:bg-gray-50 transition-all cursor-pointer"
-          >
-            {t("cancel")}
-          </button>
-          <button
-            type="button"
-            onClick={handleModalSubmit}
-            disabled={modalPending || !name.trim()}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
-          >
-            {modalPending ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                <span>{t("saving")}</span>
-              </>
-            ) : (
-              <span>{t("create")}</span>
+            <Label htmlFor="create-name">{label}</Label>
+            <Input id="create-name" placeholder={label} {...register("name")} />
+            {errors.name && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.name.message}
+              </p>
             )}
-          </button>
-        </div>
+          </div>
+
+          {showIcon && (
+            <div className="space-y-2">
+              <Label htmlFor="create-icon">{t("categoryIcon")}</Label>
+              <Input
+                id="create-icon"
+                placeholder={t("categoryIcon")}
+                {...register("icon")}
+              />
+            </div>
+          )}
+
+          {modalError && (
+            <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
+              <AlertCircle size={16} className="shrink-0" />
+              <span>{modalError}</span>
+            </div>
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-lg border border-slate-300 px-4 py-3 text-sm font-medium text-foreground hover:bg-gray-50 transition-all cursor-pointer"
+            >
+              {t("cancel")}
+            </button>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>{t("saving")}</span>
+                </>
+              ) : (
+                <span>{t("create")}</span>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

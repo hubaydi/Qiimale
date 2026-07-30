@@ -1,11 +1,16 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2, Upload, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { submitReview } from "@/actions/reviews";
 import { StarRating } from "@/components/StarRating";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import type { ActionResult } from "@/lib/types";
 
 async function uploadPhoto(file: File): Promise<string | null> {
@@ -21,6 +26,13 @@ async function uploadPhoto(file: File): Promise<string | null> {
   return doc?.doc?.id ?? doc?.id ?? null;
 }
 
+const reviewSchema = z.object({
+  rating: z.number().int().min(1),
+  text: z.string().min(20),
+});
+
+type ReviewFormValues = z.infer<typeof reviewSchema>;
+
 export function ReviewForm({
   placeId,
   placeSlug,
@@ -32,12 +44,27 @@ export function ReviewForm({
 }) {
   const t = useTranslations("Review");
   const router = useRouter();
-  const [pending, start] = useTransition();
-  const [rating, setRating] = useState(existing?.rating ?? 0);
-  const [text, setText] = useState(existing?.text ?? "");
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-  const [err, setErr] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<ReviewFormValues>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: {
+      rating: existing?.rating ?? 0,
+      text: existing?.text ?? "",
+    },
+  });
+
+  const rating = watch("rating");
+  const text = watch("text");
 
   function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = Array.from(e.target.files || []).slice(0, 3);
@@ -49,44 +76,28 @@ export function ReviewForm({
   }
 
   function removeFile(index: number) {
-    const newFiles = files.filter((_, i) => i !== index);
-    const newPreviews = previews.filter((_, i) => i !== index);
-    setFiles(newFiles);
-    setPreviews(newPreviews);
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setErr(null);
-
-    if (rating < 1) {
-      setErr(`${t("rating")} waa qasab.`);
-      return;
-    }
-    if (text.trim().length < 20) {
-      setErr(t("minLength"));
-      return;
-    }
-
-    start(async () => {
+  function onSubmit(data: ReviewFormValues) {
+    setServerError(null);
+    startTransition(async () => {
       const photoIds: string[] = [];
       for (const f of files) {
         const id = await uploadPhoto(f);
         if (id) photoIds.push(id);
       }
-
       const res: ActionResult<{ reviewId: string }> = await submitReview({
         placeId,
-        rating,
-        text,
+        rating: data.rating,
+        text: data.text,
         photoIds,
       });
-
       if (!res.ok) {
-        setErr(res.error.message);
+        setServerError(res.error.message);
         return;
       }
-
       router.push(`/place/${placeSlug}`);
       router.refresh();
     });
@@ -94,7 +105,7 @@ export function ReviewForm({
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
     >
       <div className="space-y-2">
@@ -102,24 +113,31 @@ export function ReviewForm({
           {t("rating")}
         </span>
         <div className="flex items-center gap-3">
-          <StarRating value={rating} size={32} onChange={setRating} />
+          <input
+            type="hidden"
+            {...register("rating", { valueAsNumber: true })}
+          />
+          <StarRating
+            value={rating}
+            size={32}
+            onChange={(v) => setValue("rating", v, { shouldValidate: true })}
+          />
           {rating > 0 && (
             <span className="text-sm font-bold text-amber-500">{rating}/5</span>
           )}
         </div>
+        {errors.rating && (
+          <p className="text-xs font-medium text-red-500">
+            {errors.rating.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
-        <label
-          className="block text-sm font-semibold text-foreground"
-          htmlFor="text"
-        >
-          {t("comment")}
-        </label>
+        <Label htmlFor="text">{t("comment")}</Label>
         <textarea
           id="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          {...register("text")}
           placeholder={t("commentPlaceholder")}
           rows={5}
           className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
@@ -128,6 +146,11 @@ export function ReviewForm({
           <span>{t("minLength")}</span>
           <span>{text.length} / 20+</span>
         </div>
+        {errors.text && (
+          <p className="text-xs font-medium text-red-500">
+            {errors.text.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -175,28 +198,24 @@ export function ReviewForm({
         </div>
       </div>
 
-      {err && (
+      {serverError && (
         <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
           <AlertCircle size={16} className="shrink-0" />
-          <span>{err}</span>
+          <span>{serverError}</span>
         </div>
       )}
 
       <div className="pt-2">
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
-        >
-          {pending ? (
+        <Button type="submit" className="w-full" size="lg" disabled={isPending}>
+          {isPending ? (
             <>
               <Loader2 size={16} className="animate-spin" />
-              <span>Deynayaa...</span>
+              <span>Loading...</span>
             </>
           ) : (
             <span>{t("submit")}</span>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

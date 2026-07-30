@@ -67,6 +67,7 @@
     "logout": "Ka bax akoonka",
     "email": "Iimayl",
     "password": "Erey sir ah",
+    "confirmPassword": "Xaqiiji ereyga sirta ah",
     "name": "Magacaaga",
     "google": "Soo geli Google-ga",
     "verifyEmail": "Fur iimaylka si aad qiimayn u qortid.",
@@ -147,13 +148,14 @@
     "empty": "Weli goobo ma jiraan."
   },
   "Errors": {
+    "WRONG_PASSWORD": "Email-ka ama Ereyga sirta ah waa khalad.",
     "UNAUTHENTICATED": "Fadlan marka hore akoon samayso ama gal akoonka.",
     "UNVERIFIED": "verify garee iimaylkaaga kahor qiimayn qoridda.",
     "NOT_FOUND": "Lama helin.",
     "FORBIDDEN": "Lama oggola.",
     "ALREADY_FLAGGED": "Horey ayaad u dacwaysay.",
     "SELF_UPVOTE": "Qiimayntaada ma taageeri kartid.",
-    "VALIDATION": "Xog aan saxnayn.",
+    "VALIDATION": "Xogtan ma ahan mid saxan.",
     "CONFLICT": "Iimaylkan waa mid diiwaan-gashan."
   }
 }

@@ -1,4 +1,5 @@
 export type ErrorCode =
+  | "WRONG_PASSWORD"
   | "UNAUTHENTICATED"
   | "UNVERIFIED"
   | "NOT_FOUND"

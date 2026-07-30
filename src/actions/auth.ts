@@ -101,7 +101,7 @@ export async function loginUser(
     });
 
     if (!result.token) {
-      return error("UNAUTHENTICATED", "Login failed");
+      return error("WRONG_PASSWORD", "Login failed");
     }
     setSessionCookie(cookieStore, result.token);
     return { ok: true, data: { token: result.token, verified: true } };
@@ -131,7 +131,7 @@ export async function loginUser(
         return { ok: true, data: { token, verified: false } };
       }
     }
-    return error("UNAUTHENTICATED", "Invalid credentials");
+    return error("WRONG_PASSWORD", "Invalid credentials");
   }
 }
 

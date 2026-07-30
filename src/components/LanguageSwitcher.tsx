@@ -4,7 +4,7 @@ import { Globe } from "lucide-react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
-const LOCALE_LABELS: Record<string, string> = {
+const LOCALE_LABELS = {
   so: "Soomaali",
   en: "English",
 };

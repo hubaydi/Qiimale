@@ -40,14 +40,14 @@ export default async function HomePage() {
 
   const categories = await payload.find({
     collection: "categories",
-    limit: 50,
+    limit: 8,
     locale,
     fallbackLocale: "so",
     overrideAccess: true,
   });
   const cities = await payload.find({
     collection: "cities",
-    limit: 50,
+    limit: 8,
     locale,
     fallbackLocale: "so",
     overrideAccess: true,
@@ -55,7 +55,7 @@ export default async function HomePage() {
   const topPlaces = await payload.find({
     collection: "places",
     where: { status: { equals: "approved" } },
-    limit: 6,
+    limit: 8,
     sort: "-ratingAvg",
     overrideAccess: true,
     locale,
@@ -65,7 +65,7 @@ export default async function HomePage() {
   const latestReviews = await payload.find({
     collection: "reviews",
     where: { status: { equals: "published" } },
-    limit: 5,
+    limit: 8,
     sort: "-createdAt",
     overrideAccess: true,
     depth: 2,

@@ -7,8 +7,8 @@ export function Footer({ locale }: { locale: string }) {
             <span className="font-jakarta text-xl font-bold">Qiimale</span>
             <p className="mt-2 text-sm text-slate-400">
               {locale === "so"
-                ? "Qiimayn goobo & adeegyo Soomaaliya"
-                : "Rate places & services in Somalia"}
+                ? "Madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada Soomaaliya"
+                : "A platform for reviewing places and services in Somalia."}
             </p>
           </div>
           <div>
@@ -44,7 +44,7 @@ export function Footer({ locale }: { locale: string }) {
             <h3 className="text-sm font-semibold text-white">About</h3>
             <p className="mt-3 text-sm text-slate-400">
               {locale === "so"
-                ? "Qiimale waa goob loogu talagalay in lagu qiimeeyo, laguna soo bandhigo tajribada ay dadku kala kulmeen goobaha Ganacsi ee Soomaaliya. Gaar ahaan kuwa online-ka ah."
+                ? "Qiimale waa madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada Ganacsi, Iyo in lagu soo bandhigo tajribada dadku kala kulmeen goobaha Ganacsi Soomaaliya. Gaar ahaan kuwa online-ka ah.."
                 : "Qiimale is a platform for reviewing places and services in Somalia."}
             </p>
           </div>

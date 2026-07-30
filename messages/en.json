@@ -4,6 +4,7 @@
     "categories": "Browse by category",
     "topRated": "Top rated places",
     "latestReviews": "Latest reviews",
+    "latestPlaces": "Latest places",
     "viewAll": "View all",
     "searchButton": "Search",
     "cities": "Browse by city"
@@ -13,6 +14,7 @@
     "search": "Search",
     "categories": "Categories",
     "cities": "Cities",
+    "places": "Places",
     "addPlace": "Add a place",
     "account": "My account",
     "login": "Log in",
@@ -139,6 +141,10 @@
     "title": "Cities",
     "empty": "No cities yet.",
     "placesIn": "Places in {city}"
+  },
+  "Places": {
+    "title": "Places",
+    "empty": "No places yet."
   },
   "Errors": {
     "UNAUTHENTICATED": "Please log in first.",

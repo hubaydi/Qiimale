@@ -13,6 +13,7 @@ export async function Header() {
     search: t("search"),
     categories: t("categories"),
     cities: t("cities"),
+    places: t("places"),
     addPlace: t("addPlace"),
     account: t("account"),
     login: t("login"),

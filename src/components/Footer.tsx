@@ -44,7 +44,7 @@ export function Footer({ locale }: { locale: string }) {
             <h3 className="text-sm font-semibold text-white">About</h3>
             <p className="mt-3 text-sm text-slate-400">
               {locale === "so"
-                ? "Qiimale waa madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada Ganacsi, Iyo in lagu soo bandhigo tajribada dadku kala kulmeen goobaha Ganacsi Soomaaliya. Gaar ahaan kuwa online-ka ah.."
+                ? "Qiimale waa madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada ganacsi, iyo in lagu soo bandhigo waaya-aragnimada dadku kala kulmeen goobaha ganacsi ee Soomaaliya —gaar ahaan kuwa online-ka ah."
                 : "Qiimale is a platform for reviewing places and services in Somalia."}
             </p>
           </div>

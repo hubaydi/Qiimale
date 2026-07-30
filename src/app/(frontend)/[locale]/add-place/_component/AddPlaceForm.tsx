@@ -95,7 +95,6 @@ export function AddPlaceForm({
         return;
       }
       router.push("/account");
-      router.refresh();
     });
   }
 

@@ -189,7 +189,7 @@ export default async function PlacePage({
 
           <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
             <Link
-              href={`/place/${slug}/review`}
+              href={`/places/${slug}/review`}
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all shadow-sm hover:shadow-md cursor-pointer"
             >
               <Plus size={16} />
@@ -248,7 +248,7 @@ export default async function PlacePage({
               {SORTS.map((s) => (
                 <Link
                   key={s}
-                  href={`/place/${slug}?sort=${s}`}
+                  href={`/places/${slug}?sort=${s}`}
                   className={`px-2.5 py-1 rounded-md transition-all font-medium ${
                     sort === s
                       ? "bg-background text-foreground shadow-xs"

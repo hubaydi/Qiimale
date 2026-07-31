@@ -124,7 +124,7 @@ export default async function AccountPage() {
                     <div className="flex items-center justify-between">
                       {place ? (
                         <Link
-                          href={`/place/${place.slug}`}
+                          href={`/places/${place.slug}`}
                           className="font-bold text-foreground hover:text-primary transition-colors text-sm"
                         >
                           {place.name}
@@ -180,7 +180,7 @@ export default async function AccountPage() {
                   <div>
                     {p.status === "approved" ? (
                       <Link
-                        href={`/place/${p.slug}`}
+                        href={`/places/${p.slug}`}
                         className="font-bold text-foreground hover:text-primary transition-colors text-sm"
                       >
                         {p.name}

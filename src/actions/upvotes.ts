@@ -60,7 +60,7 @@ export async function toggleUpvote(
       overrideAccess: true,
       user,
     });
-    if (placeSlug) revalidatePath(`/place/${placeSlug}`);
+if (placeSlug) revalidatePath(`/places/${placeSlug}`);
     return { ok: true, data: { upvoted: false } };
   }
   await payload.create({
@@ -69,6 +69,6 @@ export async function toggleUpvote(
     overrideAccess: true,
     user,
   });
-  if (placeSlug) revalidatePath(`/place/${placeSlug}`);
+  if (placeSlug) revalidatePath(`/places/${placeSlug}`);
   return { ok: true, data: { upvoted: true } };
 }

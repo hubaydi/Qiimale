@@ -83,6 +83,6 @@ export async function submitReview(
     reviewId = created.id;
   }
 
-  revalidatePath(`/place/${place.slug}`);
+  revalidatePath(`/places/${place.slug}`);
   return { ok: true, data: { reviewId } };
 }

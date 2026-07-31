@@ -230,7 +230,7 @@ export default async function HomePage() {
               return (
                 <li key={r.id}>
                   <Link
-                    href={`/place/${place.slug}`}
+                    href={`/places/${place.slug}`}
                     className="block border border-border bg-white rounded-xl p-5 transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-3">

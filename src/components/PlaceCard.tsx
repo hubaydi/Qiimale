@@ -27,7 +27,7 @@ export function PlaceCard({
 
   return (
     <Link
-      href={`/place/${place.slug}`}
+      href={`/places/${place.slug}`}
       className="group block overflow-hidden rounded-xl border border-border bg-white transition-all duration-200 hover:border-blue-200 hover:shadow-sm hover:border-l-2 hover:border-l-blue-500"
     >
       {imageUrl ? (

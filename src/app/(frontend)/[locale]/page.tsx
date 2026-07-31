@@ -1,4 +1,4 @@
-import * as Icons from "lucide-react";
+import { ArrowRight, MapPin, Search } from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PlaceCard } from "@/components/PlaceCard";
@@ -26,7 +26,7 @@ function SectionHeader({
           className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
         >
           {linkLabel}
-          <Icons.ArrowRight className="size-3.5" />
+          <ArrowRight className="size-3.5" />
         </Link>
       ) : null}
     </div>
@@ -101,7 +101,7 @@ export default async function HomePage() {
           </p>
           <form action="/search" className="relative mt-8 max-w-xl mx-auto">
             <div className="bg-white rounded-2xl shadow-lg flex items-center">
-              <Icons.Search
+              <Search
                 className="pointer-events-none ml-4 size-5 text-muted-foreground"
                 aria-hidden
               />
@@ -120,7 +120,7 @@ export default async function HomePage() {
             </div>
           </form>
           <div className="mt-6 flex items-center justify-center gap-2 text-sm text-white/70">
-            <Icons.MapPin size={14} />
+            <MapPin size={14} />
             <span>200+ Places · 500+ Reviews · 10+ Cities</span>
           </div>
         </div>
@@ -135,28 +135,22 @@ export default async function HomePage() {
             linkLabel={t("Home.viewAll")}
           />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {categories.docs.map((cat: Category) => {
-              const iconKey = cat.icon as keyof typeof Icons | undefined;
-              // biome-ignore lint/performance/noDynamicNamespaceImportAccess: lucide icon lookup
-              const iconComponent = iconKey ? Icons[iconKey] : null;
-              const Icon =
-                (iconComponent as React.ComponentType<{ size?: number }>) ||
-                Icons.Tag;
-              return (
-                <Link
-                  key={cat.id}
-                  href={`/categories/${cat.slug}`}
-                  className="group flex flex-col items-center gap-2.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
-                >
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
-                    <Icon size={20} />
-                  </div>
-                  <span className="text-sm font-medium text-foreground leading-tight">
-                    {cat.name}
+            {categories.docs.map((cat: Category) => (
+              <Link
+                key={cat.id}
+                href={`/categories/${cat.slug}`}
+                className="group flex flex-col justify-center gap-1.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm min-h-[104px]"
+              >
+                <span className="text-sm font-medium text-foreground leading-tight">
+                  {cat.name}
+                </span>
+                {cat.description ? (
+                  <span className="line-clamp-2 text-xs text-muted-foreground">
+                    {cat.description}
                   </span>
-                </Link>
-              );
-            })}
+                ) : null}
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -175,7 +169,7 @@ export default async function HomePage() {
                 className="group flex flex-col items-center gap-2.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
               >
                 <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
-                  <Icons.MapPin size={20} />
+                  <MapPin size={20} />
                 </div>
                 <span className="text-sm font-medium text-foreground leading-tight">
                   {city.name}

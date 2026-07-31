@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { CategoryOption, CityOption } from "./types";
+import type { Category, City } from "@/payload-types";
 import { getLocalizedName } from "./utils";
 
 export function StepDetails({
@@ -17,8 +17,8 @@ export function StepDetails({
 }: {
   selectedCityId: string | null;
   selectedCatId: string | null;
-  cities: CityOption[];
-  categories: CategoryOption[];
+  cities: City[];
+  categories: Category[];
   register: UseFormRegister<{
     name: string;
     address?: string;

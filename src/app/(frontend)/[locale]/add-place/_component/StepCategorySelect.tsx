@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import type { CategoryOption } from "./types";
+import type { Category } from "@/payload-types";
 import { getLocalizedName } from "./utils";
 
 export function StepCategorySelect({
@@ -11,7 +11,7 @@ export function StepCategorySelect({
   onSelect,
   onCreate,
 }: {
-  categories: CategoryOption[];
+  categories: Category[];
   selectedCatId: string | null;
   onSelect: (id: string | null) => void;
   onCreate: () => void;

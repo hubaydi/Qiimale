@@ -11,12 +11,12 @@ import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
 import { addPlace } from "@/actions/places";
 import { Button } from "@/components/ui/button";
+import type { CategoryOption, CityOption } from "./types";
 import { CreateModal } from "./CreateModal";
 import { StepCategorySelect } from "./StepCategorySelect";
 import { StepCitySelect } from "./StepCitySelect";
 import { StepDetails } from "./StepDetails";
 import { StepIndicator } from "./StepIndicator";
-import type { CategoryOption, CityOption } from "./types";
 
 const addPlaceSchema = z.object({
   name: z.string().min(5).max(100),
@@ -104,8 +104,12 @@ export function AddPlaceForm({
     setSelectedCityId(id);
   }
 
-  function handleCategoryCreated(id: string, name: string, icon?: string) {
-    setCats((prev) => [...prev, { id, name, icon }]);
+  function handleCategoryCreated(
+    id: string,
+    name: string,
+    description?: string,
+  ) {
+    setCats((prev) => [...prev, { id, name, description }]);
     setSelectedCatId(id);
   }
 
@@ -205,10 +209,9 @@ export function AddPlaceForm({
         onClose={() => setCatModalOpen(false)}
         title={t("createCategory")}
         label={t("categoryName")}
-        showIcon
-        onSubmitAction={async (name, icon) => {
-          const res = await createCategory(name, icon);
-          if (res.ok) handleCategoryCreated(res.data.id, name, icon);
+        onSubmitAction={async (name) => {
+          const res = await createCategory(name);
+          if (res.ok) handleCategoryCreated(res.data.id, name);
           return res;
         }}
       />

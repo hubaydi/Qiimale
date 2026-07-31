@@ -16,12 +16,9 @@ export const Categories: CollectionConfig = {
     { name: "name", type: "text", required: true, localized: true },
     slugField({ useAsSlug: "name", position: "sidebar" }),
     {
-      name: "icon",
-      type: "text",
-      admin: {
-        position: "sidebar",
-        description: "lucide icon name, e.g. utensils, graduation-cap",
-      },
+      name: "description",
+      type: "textarea",
+      localized: true,
     },
   ],
 };

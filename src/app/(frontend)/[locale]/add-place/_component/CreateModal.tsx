@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 
 const createSchema = z.object({
   name: z.string().min(1),
-  icon: z.string().optional(),
+  description: z.string().max(200).optional(),
 });
 
 type CreateFormValues = z.infer<typeof createSchema>;
@@ -22,7 +22,6 @@ export function CreateModal({
   title,
   label,
   onSubmitAction,
-  showIcon,
 }: {
   open: boolean;
   onClose: () => void;
@@ -30,12 +29,11 @@ export function CreateModal({
   label: string;
   onSubmitAction: (
     name: string,
-    icon?: string,
+    description?: string,
   ) => Promise<
     | { ok: true; data: { id: string } }
     | { ok: false; error: { code: string; message: string } }
   >;
-  showIcon?: boolean;
 }) {
   const t = useTranslations("AddPlace");
   const tErr = useTranslations("Errors");
@@ -49,7 +47,7 @@ export function CreateModal({
     formState: { errors },
   } = useForm<CreateFormValues>({
     resolver: zodResolver(createSchema),
-    defaultValues: { name: "", icon: "" },
+    defaultValues: { name: "", description: "" },
   });
 
   if (!open) return null;
@@ -59,7 +57,7 @@ export function CreateModal({
     setIsPending(true);
     const res = await onSubmitAction(
       data.name.trim(),
-      showIcon ? data.icon?.trim() || undefined : undefined,
+      data.description?.trim(),
     );
     setIsPending(false);
     if (!res.ok) {
@@ -95,17 +93,19 @@ export function CreateModal({
               </p>
             )}
           </div>
-
-          {showIcon && (
-            <div className="space-y-2">
-              <Label htmlFor="create-icon">{t("categoryIcon")}</Label>
-              <Input
-                id="create-icon"
-                placeholder={t("categoryIcon")}
-                {...register("icon")}
-              />
-            </div>
-          )}
+          <div className="space-y-2">
+            <Label htmlFor="create-description">{t("description")}</Label>
+            <Input
+              id="create-description"
+              placeholder={t("description")}
+              {...register("description")}
+            />
+            {errors.description && (
+              <p className="text-xs font-medium text-red-500">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
 
           {modalError && (
             <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">

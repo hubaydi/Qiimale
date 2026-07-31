@@ -12,14 +12,14 @@ const schema = z.object({
     .string()
     .min(5, "Category name is required")
     .max(50, "Category name is too long"),
-  icon: z.string().optional(),
+  description: z.string().max(200).optional(),
 });
 
 export async function createCategory(
   name: string,
-  icon?: string,
+  description?: string,
 ): Promise<ActionResult<{ id: string }>> {
-  const parsed = schema.safeParse({ name, icon });
+  const parsed = schema.safeParse({ name, description });
   if (!parsed.success) {
     return error(
       "VALIDATION",
@@ -33,17 +33,13 @@ export async function createCategory(
 
   const payload = await getPayloadClient();
 
-  const data: Record<string, unknown> = {
-    name: parsed.data.name,
-    generateSlug: true,
-  };
-  if (parsed.data.icon) {
-    data.icon = parsed.data.icon;
-  }
-
   const created: Category = await payload.create({
     collection: "categories",
-    data: data as RequiredDataFromCollectionSlug<"categories">,
+    data: {
+      name: parsed.data.name,
+      generateSlug: true,
+      description: parsed.data.description,
+    } as RequiredDataFromCollectionSlug<"categories">,
     overrideAccess: true,
     user,
   });

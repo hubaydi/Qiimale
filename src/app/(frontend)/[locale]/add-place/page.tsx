@@ -33,7 +33,7 @@ export default async function AddPlacePage() {
         categories={cats.docs.map((c) => ({
           id: c.id,
           name: c.name,
-          icon: (c as { icon?: string | null }).icon,
+          description: c.description,
         }))}
       />
     </div>

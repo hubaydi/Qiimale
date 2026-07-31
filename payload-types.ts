@@ -141,10 +141,7 @@ export interface Category {
    */
   generateSlug?: boolean | null;
   slug: string;
-  /**
-   * lucide icon name, e.g. utensils, graduation-cap
-   */
-  icon?: string | null;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -406,7 +403,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  icon?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

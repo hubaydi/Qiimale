@@ -8,6 +8,7 @@ import {
   getFieldsToSign,
   jwtSign,
   UnverifiedEmail,
+  ValidationError,
 } from "payload";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
@@ -77,8 +78,15 @@ export async function registerUser(
     setSessionCookie(cookieStore, token);
     return { ok: true, data: { message: "registered" } };
   } catch (err) {
-    if (/dup|E11000|already/i.test(String(err)))
+    // ponytail: Payload throws ValidationError on email-uniqueness BEFORE the DB write
+    // (it validates in-app), not a Mongo E11000. Match by path so real validation
+    // bugs (e.g. password too short) still surface instead of masquerading as CONFLICT.
+    if (
+      err instanceof ValidationError &&
+      err.data?.errors?.some((e) => e.path === "email")
+    ) {
       return error("CONFLICT", "Email already registered.");
+    }
     throw err;
   }
 }

@@ -1,4 +1,4 @@
-import { ArrowRight, MapPin, Search } from "lucide-react";
+import { ArrowRight, MapPin, Search, Tag } from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PlaceCard } from "@/components/PlaceCard";
@@ -139,16 +139,14 @@ export default async function HomePage() {
               <Link
                 key={cat.id}
                 href={`/categories/${cat.slug}`}
-                className="group flex flex-col justify-center gap-1.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm min-h-[104px]"
+                className="group flex flex-col items-center gap-2.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
               >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
+                  <Tag size={20} />
+                </div>
                 <span className="text-sm font-medium text-foreground leading-tight">
                   {cat.name}
                 </span>
-                {cat.description ? (
-                  <span className="line-clamp-2 text-xs text-muted-foreground">
-                    {cat.description}
-                  </span>
-                ) : null}
               </Link>
             ))}
           </div>

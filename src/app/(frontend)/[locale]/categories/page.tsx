@@ -35,7 +35,7 @@ export default async function CategoriesPage() {
           <Link
             key={cat.id}
             href={`/categories/${cat.slug}`}
-            className="group flex flex-col justify-center gap-1.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm min-h-[104px]"
+            className="group flex flex-col justify-center gap-1.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm min-h-26"
           >
             <span className="text-sm font-medium text-foreground leading-tight">
               {cat.name}

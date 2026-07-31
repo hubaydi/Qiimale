@@ -29,6 +29,7 @@ export async function createCity(
   const user = await getCurrentUser();
 
   if (!user) return error("UNAUTHENTICATED", "Please log in first.");
+  if (!user._verified) return error("UNVERIFIED", "Verify email first");
 
   const payload = await getPayloadClient();
 

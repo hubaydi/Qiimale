@@ -17,6 +17,7 @@ export async function toggleUpvote(
   if (!parsed.success) return error("VALIDATION", "Invalid data");
   const user = await getCurrentUser();
   if (!user) return error("UNAUTHENTICATED", "Login required");
+  if (!user._verified) return error("UNVERIFIED", "Verify email first");
 
   const payload = await getPayloadClient();
   const review = await payload.findByID({
@@ -60,7 +61,7 @@ export async function toggleUpvote(
       overrideAccess: true,
       user,
     });
-if (placeSlug) revalidatePath(`/places/${placeSlug}`);
+    if (placeSlug) revalidatePath(`/places/${placeSlug}`);
     return { ok: true, data: { upvoted: false } };
   }
   await payload.create({

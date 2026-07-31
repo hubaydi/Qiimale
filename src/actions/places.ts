@@ -31,6 +31,7 @@ export async function addPlace(
 
   const user = await getCurrentUser();
   if (!user) return error("UNAUTHENTICATED", "Login required");
+  if (!user._verified) return error("UNVERIFIED", "Verify email first");
 
   const payload = await getPayloadClient();
   const created: Place = await payload.create({

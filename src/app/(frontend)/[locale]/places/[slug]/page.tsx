@@ -1,10 +1,19 @@
-import { ArrowLeft, MapPin, MessageSquare, Plus, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  MapPin,
+  MessageSquare,
+  Plus,
+  Star,
+} from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
+import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
 import type { Place } from "@/payload-types";
 
 const SORTS = ["recent", "top", "high", "low"] as const;
@@ -43,6 +52,9 @@ export default async function PlacePage({
 
   const category = typeof place.category === "object" ? place.category : null;
   const city = typeof place.city === "object" ? place.city : null;
+  const imageUrl = mediaUrl(place.image as MediaField);
+  const imageAlt = mediaAlt(place.image as MediaField, place.name);
+  const website = place.website || null;
 
   const sortField =
     sort === "recent"
@@ -94,61 +106,96 @@ export default async function PlacePage({
       </div>
 
       {/* Main Info Card */}
-      <div className="rounded-2xl border border-border bg-white text-card-foreground p-6 sm:p-8 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-          <div className="space-y-4">
-            <div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                {category?.name || "Qayb"}
+      <div className="rounded-2xl border border-border bg-white text-card-foreground overflow-hidden">
+        {imageUrl ? (
+          <div className="relative aspect-video w-full bg-muted md:aspect-2/1">
+            <Image
+              src={imageUrl}
+              alt={imageAlt}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 1024px"
+              className="object-cover"
+            />
+          </div>
+        ) : null}
+        <div className="relative p-6 sm:p-8">
+          <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div className="space-y-4">
+              <div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                  {category?.name || "Qayb"}
+                </span>
+                <h1 className="text-3xl font-extrabold tracking-tight mt-2">
+                  {place.name}
+                </h1>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-muted-foreground">
+                {city && (
+                  <div className="flex items-center gap-1">
+                    <MapPin size={16} className="text-primary" />
+                    <span>{city.name}</span>
+                  </div>
+                )}
+                {place.address && (
+                  <div className="flex items-center gap-1 border-l pl-4 border-border">
+                    <span>{place.address}</span>
+                  </div>
+                )}
+              </div>
+
+              {website && (
+                <a
+                  href={website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors w-fit"
+                >
+                  <ExternalLink size={15} />
+                  {(() => {
+                    try {
+                      return new URL(website).hostname.replace(/^www\./, "");
+                    } catch {
+                      return website;
+                    }
+                  })()}
+                </a>
+              )}
+
+              {place.description && (
+                <p className="text-sm text-foreground/80 max-w-2xl leading-relaxed pt-2">
+                  {place.description}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-37.5 shrink-0 text-center">
+              <span className="text-4xl font-black text-foreground">
+                {place.ratingAvg?.toFixed(1) ?? "0.0"}
               </span>
-              <h1 className="text-3xl font-extrabold tracking-tight mt-2">
-                {place.name}
-              </h1>
+              <div className="my-2">
+                <StarRating
+                  value={Math.round(place.ratingAvg || 0)}
+                  size={18}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground font-medium">
+                {t("reviews", { count: totalReviews })}
+              </span>
             </div>
-
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-muted-foreground">
-              {city && (
-                <div className="flex items-center gap-1">
-                  <MapPin size={16} className="text-primary" />
-                  <span>{city.name}</span>
-                </div>
-              )}
-              {place.address && (
-                <div className="flex items-center gap-1 border-l pl-4 border-border">
-                  <span>{place.address}</span>
-                </div>
-              )}
-            </div>
-
-            {place.description && (
-              <p className="text-sm text-foreground/80 max-w-2xl leading-relaxed pt-2">
-                {place.description}
-              </p>
-            )}
           </div>
 
-          <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-37.5 shrink-0 text-center">
-            <span className="text-4xl font-black text-foreground">
-              {place.ratingAvg?.toFixed(1) ?? "0.0"}
-            </span>
-            <div className="my-2">
-              <StarRating value={Math.round(place.ratingAvg || 0)} size={18} />
-            </div>
-            <span className="text-xs text-muted-foreground font-medium">
-              {t("reviews", { count: totalReviews })}
-            </span>
+          <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
+            <Link
+              href={`/place/${slug}/review`}
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all shadow-sm hover:shadow-md cursor-pointer"
+            >
+              <Plus size={16} />
+              {t("writeReview")}
+            </Link>
           </div>
-        </div>
-
-        <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
-          <Link
-            href={`/place/${slug}/review`}
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all shadow-sm hover:shadow-md cursor-pointer"
-          >
-            <Plus size={16} />
-            {t("writeReview")}
-          </Link>
         </div>
       </div>
 

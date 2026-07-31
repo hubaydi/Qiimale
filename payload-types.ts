@@ -212,41 +212,14 @@ export interface Place {
   city: string | City;
   address?: string | null;
   description?: string | null;
+  image?: (string | null) | Media;
+  website?: string | null;
   status: 'pending' | 'approved' | 'rejected';
   submittedBy?: (string | null) | User;
   ratingAvg?: number | null;
   reviewCount?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  name: string;
-  role: 'admin' | 'reviewer';
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -285,6 +258,35 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  name: string;
+  role: 'admin' | 'reviewer';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -486,6 +488,8 @@ export interface PlacesSelect<T extends boolean = true> {
   city?: T;
   address?: T;
   description?: T;
+  image?: T;
+  website?: T;
   status?: T;
   submittedBy?: T;
   ratingAvg?: T;

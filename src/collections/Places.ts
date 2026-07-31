@@ -41,6 +41,8 @@ export const Places: CollectionConfig = {
     },
     { name: "address", type: "text" },
     { name: "description", type: "textarea" },
+    { name: "image", type: "upload", relationTo: "media" },
+    { name: "website", type: "text" },
     {
       name: "status",
       type: "select",

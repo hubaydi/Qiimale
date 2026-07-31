@@ -68,10 +68,11 @@ export default buildConfig({
       config: {
         credentials: {
           accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
-          secretAccessKey: process.env.S3_SECRET || "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
         },
         region: "auto",
         endpoint: process.env.S3_ENDPOINT || "",
+        forcePathStyle: true,
       },
     }),
   ],

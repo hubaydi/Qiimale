@@ -1,15 +1,9 @@
-import {
-  ArrowLeft,
-  ExternalLink,
-  MapPin,
-  MessageSquare,
-  Plus,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, ExternalLink, MapPin, Plus, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { PlaceReviews } from "@/components/PlaceReviews";
 import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
@@ -17,24 +11,14 @@ import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
 import { normalizeUrl } from "@/lib/url";
 import type { Place } from "@/payload-types";
 
-const SORTS = ["recent", "top", "high", "low"] as const;
-type SortKey = (typeof SORTS)[number];
-
 export default async function PlacePage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ sort?: string }>;
 }) {
   const { slug } = await params;
   const t = await getTranslations("Place");
-  const tReview = await getTranslations("Review");
   const locale = await getLocale();
-  const sp = await searchParams;
-  const sort: SortKey = (SORTS as readonly string[]).includes(sp.sort || "")
-    ? (sp.sort as SortKey)
-    : "recent";
 
   const payload = await getPayloadClient();
 
@@ -57,15 +41,6 @@ export default async function PlacePage({
   const imageAlt = mediaAlt(place.image as MediaField, place.name);
   const website = place.website ? normalizeUrl(place.website) : null;
 
-  const sortField =
-    sort === "recent"
-      ? "-createdAt"
-      : sort === "top"
-        ? "-upvoteCount"
-        : sort === "high"
-          ? "-rating"
-          : "rating";
-
   const reviews = await payload.find({
     collection: "reviews",
     where: {
@@ -75,7 +50,7 @@ export default async function PlacePage({
       ],
     },
     limit: 50,
-    sort: sortField,
+    sort: "-createdAt",
     overrideAccess: true,
     depth: 2,
   });
@@ -237,50 +212,20 @@ export default async function PlacePage({
         </div>
 
         {/* Reviews List */}
-        <div className="md:col-span-2 space-y-6">
-          <div className="flex flex-col items-start justify-between border-b pb-4 gap-2">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <MessageSquare size={20} className="text-primary" />
-              <span>{locale === "so" ? "Faallooyin" : "Reviews"}</span>
-            </h2>
-
-            {/* Sort options */}
-            <div className="flex items-center gap-3 text-xs bg-muted p-1 rounded-lg border border-border">
-              {SORTS.map((s) => (
-                <Link
-                  key={s}
-                  href={`/places/${slug}?sort=${s}`}
-                  className={`px-2.5 py-1 rounded-md transition-all font-medium ${
-                    sort === s
-                      ? "bg-background text-foreground shadow-xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {tReview(
-                    `sort${s[0].toUpperCase()}${s.slice(1)}` as
-                      | "sortRecent"
-                      | "sortTop"
-                      | "sortHigh"
-                      | "sortLow",
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {reviewDocs.length === 0 ? (
-            <div className="text-center py-12 rounded-xl border border-dashed border-border p-6 text-muted-foreground space-y-2">
-              <p className="font-semibold text-foreground">{t("noReviews")}</p>
-              <p className="text-sm">{t("noReviewsHint")}</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {reviewDocs.map((r) => (
-                <ReviewCard key={r.id} review={r} locale={locale} />
-              ))}
-            </div>
-          )}
-        </div>
+        <PlaceReviews
+          reviews={reviewDocs.map((r) => ({
+            id: r.id,
+            rating: r.rating,
+            upvoteCount: r.upvoteCount || 0,
+            createdAt: r.createdAt,
+          }))}
+          cards={reviewDocs.map((r) => (
+            <ReviewCard key={r.id} review={r} locale={locale} />
+          ))}
+          title={locale === "so" ? "Faallooyin" : "Reviews"}
+          emptyTitle={t("noReviews")}
+          emptyHint={t("noReviewsHint")}
+        />
       </div>
     </div>
   );

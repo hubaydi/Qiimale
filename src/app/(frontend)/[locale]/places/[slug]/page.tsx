@@ -14,6 +14,7 @@ import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
+import { normalizeUrl } from "@/lib/url";
 import type { Place } from "@/payload-types";
 
 const SORTS = ["recent", "top", "high", "low"] as const;
@@ -52,9 +53,9 @@ export default async function PlacePage({
 
   const category = typeof place.category === "object" ? place.category : null;
   const city = typeof place.city === "object" ? place.city : null;
-  const imageUrl = mediaUrl(place.image as MediaField);
+  const imageUrl = mediaUrl(place.image as MediaField, "card");
   const imageAlt = mediaAlt(place.image as MediaField, place.name);
-  const website = place.website || null;
+  const website = place.website ? normalizeUrl(place.website) : null;
 
   const sortField =
     sort === "recent"

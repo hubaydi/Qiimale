@@ -13,10 +13,11 @@ export const Media: CollectionConfig = {
   },
   upload: {
     mimeTypes: ["image/*"],
-    formatOptions: { format: "webp" },
+    formatOptions: { format: "webp", options: { quality: 80 } },
+    resizeOptions: { max: true, width: 1600 },
     imageSizes: [
-      { name: "thumb", width: 400, height: 400, position: "centre" },
-      { name: "card", width: 800, height: 800, position: "centre" },
+      { name: "thumb", width: 400 },
+      { name: "card", width: 800 },
     ],
   },
   fields: [{ name: "alt", type: "text" }],

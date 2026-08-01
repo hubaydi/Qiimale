@@ -17,6 +17,7 @@ export async function Header() {
     addPlace: t("addPlace"),
     account: t("account"),
     login: t("login"),
+    admin: t("admin"),
   };
 
   return (

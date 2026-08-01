@@ -6,6 +6,7 @@ import {
   LogIn,
   MapPin,
   Search,
+  Shield,
   User,
 } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +17,13 @@ import { cn } from "@/lib/utils";
 
 interface NavLinksProps {
   labels: Record<
-    "search" | "categories" | "cities" | "places" | "account" | "login",
+    | "search"
+    | "categories"
+    | "cities"
+    | "places"
+    | "account"
+    | "login"
+    | "admin",
     string
   >;
   user: Awaited<ReturnType<typeof getCurrentUser>>;
@@ -70,6 +77,30 @@ export function NavLinks({
         );
       })}
       <AddMenu className={ctaClassName} />
+      {user?.role === "admin" && (
+        <Link
+          href="/admin"
+          className={cn(
+            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+            pathname.startsWith("/admin")
+              ? "bg-blue-50 text-blue-600"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            linkClassName,
+          )}
+        >
+          <span
+            className={cn(
+              "flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors",
+              pathname.startsWith("/admin")
+                ? "bg-blue-100 text-blue-600"
+                : "bg-muted text-muted-foreground",
+            )}
+          >
+            <Shield size={16} />
+          </span>
+          {labels.admin}
+        </Link>
+      )}
       <div className="my-1 border-t border-border" />
       {user ? (
         <Link

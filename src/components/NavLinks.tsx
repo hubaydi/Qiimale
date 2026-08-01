@@ -5,24 +5,18 @@ import {
   LayoutGrid,
   LogIn,
   MapPin,
-  Plus,
   Search,
   User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AddMenu } from "@/components/AddMenu";
 import type { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
 interface NavLinksProps {
   labels: Record<
-    | "search"
-    | "categories"
-    | "cities"
-    | "places"
-    | "addPlace"
-    | "account"
-    | "login",
+    "search" | "categories" | "cities" | "places" | "account" | "login",
     string
   >;
   user: Awaited<ReturnType<typeof getCurrentUser>>;
@@ -75,16 +69,7 @@ export function NavLinks({
           </Link>
         );
       })}
-      <Link
-        href="/add-place"
-        className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 my-2",
-          ctaClassName,
-        )}
-      >
-        <Plus size={16} />
-        {labels.addPlace}
-      </Link>
+      <AddMenu className={ctaClassName} />
       <div className="my-1 border-t border-border" />
       {user ? (
         <Link

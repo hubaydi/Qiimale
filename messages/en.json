@@ -16,6 +16,9 @@
     "cities": "Cities",
     "places": "Places",
     "addPlace": "Add a place",
+    "add": "Add",
+    "addCategory": "Add a category",
+    "addCity": "Add a city",
     "account": "My account",
     "login": "Log in",
     "logout": "Log out",
@@ -166,6 +169,21 @@
     "title": "Cities",
     "empty": "No cities yet.",
     "placesIn": "Places in {city}"
+  },
+  "AddCategory": {
+    "title": "Add a category",
+    "name": "Category name",
+    "description": "Description (optional)",
+    "placeholder": "e.g. Restaurants, Hotels, Markets",
+    "submit": "Submit",
+    "success": "Your category was submitted for admin review."
+  },
+  "AddCity": {
+    "title": "Add a city",
+    "name": "City name",
+    "placeholder": "e.g. Mogadishu, Hargeisa, Kismayo",
+    "submit": "Submit",
+    "success": "Your city was submitted for admin review."
   },
   "Places": {
     "title": "Places",

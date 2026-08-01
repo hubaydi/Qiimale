@@ -11,12 +11,12 @@ import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
 import { addPlace } from "@/actions/places";
 import { Button } from "@/components/ui/button";
-import type { CategoryOption, CityOption } from "./types";
 import { CreateModal } from "./CreateModal";
 import { StepCategorySelect } from "./StepCategorySelect";
 import { StepCitySelect } from "./StepCitySelect";
 import { StepDetails } from "./StepDetails";
 import { StepIndicator } from "./StepIndicator";
+import type { CategoryOption, CityOption } from "./types";
 
 const addPlaceSchema = z.object({
   name: z.string().min(5).max(100),

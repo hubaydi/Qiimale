@@ -1,6 +1,7 @@
-import { ArrowRight, MapPin, Search, Tag } from "lucide-react";
+import { ArrowRight, MapPin, Plus, Search, Tag } from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category, City, Place, Review } from "@/payload-types";
@@ -9,10 +10,12 @@ function SectionHeader({
   title,
   href,
   linkLabel,
+  action,
 }: {
   title: string;
   href?: string;
   linkLabel?: string;
+  action?: ReactNode;
 }) {
   return (
     <div className="mb-5 flex items-center justify-between gap-4">
@@ -20,15 +23,18 @@ function SectionHeader({
         <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600" />
         {title}
       </h2>
-      {href && linkLabel ? (
-        <Link
-          href={href}
-          className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
-        >
-          {linkLabel}
-          <ArrowRight className="size-3.5" />
-        </Link>
-      ) : null}
+      <div className="flex items-center gap-2">
+        {action}
+        {href && linkLabel ? (
+          <Link
+            href={href}
+            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            {linkLabel}
+            <ArrowRight className="size-3.5" />
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -135,6 +141,15 @@ export default async function HomePage() {
             title={t("Home.categories")}
             href="/categories"
             linkLabel={t("Home.viewAll")}
+            action={
+              <Link
+                href="/add-category"
+                className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                <Plus size={14} />
+                {t("Nav.addCategory")}
+              </Link>
+            }
           />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {categories.docs.map((cat: Category) => (
@@ -160,6 +175,15 @@ export default async function HomePage() {
             title={t("Home.cities")}
             href="/cities"
             linkLabel={t("Home.viewAll")}
+            action={
+              <Link
+                href="/add-city"
+                className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                <Plus size={14} />
+                {t("Nav.addCity")}
+              </Link>
+            }
           />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {cities.docs.map((city: City) => (

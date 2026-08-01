@@ -1,13 +1,16 @@
 "use client";
 
-import { Globe } from "lucide-react";
+import { Check, ChevronDown, Globe } from "lucide-react";
 import { useLocale } from "next-intl";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
-const LOCALE_LABELS = {
-  so: "Soomaali",
-  en: "English",
-};
+const LOCALE_LABELS = { so: "Soomaali", en: "English" } as const;
 
 export function LanguageSwitcher() {
   const locale = useLocale();
@@ -15,19 +18,33 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
 
   return (
-    <div className="relative inline-flex items-center">
-      <Globe
-        size={14}
-        className="absolute left-2.5 text-muted-foreground pointer-events-none"
-      />
-      <select
-        value={locale}
-        onChange={(e) => router.replace(pathname, { locale: e.target.value })}
-        className="appearance-none bg-muted text-muted-foreground hover:text-foreground rounded-lg pl-7 pr-4 py-1.5 text-sm font-medium transition-colors cursor-pointer border-0 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <option value="so">{LOCALE_LABELS.so}</option>
-        <option value="en">{LOCALE_LABELS.en}</option>
-      </select>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-muted px-2.5 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          aria-label="Language"
+        >
+          <Globe size={14} />
+          {LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS]}
+          <ChevronDown size={14} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {(Object.keys(LOCALE_LABELS) as Array<keyof typeof LOCALE_LABELS>).map(
+          (l) => (
+            <DropdownMenuItem
+              key={l}
+              disabled={l === locale}
+              onClick={() => router.replace(pathname, { locale: l })}
+              className="justify-between"
+            >
+              {LOCALE_LABELS[l]}
+              {l === locale ? <Check size={16} /> : null}
+            </DropdownMenuItem>
+          ),
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

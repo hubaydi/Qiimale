@@ -16,6 +16,9 @@
     "cities": "Magaalooyinka",
     "places": "Goobaha",
     "addPlace": "Ku dar goob",
+    "add": "Ku dar",
+    "addCategory": "Ku dar qayb",
+    "addCity": "Ku dar magaalo",
     "account": "Akoonkayga",
     "login": "Gal akoon",
     "logout": "Ka bax",
@@ -166,6 +169,21 @@
     "title": "Magaalooyinka",
     "empty": "Weli magaalooyin ma jiraan.",
     "placesIn": "Goobaha ku yaala {city}"
+  },
+  "AddCategory": {
+    "title": "Ku dar qayb",
+    "name": "Magaca qaybta",
+    "description": "Faahfaahin (ikhtiyaar)",
+    "placeholder": "tusaale: Makhaayado, Hoteelo, Suuqyo",
+    "submit": "Soo gudbi",
+    "success": "Qaybta waa la soo gudbiyay, maamulka ayaa hubin doona."
+  },
+  "AddCity": {
+    "title": "Ku dar magaalo",
+    "name": "Magaca magaalada",
+    "placeholder": "tusaale: Muqdisho, Hargeysa, Kismaayo",
+    "submit": "Soo gudbi",
+    "success": "Magaalada waa la soo gudbiyay, maamulka ayaa hubin doona."
   },
   "Places": {
     "title": "Goobaha",

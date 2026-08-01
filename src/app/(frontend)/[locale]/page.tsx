@@ -64,7 +64,7 @@ export default async function HomePage() {
     collection: "places",
     where: { status: { equals: "approved" } },
     limit: 8,
-    sort: "-ratingAvg",
+    sort: ["-ratingAvg", "-reviewCount"],
     overrideAccess: true,
     locale,
     fallbackLocale: "so",

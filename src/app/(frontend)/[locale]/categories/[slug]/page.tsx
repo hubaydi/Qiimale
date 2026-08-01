@@ -62,7 +62,7 @@ export default async function CategoryDetailPage({ params }: Props) {
       ],
     },
     limit: 50,
-    sort: "-ratingAvg",
+    sort: ["-ratingAvg", "-reviewCount"],
     overrideAccess: true,
     depth: 1,
     locale,

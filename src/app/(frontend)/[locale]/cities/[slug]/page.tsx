@@ -66,7 +66,7 @@ export default async function CityDetailPage({ params }: Props) {
       ],
     },
     limit: 50,
-    sort: "-ratingAvg",
+    sort: ["-ratingAvg", "-reviewCount"],
     overrideAccess: true,
     depth: 1,
     locale,

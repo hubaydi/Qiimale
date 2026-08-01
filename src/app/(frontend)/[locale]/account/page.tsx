@@ -3,19 +3,28 @@ import {
   CheckCircle2,
   Clock,
   MessageSquare,
+  Star,
+  ThumbsUp,
   User as UserIcon,
 } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { AccountTabs } from "@/components/account/AccountTabs";
 import { LogoutButton } from "@/components/LogoutButton";
 import { ResendButton } from "@/components/ResendButton";
-import { StarRating } from "@/components/StarRating";
-
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { getPayloadClient } from "@/lib/get-payload";
 import { getCurrentUser } from "@/lib/session";
+import type { Category, City, Place, Review } from "@/payload-types";
+
+function formatDate(iso: string, locale: string) {
+  return new Date(iso).toLocaleDateString(locale === "so" ? "so-SO" : "en-US", {
+    year: "numeric",
+    month: "long",
+  });
+}
 
 export default async function AccountPage() {
   const t = await getTranslations("Account");
@@ -25,203 +34,176 @@ export default async function AccountPage() {
 
   const payload = await getPayloadClient();
 
-  const reviews = await payload.find({
-    collection: "reviews",
-    where: { author: { equals: user.id } },
-    overrideAccess: true,
-    depth: 1,
-    sort: "-createdAt",
-  });
+  const [reviews, places, categories, cities] = await Promise.all([
+    payload.find({
+      collection: "reviews",
+      where: { author: { equals: user.id } },
+      overrideAccess: true,
+      depth: 1,
+      sort: "-createdAt",
+    }),
+    payload.find({
+      collection: "places",
+      where: { submittedBy: { equals: user.id } },
+      overrideAccess: true,
+      depth: 1,
+      sort: "-createdAt",
+    }),
+    payload.find({
+      collection: "categories",
+      where: { submittedBy: { equals: user.id } },
+      overrideAccess: true,
+      depth: 1,
+      sort: "-createdAt",
+    }),
+    payload.find({
+      collection: "cities",
+      where: { submittedBy: { equals: user.id } },
+      overrideAccess: true,
+      depth: 1,
+      sort: "-createdAt",
+    }),
+  ]);
 
-  const places = await payload.find({
-    collection: "places",
-    where: { submittedBy: { equals: user.id } },
-    overrideAccess: true,
-    depth: 1,
-    sort: "-createdAt",
-  });
+  const reviewDocs = reviews.docs as Review[];
+  const placeDocs = places.docs as Place[];
+  const categoryDocs = categories.docs as Category[];
+  const cityDocs = cities.docs as City[];
 
-  const reviewDocs = reviews.docs;
-  const placeDocs = places.docs;
+  const totalUpvotes = reviewDocs.reduce(
+    (sum, r) => sum + (r.upvoteCount || 0),
+    0,
+  );
+  const avgRating =
+    reviewDocs.length > 0
+      ? reviewDocs.reduce((sum, r) => sum + r.rating, 0) / reviewDocs.length
+      : null;
+  const approvedPlaces = placeDocs.filter(
+    (p) => p.status === "approved",
+  ).length;
+  const pendingPlaces = placeDocs.filter((p) => p.status === "pending").length;
+
+  const initials = user.name ? user.name.slice(0, 2).toUpperCase() : "?";
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4">
-      {/* Profile Header */}
-      <div className="rounded-2xl border border-border bg-white p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
-        <div className="h-20 w-20 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-2xl shrink-0">
-          {user.name ? (
-            user.name.slice(0, 2).toUpperCase()
-          ) : (
-            <UserIcon size={32} />
-          )}
-        </div>
-        <div className="flex-1 text-center sm:text-left space-y-1">
-          <h1 className="text-2xl font-extrabold tracking-tight">
-            {user.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">{user.email}</p>
-          <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
-            <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground capitalize">
-              {user.role}
-            </span>
-            {user._verified ? (
-              <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                <CheckCircle2 size={13} />
-                <span>{locale === "so" ? "La xaqiijiyay" : "Verified"}</span>
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                <Clock size={13} />
-                <span>
-                  {locale === "so" ? "Lama xaqiijin email-kaaga" : "Unverified"}
+    <div className="max-w-4xl mx-auto space-y-6 py-4">
+      {/* Profile header with cover */}
+      <div className="overflow-hidden rounded-2xl border border-border bg-white">
+        <div className="h-28 sm:h-32 bg-gradient-to-r from-blue-600 to-blue-400" />
+        <div className="px-6 pb-6 -mt-10">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+            <div className="h-20 w-20 rounded-full border-4 border-white bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-2xl shrink-0 shadow-sm">
+              {user.name ? initials : <UserIcon size={32} />}
+            </div>
+            <div className="flex-1 pt-4 sm:pt-0">
+              <h1 className="text-2xl font-extrabold tracking-tight flex items-center gap-2 flex-wrap">
+                {user.name}
+              </h1>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
+              <div className="flex items-center gap-2 pt-1 flex-wrap">
+                <Badge variant="secondary" className="capitalize">
+                  {user.role}
+                </Badge>
+                {user._verified ? (
+                  <Badge
+                    variant="secondary"
+                    className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  >
+                    <CheckCircle2 />
+                    {t("verified")}
+                  </Badge>
+                ) : (
+                  <Badge
+                    variant="secondary"
+                    className="bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                  >
+                    <Clock />
+                    {t("unverified")}
+                  </Badge>
+                )}
+                <span className="text-xs text-muted-foreground">
+                  {t("memberSince", {
+                    date: formatDate(user.createdAt, locale),
+                  })}
                 </span>
-              </span>
-            )}
-            {!user._verified && <ResendButton email={user.email} />}
+              </div>
+            </div>
+            <div className="flex items-center gap-2 sm:pb-1">
+              {!user._verified && <ResendButton email={user.email} />}
+              <LogoutButton />
+            </div>
           </div>
         </div>
-        <div className="shrink-0">
-          <LogoutButton />
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* User Reviews */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <MessageSquare size={20} className="text-primary" />
-            <span>{t("myReviews")}</span>
-            <span className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground font-normal">
-              {reviewDocs.length}
-            </span>
-          </h2>
-
-          {reviewDocs.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground space-y-2">
-              <p className="text-sm">
-                {locale === "so"
-                  ? "Weli qiimayn ma samayn."
-                  : "No reviews submitted yet."}
+      {/* Overview stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Card size="sm">
+          <CardContent className="flex items-center gap-3">
+            <MessageSquare className="text-primary" />
+            <div>
+              <p className="text-2xl font-extrabold leading-none">
+                {reviewDocs.length}
               </p>
-              <Link
-                href="/search"
-                className="inline-block text-xs text-primary hover:underline font-medium"
-              >
-                {locale === "so"
-                  ? "Raadi goob si aad u qiimayso"
-                  : "Find a place to review"}
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {reviewDocs.map((r) => {
-                const place = typeof r.place === "object" ? r.place : null;
-                return (
-                  <div
-                    key={r.id}
-                    className="rounded-xl border border-border bg-white p-4 space-y-2 hover:border-blue-200 hover:shadow-sm transition-all"
-                  >
-                    <div className="flex items-center justify-between">
-                      {place ? (
-                        <Link
-                          href={`/places/${place.slug}`}
-                          className="font-bold text-foreground hover:text-primary transition-colors text-sm"
-                        >
-                          {place.name}
-                        </Link>
-                      ) : (
-                        <span className="font-bold text-sm text-muted-foreground">
-                          --
-                        </span>
-                      )}
-                      <StarRating value={r.rating} size={14} />
-                    </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {r.text}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        {/* Submitted Places */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <Building2 size={20} className="text-primary" />
-            <span>{t("myPlaces")}</span>
-            <span className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground font-normal">
-              {placeDocs.length}
-            </span>
-          </h2>
-
-          {placeDocs.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground space-y-2">
-              <p className="text-sm">
-                {locale === "so"
-                  ? "Weli goob ma aadan soo gudbin."
-                  : "No places added yet."}
+              <p className="text-xs text-muted-foreground mt-1">
+                {t("statReviews")}
               </p>
-              <Link
-                href="/add-place"
-                className="inline-block text-xs text-primary hover:underline font-medium"
-              >
-                {locale === "so" ? "Ku dar goob cusub" : "Add a new place"}
-              </Link>
             </div>
-          ) : (
-            <div className="space-y-3">
-              {placeDocs.map((p) => (
-                <div
-                  key={p.id}
-                  className="rounded-xl border border-border bg-white p-4 flex items-center justify-between hover:border-blue-200 hover:shadow-sm transition-all"
-                >
-                  <div>
-                    {p.status === "approved" ? (
-                      <Link
-                        href={`/places/${p.slug}`}
-                        className="font-bold text-foreground hover:text-primary transition-colors text-sm"
-                      >
-                        {p.name}
-                      </Link>
-                    ) : (
-                      <span className="font-bold text-sm text-foreground">
-                        {p.name}
-                      </span>
-                    )}
-                    {p.address && (
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {p.address}
-                      </p>
-                    )}
-                  </div>
-
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold shrink-0 ${
-                      p.status === "pending"
-                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                        : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                    }`}
-                  >
-                    {p.status === "pending" ? (
-                      <>
-                        <Clock size={12} />
-                        <span>{t("statusPending")}</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 size={12} />
-                        <span>{t("statusApproved")}</span>
-                      </>
-                    )}
-                  </span>
-                </div>
-              ))}
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent className="flex items-center gap-3">
+            <ThumbsUp className="text-primary" />
+            <div>
+              <p className="text-2xl font-extrabold leading-none">
+                {totalUpvotes}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t("statUpvotes")}
+              </p>
             </div>
-          )}
-        </section>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent className="flex items-center gap-3">
+            <Star className="text-primary" />
+            <div>
+              <p className="text-2xl font-extrabold leading-none">
+                {avgRating === null ? t("noAvg") : avgRating.toFixed(1)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t("statAvgRating")}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent className="flex items-center gap-3">
+            <Building2 className="text-primary" />
+            <div>
+              <p className="text-2xl font-extrabold leading-none">
+                {placeDocs.length}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t("statPlaces")}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {t("placesSplit", {
+                  approved: approvedPlaces,
+                  pending: pendingPlaces,
+                })}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      <AccountTabs
+        reviews={reviewDocs}
+        places={placeDocs}
+        categories={categoryDocs}
+        cities={cityDocs}
+      />
     </div>
   );
 }

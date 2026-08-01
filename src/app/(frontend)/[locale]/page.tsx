@@ -40,6 +40,7 @@ export default async function HomePage() {
 
   const categories = await payload.find({
     collection: "categories",
+    where: { status: { equals: "approved" } },
     limit: 8,
     locale,
     fallbackLocale: "so",
@@ -47,6 +48,7 @@ export default async function HomePage() {
   });
   const cities = await payload.find({
     collection: "cities",
+    where: { status: { equals: "approved" } },
     limit: 8,
     locale,
     fallbackLocale: "so",

@@ -4,7 +4,10 @@ import { isAdmin, isAdminAccess } from "@/access/isAdmin";
 
 export const Categories: CollectionConfig = {
   slug: "categories",
-  admin: { useAsTitle: "name" },
+  admin: {
+    useAsTitle: "name",
+    defaultColumns: ["name", "status", "submittedBy"],
+  },
   access: {
     read: isAdmin,
     create: isAdmin,
@@ -19,6 +22,20 @@ export const Categories: CollectionConfig = {
       name: "description",
       type: "textarea",
       localized: true,
+    },
+    {
+      name: "status",
+      type: "select",
+      options: ["pending", "approved", "rejected"],
+      defaultValue: "pending",
+      required: true,
+      admin: { position: "sidebar" },
+    },
+    {
+      name: "submittedBy",
+      type: "relationship",
+      relationTo: "users",
+      admin: { position: "sidebar", readOnly: true },
     },
   ],
 };

@@ -11,6 +11,7 @@ export default async function CitiesPage() {
 
   const cities = await payload.find({
     collection: "cities",
+    where: { status: { equals: "approved" } },
     limit: 100,
     locale,
     fallbackLocale: "so",

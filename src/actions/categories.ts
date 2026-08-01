@@ -40,6 +40,8 @@ export async function createCategory(
       name: parsed.data.name,
       generateSlug: true,
       description: parsed.data.description,
+      status: "pending",
+      submittedBy: user.id,
     } as RequiredDataFromCollectionSlug<"categories">,
     overrideAccess: true,
     user,

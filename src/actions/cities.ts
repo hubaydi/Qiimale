@@ -38,6 +38,8 @@ export async function createCity(
     data: {
       name: parsed.data.name,
       generateSlug: true,
+      status: "pending",
+      submittedBy: user.id,
     } as RequiredDataFromCollectionSlug<"cities">,
     overrideAccess: true,
     user,

@@ -10,6 +10,7 @@ export default async function CategoriesPage() {
 
   const categories = await payload.find({
     collection: "categories",
+    where: { status: { equals: "approved" } },
     limit: 100,
     locale,
     fallbackLocale: "so",

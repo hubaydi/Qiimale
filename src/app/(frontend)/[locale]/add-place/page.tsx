@@ -12,9 +12,15 @@ export default async function AddPlacePage() {
   const payload = await getPayloadClient();
 
   const [cities, cats] = await Promise.all([
-    payload.find({ collection: "cities", limit: 100, overrideAccess: true }),
+    payload.find({
+      collection: "cities",
+      where: { status: { equals: "approved" } },
+      limit: 100,
+      overrideAccess: true,
+    }),
     payload.find({
       collection: "categories",
+      where: { status: { equals: "approved" } },
       limit: 100,
       overrideAccess: true,
     }),

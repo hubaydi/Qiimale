@@ -18,7 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const result = await payload.find({
     collection: "cities",
-    where: { slug: { equals: slug } },
+    where: {
+      and: [{ slug: { equals: slug } }, { status: { equals: "approved" } }],
+    },
     limit: 1,
     locale,
     fallbackLocale: "so",
@@ -43,7 +45,9 @@ export default async function CityDetailPage({ params }: Props) {
 
   const result = await payload.find({
     collection: "cities",
-    where: { slug: { equals: slug } },
+    where: {
+      and: [{ slug: { equals: slug } }, { status: { equals: "approved" } }],
+    },
     limit: 1,
     locale,
     fallbackLocale: "so",

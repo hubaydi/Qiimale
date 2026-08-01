@@ -111,6 +111,7 @@ export async function ReviewCard({
             reviewId={review.id}
             count={review.upvoteCount || 0}
             upvoted={upvoted}
+            authenticated={!!user}
           />
           {user && <FlagButton reviewId={review.id} flagged={flagged} />}
         </div>

@@ -6,6 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -57,6 +58,7 @@ export default async function LocaleLayout({
           <main className="flex-1 container mx-auto px-4 py-6">{children}</main>
           <Footer locale={locale} />
         </NextIntlClientProvider>
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

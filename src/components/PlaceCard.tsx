@@ -28,7 +28,7 @@ export function PlaceCard({
   return (
     <Link
       href={`/places/${place.slug}`}
-      className="group flex items-center gap-4 rounded-xl border border-border bg-white p-4 transition-all duration-200 hover:border-blue-200 hover:shadow-sm hover:border-l-2 hover:border-l-blue-500"
+      className="group flex min-w-0 items-center gap-4 rounded-xl border border-border bg-white p-4 transition-all duration-200 hover:border-blue-200 hover:shadow-sm hover:border-l-2 hover:border-l-blue-500"
     >
       {imageUrl ? (
         <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -45,7 +45,7 @@ export function PlaceCard({
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="font-semibold text-foreground leading-snug group-hover:text-blue-600">
+        <div className="line-clamp-2 break-words font-semibold text-foreground leading-snug group-hover:text-blue-600">
           {place.name}
         </div>
         <div className="mt-0.5 truncate text-sm text-muted-foreground">

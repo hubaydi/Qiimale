@@ -14,7 +14,7 @@ export const Media: CollectionConfig = {
   upload: {
     mimeTypes: ["image/*"],
     formatOptions: { format: "webp", options: { quality: 80 } },
-    resizeOptions: { max: true, width: 1600 },
+    resizeOptions: { width: 1600, withoutEnlargement: true },
     imageSizes: [
       { name: "thumb", width: 400 },
       { name: "card", width: 800 },

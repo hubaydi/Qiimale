@@ -113,84 +113,86 @@ export function AddPlaceForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
-    >
-      <StepIndicator step={step} />
+    <>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
+      >
+        <StepIndicator step={step} />
 
-      {step === 1 && (
-        <StepCitySelect
-          cities={cities}
-          selectedCityId={selectedCityId}
-          onSelect={setSelectedCityId}
-          onCreate={() => setCityModalOpen(true)}
-        />
-      )}
-      {step === 2 && (
-        <StepCategorySelect
-          categories={cats}
-          selectedCatId={selectedCatId}
-          onSelect={setSelectedCatId}
-          onCreate={() => setCatModalOpen(true)}
-        />
-      )}
-      {step === 3 && (
-        <StepDetails
-          selectedCityId={selectedCityId}
-          selectedCatId={selectedCatId}
-          cities={cities}
-          categories={cats}
-          register={register}
-          errors={errors}
-        />
-      )}
+        {step === 1 && (
+          <StepCitySelect
+            cities={cities}
+            selectedCityId={selectedCityId}
+            onSelect={setSelectedCityId}
+            onCreate={() => setCityModalOpen(true)}
+          />
+        )}
+        {step === 2 && (
+          <StepCategorySelect
+            categories={cats}
+            selectedCatId={selectedCatId}
+            onSelect={setSelectedCatId}
+            onCreate={() => setCatModalOpen(true)}
+          />
+        )}
+        {step === 3 && (
+          <StepDetails
+            selectedCityId={selectedCityId}
+            selectedCatId={selectedCatId}
+            cities={cities}
+            categories={cats}
+            register={register}
+            errors={errors}
+          />
+        )}
 
-      {serverError && (
-        <div className="mt-4 flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
-          <AlertCircle size={16} className="shrink-0" />
-          <span>{serverError}</span>
+        {serverError && (
+          <div className="mt-4 flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
+            <AlertCircle size={16} className="shrink-0" />
+            <span>{serverError}</span>
+          </div>
+        )}
+
+        <div className="flex justify-between mt-6 pt-4 border-t border-gray-100">
+          {step > 1 ? (
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={isPending}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-gray-50 transition-all disabled:opacity-50 cursor-pointer"
+            >
+              <ChevronLeft size={16} />
+              <span>{t("back")}</span>
+            </button>
+          ) : (
+            <div />
+          )}
+
+          {step < 3 ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!canGoNext() || isPending}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
+            >
+              <span>{t("next")}</span>
+              <ChevronRight size={16} />
+            </button>
+          ) : (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>{t("saving")}</span>
+                </>
+              ) : (
+                <span>{t("submit")}</span>
+              )}
+            </Button>
+          )}
         </div>
-      )}
-
-      <div className="flex justify-between mt-6 pt-4 border-t border-gray-100">
-        {step > 1 ? (
-          <button
-            type="button"
-            onClick={handleBack}
-            disabled={isPending}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-gray-50 transition-all disabled:opacity-50 cursor-pointer"
-          >
-            <ChevronLeft size={16} />
-            <span>{t("back")}</span>
-          </button>
-        ) : (
-          <div />
-        )}
-
-        {step < 3 ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={!canGoNext() || isPending}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
-          >
-            <span>{t("next")}</span>
-            <ChevronRight size={16} />
-          </button>
-        ) : (
-          <Button type="submit" disabled={isPending}>
-            {isPending ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                <span>{t("saving")}</span>
-              </>
-            ) : (
-              <span>{t("submit")}</span>
-            )}
-          </Button>
-        )}
-      </div>
+      </form>
 
       <CreateModal
         open={cityModalOpen}
@@ -214,6 +216,6 @@ export function AddPlaceForm({
           return res;
         }}
       />
-    </form>
+    </>
   );
 }

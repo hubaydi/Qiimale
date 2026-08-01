@@ -41,9 +41,11 @@ async function issueUnverifiedSession(
 ): Promise<string> {
   const collectionConfig = payload.collections.users.config as CollectionConfig;
   const fieldsToSign = getFieldsToSign({ collectionConfig, email, user });
+  // ponytail: use payload.secret (SHA-256-hashed) so unverified tokens verify the
+  // same as Payload's own login tokens — and payload.auth can also read them.
   const { token } = await jwtSign({
     fieldsToSign,
-    secret: process.env.PAYLOAD_SECRET || "",
+    secret: payload.secret,
     tokenExpiration: TOKEN_EXPIRATION,
   });
   return token;

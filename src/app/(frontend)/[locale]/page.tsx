@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
+import { Input } from "@/components/ui/input";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category, City, Place, Review } from "@/payload-types";
 
@@ -142,16 +143,16 @@ export default async function HomePage() {
             className="relative mt-8 max-w-xl mx-auto"
           >
             <form action="/search">
-              <div className="flex items-center gap-2 rounded-2xl bg-white/90 p-2 shadow-float ring-1 ring-white/30 backdrop-blur-md">
+              <div className="flex items-center gap-2 rounded-2xl bg-white/90 p-2 shadow-float  ring-white/30 backdrop-blur-md">
                 <Search
                   className="pointer-events-none ml-3 size-5 shrink-0 text-muted-foreground"
                   aria-hidden
                 />
-                <input
+                <Input
                   name="q"
                   required
                   placeholder={t("Search.placeholder")}
-                  className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-base outline-none placeholder:text-muted-foreground"
+                  className="h-auto flex-1 border-0 bg-transparent px-2 py-2.5 shadow-none"
                   aria-label={t("Search.placeholder")}
                 />
                 <button

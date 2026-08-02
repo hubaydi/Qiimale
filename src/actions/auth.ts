@@ -32,7 +32,7 @@ const loginSchema = z.object({
 });
 
 // ponytail: mirrors lib/types.ts cookie maxAge — if one changes, change both
-const TOKEN_EXPIRATION = 7200;
+const TOKEN_EXPIRATION = 604800;
 
 async function issueUnverifiedSession(
   payload: Awaited<ReturnType<typeof getPayloadClient>>,

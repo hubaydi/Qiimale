@@ -75,6 +75,8 @@
     "confirmPassword": "Xaqiiji ereyga sirta ah",
     "name": "Magacaaga",
     "google": "Soo geli Google-ga",
+    "or": "ama",
+    "oauthFailed": "Soo-gelida Google way fashilantay. Dib u isku day.",
     "verifyEmail": "Fur iimaylka si aad qiimayn u qortid.",
     "emailSent": "Waxaanu kuu soo dirnay iimayl xaqiijin ah.",
     "verifySuccess": "Iimaylkaaga waa la xaqiijiyay. Hadda waxaad qori kartaa qiimayn.",

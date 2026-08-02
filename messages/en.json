@@ -75,6 +75,8 @@
     "confirmPassword": "Confirm password",
     "name": "Your name",
     "google": "Continue with Google",
+    "or": "or",
+    "oauthFailed": "Google sign-in failed. Try again.",
     "verifyEmail": "Verify your email before reviewing.",
     "emailSent": "We sent you a verification email.",
     "verifySuccess": "Your email is verified. You can review now.",

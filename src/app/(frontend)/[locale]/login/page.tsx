@@ -5,7 +5,12 @@ import { getCurrentUser } from "@/lib/session";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ verified?: string; reset?: string }>;
+  searchParams: Promise<{
+    verified?: string;
+    reset?: string;
+    error?: string;
+    reason?: string;
+  }>;
 }) {
   const user = await getCurrentUser();
   if (user) redirect("/");
@@ -14,6 +19,9 @@ export default async function LoginPage({
     <LoginForm
       showVerified={params.verified === "true"}
       showReset={params.reset === "true"}
+      oauthError={
+        params.error === "oauth" ? params.reason || "generic" : undefined
+      }
     />
   );
 }

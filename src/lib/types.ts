@@ -25,7 +25,7 @@ export function setSessionCookie(cookies: CookieStore, token: string) {
     path: "/",
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 7200,
+    maxAge: 604800,
   });
 }
 

@@ -9,6 +9,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { registerUser } from "@/actions/auth";
+import { GoogleIcon } from "@/components/GoogleIcon";
 import { PasswordInput } from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -164,6 +165,24 @@ export function RegisterForm() {
             )}
           </Button>
         </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">
+              {t("or")}
+            </span>
+          </div>
+        </div>
+
+        <Button asChild variant="outline" size="lg" className="w-full">
+          <a href="/oauth/google">
+            <GoogleIcon className="size-4" />
+            <span>{t("google")}</span>
+          </a>
+        </Button>
 
         <p className="text-center text-xs text-muted-foreground">
           <Link

@@ -66,7 +66,7 @@ export function PlaceReviews({
               key={s}
               type="button"
               onClick={() => setSort(s)}
-              className={`px-2.5 py-1 rounded-md transition-all font-medium ${
+              className={`px-2.5 py-1 rounded-md transition-all font-medium cursor-pointer ${
                 sort === s
                   ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"

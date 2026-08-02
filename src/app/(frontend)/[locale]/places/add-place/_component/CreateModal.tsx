@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const createSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(3),
   description: z.string().max(200).optional(),
 });
 

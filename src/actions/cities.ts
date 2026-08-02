@@ -10,7 +10,7 @@ import type { City } from "@/payload-types";
 const schema = z.object({
   name: z
     .string()
-    .min(5, "City name is required")
+    .min(3, "City name is required")
     .max(50, "City name is too long"),
 });
 

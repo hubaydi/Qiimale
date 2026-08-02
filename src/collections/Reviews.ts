@@ -12,6 +12,7 @@ export const Reviews: CollectionConfig = {
       "rating",
       "place",
       "author",
+      "photos",
       "status",
       "upvoteCount",
       "flagCount",

@@ -147,6 +147,8 @@
     "city": "City",
     "address": "Address (optional)",
     "description": "Description (optional)",
+    "image": "Image (optional)",
+    "addImage": "Add image",
     "submit": "Submit",
     "success": "Thanks! Your place was submitted and is pending admin review.",
     "stepCity": "City",

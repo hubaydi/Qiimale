@@ -1,5 +1,6 @@
 "use client";
 
+import { Upload, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,9 @@ export function StepDetails({
   categories,
   register,
   errors,
+  imagePreview,
+  onImageSelect,
+  onImageRemove,
 }: {
   selectedCityId: string | null;
   selectedCatId: string | null;
@@ -25,6 +29,9 @@ export function StepDetails({
     description?: string;
   }>;
   errors: FieldErrors<{ name: string; address?: string; description?: string }>;
+  imagePreview: string | null;
+  onImageSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onImageRemove: () => void;
 }) {
   const t = useTranslations("AddPlace");
   const locale = useLocale();
@@ -95,6 +102,42 @@ export function StepDetails({
           }
           className="w-full rounded-lg border border-input bg-card px-4 py-3 text-base placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-y"
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="place-image">{t("image")}</Label>
+        {imagePreview ? (
+          <div className="relative aspect-video w-full max-w-xs overflow-hidden rounded-xl border">
+            {/* biome-ignore lint/performance/noImgElement: local object url preview */}
+            <img
+              src={imagePreview}
+              alt="Place preview"
+              className="h-full w-full object-cover"
+            />
+            <button
+              type="button"
+              onClick={onImageRemove}
+              className="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1 hover:bg-black transition-colors"
+              aria-label="Remove image"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-input hover:border-primary hover:bg-primary/5 cursor-pointer transition-all p-4 text-center">
+            <Upload size={18} className="text-muted-foreground" />
+            <span className="text-sm text-muted-foreground font-medium">
+              {t("addImage")}
+            </span>
+            <input
+              id="place-image"
+              type="file"
+              accept="image/*"
+              onChange={onImageSelect}
+              className="sr-only"
+            />
+          </label>
+        )}
       </div>
     </div>
   );

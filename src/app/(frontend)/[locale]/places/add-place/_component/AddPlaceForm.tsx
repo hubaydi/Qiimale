@@ -9,8 +9,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
+import { uploadMedia } from "@/actions/media";
 import { addPlace } from "@/actions/places";
 import { Button } from "@/components/ui/button";
+import type { ActionResult } from "@/lib/types";
 import { CreateModal } from "./CreateModal";
 import { StepCategorySelect } from "./StepCategorySelect";
 import { StepCitySelect } from "./StepCitySelect";
@@ -25,6 +27,13 @@ const addPlaceSchema = z.object({
 });
 
 type AddPlaceFormValues = z.infer<typeof addPlaceSchema>;
+
+async function uploadPlaceImage(file: File): Promise<string | null> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const res: ActionResult<{ id: string }> = await uploadMedia(fd);
+  return res.ok ? res.data.id : null;
+}
 
 export function AddPlaceForm({
   cities: initialCities,
@@ -46,6 +55,22 @@ export function AddPlaceForm({
   const [catModalOpen, setCatModalOpen] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  function onImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  }
+
+  function onImageRemove() {
+    setImageFile(null);
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImagePreview(null);
+  }
 
   const {
     register,
@@ -83,12 +108,18 @@ export function AddPlaceForm({
     setServerError(null);
     if (!selectedCityId || !selectedCatId) return;
     startTransition(async () => {
+      let imageId: string | undefined;
+      if (imageFile) {
+        const id = await uploadPlaceImage(imageFile);
+        if (id) imageId = id;
+      }
       const res = await addPlace({
         name: data.name,
         categoryId: selectedCatId,
         cityId: selectedCityId,
         address: data.address || "",
         description: data.description || "",
+        imageId,
       });
       if (!res.ok) {
         setServerError(tErr(res.error.code) || res.error.message);
@@ -144,6 +175,9 @@ export function AddPlaceForm({
             categories={cats}
             register={register}
             errors={errors}
+            imagePreview={imagePreview}
+            onImageSelect={onImageSelect}
+            onImageRemove={onImageRemove}
           />
         )}
 

@@ -11,7 +11,7 @@ import type { Place, Review } from "@/payload-types";
 const schema = z.object({
   placeId: z.string(),
   rating: z.number().int().min(1).max(5),
-  text: z.string().min(20),
+  text: z.string().min(3),
   photoIds: z.array(z.string()).max(3).optional(),
 });
 

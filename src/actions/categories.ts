@@ -10,7 +10,7 @@ import type { Category } from "@/payload-types";
 const schema = z.object({
   name: z
     .string()
-    .min(5, "Category name is required")
+    .min(3, "Category name is required")
     .max(50, "Category name is too long"),
   description: z.string().max(200).optional(),
 });

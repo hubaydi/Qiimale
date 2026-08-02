@@ -15,6 +15,7 @@ const schema = z.object({
   cityId: z.string(),
   address: z.string().optional(),
   description: z.string().max(1000).optional(),
+  imageId: z.string().optional(),
 });
 
 export async function addPlace(
@@ -45,6 +46,7 @@ export async function addPlace(
       city: parsed.data.cityId,
       address: parsed.data.address,
       description: parsed.data.description,
+      image: parsed.data.imageId || undefined,
       status: "pending",
       submittedBy: user.id,
     } as RequiredDataFromCollectionSlug<"places">,

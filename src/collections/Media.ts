@@ -1,12 +1,13 @@
 import type { CollectionConfig } from "payload";
 import { isAdmin, isAdminAccess } from "@/access/isAdmin";
+import { verifiedOnly } from "@/access/verifiedOnly";
 
 export const Media: CollectionConfig = {
   slug: "media",
   admin: { useAsTitle: "filename" },
   access: {
-    read: isAdmin,
-    create: isAdmin,
+    read: () => true,
+    create: verifiedOnly,
     update: isAdmin,
     delete: isAdmin,
     admin: isAdminAccess,

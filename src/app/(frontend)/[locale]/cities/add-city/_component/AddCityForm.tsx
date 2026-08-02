@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const citySchema = z.object({
-  name: z.string().min(5).max(50),
+  name: z.string().min(3).max(50),
 });
 
 type CityFormValues = z.infer<typeof citySchema>;

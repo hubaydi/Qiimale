@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { uploadMedia } from "@/actions/media";
 import { submitReview } from "@/actions/reviews";
 import { StarRating } from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
@@ -16,19 +17,13 @@ import type { ActionResult } from "@/lib/types";
 async function uploadPhoto(file: File): Promise<string | null> {
   const fd = new FormData();
   fd.append("file", file);
-  const res = await fetch("/api/media", {
-    method: "POST",
-    body: fd,
-    credentials: "same-origin",
-  });
-  if (!res.ok) return null;
-  const doc = await res.json();
-  return doc?.doc?.id ?? doc?.id ?? null;
+  const res: ActionResult<{ id: string }> = await uploadMedia(fd);
+  return res.ok ? res.data.id : null;
 }
 
 const reviewSchema = z.object({
   rating: z.number().int().min(1),
-  text: z.string().min(20),
+  text: z.string().min(3),
 });
 
 type ReviewFormValues = z.infer<typeof reviewSchema>;
@@ -143,7 +138,7 @@ export function ReviewForm({
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{t("minLength")}</span>
-          <span>{text.length} / 20+</span>
+          <span>{text.length} / 3+</span>
         </div>
         {errors.text && (
           <p className="text-xs font-medium text-destructive">

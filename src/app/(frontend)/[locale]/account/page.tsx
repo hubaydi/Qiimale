@@ -88,11 +88,11 @@ export default async function AccountPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6 py-4">
       {/* Profile header with cover */}
-      <div className="overflow-hidden rounded-2xl border border-border bg-white">
-        <div className="h-28 sm:h-32 bg-gradient-to-r from-blue-600 to-blue-400" />
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
+        <div className="h-28 sm:h-32 bg-linear-to-r from-primary to-primary/70" />
         <div className="px-6 pb-6 -mt-10">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-            <div className="h-20 w-20 rounded-full border-4 border-white bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-2xl shrink-0 shadow-sm">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-card bg-primary/15 font-bold text-2xl text-primary shrink-0 shadow-soft">
               {user.name ? initials : <UserIcon size={32} />}
             </div>
             <div className="flex-1 pt-4 sm:pt-0">
@@ -115,7 +115,7 @@ export default async function AccountPage() {
                 ) : (
                   <Badge
                     variant="secondary"
-                    className="bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                    className="bg-rating/10 text-rating"
                   >
                     <Clock />
                     {t("unverified")}

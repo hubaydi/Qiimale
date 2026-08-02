@@ -21,11 +21,11 @@ export async function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 h-16 backdrop-blur-sm bg-[oklch(0.975_0.002_250)]/80 border-b border-[oklch(0.922_0.005_250)]/50">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/75 backdrop-blur-xl backdrop-saturate-150 shadow-soft supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4">
         <Link
           href="/"
-          className="font-jakarta text-xl font-bold text-foreground"
+          className="font-jakarta text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
         >
           Qiimale
         </Link>

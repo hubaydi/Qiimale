@@ -50,10 +50,10 @@ export async function ReviewCard({
   }
 
   return (
-    <article className="border border-border bg-white rounded-xl p-6 text-card-foreground space-y-4">
+    <article className="rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-soft space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 font-bold text-primary">
             {author?.name ? author.name.charAt(0).toUpperCase() : "?"}
           </div>
           <div>
@@ -105,7 +105,7 @@ export async function ReviewCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between border-t border-border pt-4">
+      <div className="flex items-center justify-between border-t border-border/70 pt-4">
         <div className="flex items-center gap-4">
           <UpvoteButton
             reviewId={review.id}

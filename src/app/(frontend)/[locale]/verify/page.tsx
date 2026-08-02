@@ -13,7 +13,7 @@ export default async function VerifyPage({
 
   if (!token) {
     return (
-      <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-white text-center space-y-4">
+      <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-card text-center space-y-4 shadow-soft">
         <XCircle className="mx-auto text-destructive" size={48} />
         <h1 className="text-xl font-bold">{t("verifyFail")}</h1>
       </div>
@@ -23,7 +23,7 @@ export default async function VerifyPage({
   const res = await verifyEmail(String(token));
 
   return (
-    <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-white text-center space-y-4">
+    <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-card text-center space-y-4 shadow-soft">
       {res.ok ? (
         <>
           <CheckCircle2 className="mx-auto text-emerald-500" size={48} />

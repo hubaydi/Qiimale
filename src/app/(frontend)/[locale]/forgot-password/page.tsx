@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-white text-center space-y-4">
+      <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-card text-center space-y-4 shadow-soft">
         <CheckCircle2 className="mx-auto text-emerald-500" size={48} />
         <h1 className="text-xl font-bold">{t("forgotPasswordSent")}</h1>
         <Link
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs font-medium text-red-500">
+              <p className="text-xs font-medium text-destructive">
                 {errors.email.message}
               </p>
             )}

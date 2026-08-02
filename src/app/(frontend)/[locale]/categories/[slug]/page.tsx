@@ -2,6 +2,7 @@ import { SearchX } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
@@ -70,9 +71,9 @@ export default async function CategoryDetailPage({ params }: Props) {
   });
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold text-foreground">
+    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
+      <Reveal as="div" className="space-y-2">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           {category.name}
         </h1>
         {category.description ? (
@@ -80,18 +81,20 @@ export default async function CategoryDetailPage({ params }: Props) {
             {category.description}
           </p>
         ) : null}
-      </div>
+      </Reveal>
       {places.docs.length === 0 ? (
         <p className="text-center text-muted-foreground py-12">
           <SearchX className="mx-auto size-8 mb-3 opacity-50" />
           No places in this category yet.
         </p>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+        <StaggerGroup className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {places.docs.map((p: Place) => (
-            <PlaceCard key={p.id} place={p} locale={locale} />
+            <StaggerItem key={p.id}>
+              <PlaceCard place={p} locale={locale} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       )}
     </div>
   );

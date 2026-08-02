@@ -2,6 +2,7 @@ import * as Icons from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Where } from "payload";
 
+import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
@@ -66,7 +67,7 @@ export default async function SearchPage({
     );
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-10">
       <form action="/search" className="relative">
         <Icons.Search
           className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground"
@@ -74,26 +75,29 @@ export default async function SearchPage({
         />
         <input
           name="q"
+          required
           defaultValue={params.q ?? ""}
           placeholder={t("placeholder")}
-          className="w-full rounded-2xl border border-border bg-white py-3.5 pl-12 pr-4 text-base shadow-sm transition-shadow placeholder:text-muted-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          className="w-full rounded-2xl border border-border bg-card py-3.5 pl-12 pr-4 text-base shadow-soft transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lift focus:outline-none"
           aria-label={t("placeholder")}
         />
       </form>
 
-      <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600" />
+      <h1 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2.5">
+        <span className="inline-block h-5 w-1 rounded-full bg-primary" />
         {t("results")}
       </h1>
 
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">{t("empty")}</p>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+        <StaggerGroup className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {filtered.map((p: Place) => (
-            <PlaceCard key={p.id} place={p} locale={locale} />
+            <StaggerItem key={p.id}>
+              <PlaceCard place={p} locale={locale} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       )}
     </div>
   );

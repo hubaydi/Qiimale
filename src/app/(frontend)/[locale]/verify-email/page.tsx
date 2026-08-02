@@ -13,7 +13,7 @@ export default async function VerifyEmailPage({
   const decodedEmail = email ? decodeURIComponent(email) : "";
 
   return (
-    <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-white text-center space-y-4">
+    <div className="max-w-md mx-auto my-12 p-8 rounded-2xl border border-border bg-card text-center space-y-4 shadow-soft">
       <Mail className="mx-auto text-primary" size={48} />
       <h1 className="text-xl font-bold">{t("verifyEmailTitle")}</h1>
       <p className="text-sm text-muted-foreground">

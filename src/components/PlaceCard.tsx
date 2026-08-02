@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { StarRating } from "@/components/StarRating";
@@ -28,37 +28,39 @@ export function PlaceCard({
   return (
     <Link
       href={`/places/${place.slug}`}
-      className="group flex min-w-0 items-center gap-4 rounded-xl border border-border bg-white p-4 transition-all duration-200 hover:border-blue-200 hover:shadow-sm hover:border-l-2 hover:border-l-blue-500"
+      className="group flex min-w-0 items-center gap-4 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift hover:border-primary/40"
     >
       {imageUrl ? (
-        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-muted">
+        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-28 sm:w-28">
           <Image
             src={imageUrl}
             alt={imageAlt}
             fill
-            sizes="112px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(min-width: 640px) 112px, 96px"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.06]"
           />
         </div>
       ) : (
-        <div className="h-28 w-28 shrink-0 rounded-lg bg-linear-to-br from-muted to-muted/40" />
+        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-muted to-muted/40 text-muted-foreground/40 sm:h-28 sm:w-28">
+          <Tag size={22} aria-hidden />
+        </div>
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="line-clamp-2 break-words font-semibold text-foreground leading-snug group-hover:text-blue-600">
+        <div className="line-clamp-2 break-words font-semibold text-foreground leading-snug transition-colors group-hover:text-primary">
           {place.name}
         </div>
         <div className="mt-0.5 truncate text-sm text-muted-foreground">
           {category?.name}
           {city?.name ? ` · ${city.name}` : null}
         </div>
-        <div className="mt-3 flex items-center gap-2 border-t pt-3 text-sm">
+        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border/70 pt-3 text-sm">
           <StarRating value={Math.round(place.ratingAvg || 0)} />
           <span className="text-muted-foreground">
             {place.reviewCount || 0}
           </span>
           {website && (
-            <span className="ml-auto inline-flex items-center gap-1 text-xs text-blue-600">
+            <span className="ml-auto inline-flex items-center gap-1 text-xs text-primary">
               <ExternalLink size={12} />
             </span>
           )}

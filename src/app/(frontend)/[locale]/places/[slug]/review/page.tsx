@@ -18,7 +18,7 @@ export default async function ReviewPage({
 
   if (!user._verified) {
     return (
-      <div className="max-w-md mx-auto my-12 p-6 rounded-2xl border border-border bg-white text-center space-y-4">
+      <div className="max-w-md mx-auto my-12 p-6 rounded-2xl border border-border bg-card text-center space-y-4 shadow-soft">
         <h2 className="text-xl font-bold">{t("Auth.verifyEmail")}</h2>
         <p className="text-sm text-muted-foreground">{t("Auth.verifyEmail")}</p>
       </div>

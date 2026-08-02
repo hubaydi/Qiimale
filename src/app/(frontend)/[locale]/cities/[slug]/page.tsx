@@ -2,6 +2,7 @@ import * as Icons from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { City, Place } from "@/payload-types";
@@ -74,31 +75,33 @@ export default async function CityDetailPage({ params }: Props) {
   });
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
-      <div className="flex items-center gap-4">
-        <div className="flex size-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
+      <Reveal as="div" className="flex items-center gap-4">
+        <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-soft">
           <Icons.MapPin size={24} />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {city.name}
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             {t("placesIn", { city: city.name })}
           </p>
         </div>
-      </div>
+      </Reveal>
       {places.docs.length === 0 ? (
         <p className="text-center text-muted-foreground py-12">
           <Icons.SearchX className="mx-auto size-8 mb-3 opacity-50" />
           No places in this city yet.
         </p>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+        <StaggerGroup className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {places.docs.map((p: Place) => (
-            <PlaceCard key={p.id} place={p} locale={locale} />
+            <StaggerItem key={p.id}>
+              <PlaceCard place={p} locale={locale} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       )}
     </div>
   );

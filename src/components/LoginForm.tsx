@@ -90,7 +90,7 @@ export function LoginForm({
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs font-medium text-red-500">
+              <p className="text-xs font-medium text-destructive">
                 {errors.email.message}
               </p>
             )}
@@ -104,7 +104,7 @@ export function LoginForm({
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs font-medium text-red-500">
+              <p className="text-xs font-medium text-destructive">
                 {errors.password.message}
               </p>
             )}

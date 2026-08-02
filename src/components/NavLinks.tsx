@@ -55,9 +55,9 @@ export function NavLinks({
             key={key}
             href={href}
             className={cn(
-              "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+              "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
               active
-                ? "bg-blue-50 text-blue-600"
+                ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
               linkClassName,
             )}
@@ -66,7 +66,7 @@ export function NavLinks({
               className={cn(
                 "flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors",
                 active
-                  ? "bg-blue-100 text-blue-600"
+                  ? "bg-primary/15 text-primary"
                   : "bg-muted text-muted-foreground",
               )}
             >
@@ -81,9 +81,9 @@ export function NavLinks({
         <Link
           href="/admin"
           className={cn(
-            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
             pathname.startsWith("/admin")
-              ? "bg-blue-50 text-blue-600"
+              ? "bg-primary/10 text-primary"
               : "text-muted-foreground hover:bg-muted hover:text-foreground",
             linkClassName,
           )}
@@ -92,7 +92,7 @@ export function NavLinks({
             className={cn(
               "flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors",
               pathname.startsWith("/admin")
-                ? "bg-blue-100 text-blue-600"
+                ? "bg-primary/15 text-primary"
                 : "bg-muted text-muted-foreground",
             )}
           >
@@ -106,9 +106,9 @@ export function NavLinks({
         <Link
           href="/account"
           className={cn(
-            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
             pathname === "/account"
-              ? "bg-blue-50 text-blue-600"
+              ? "bg-primary/10 text-primary"
               : "text-muted-foreground hover:bg-muted hover:text-foreground",
             linkClassName,
           )}
@@ -122,9 +122,9 @@ export function NavLinks({
         <Link
           href="/login"
           className={cn(
-            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+            "inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
             pathname === "/login"
-              ? "bg-blue-50 text-blue-600"
+              ? "bg-primary/10 text-primary"
               : "text-muted-foreground hover:bg-muted hover:text-foreground",
             linkClassName,
           )}

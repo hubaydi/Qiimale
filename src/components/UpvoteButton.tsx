@@ -62,8 +62,8 @@ export function UpvoteButton({
       disabled={pending}
       onClick={handleClick}
       className={cn(
-        "inline-flex items-center gap-1 text-sm transition-colors hover:text-blue-600 cursor-pointer disabled:opacity-50",
-        localUpvoted ? "text-blue-600 font-medium" : "text-muted-foreground",
+        "inline-flex items-center gap-1 text-sm transition-colors hover:text-primary cursor-pointer disabled:opacity-50",
+        localUpvoted ? "text-primary font-medium" : "text-muted-foreground",
       )}
       aria-label={t("upvote")}
       aria-pressed={localUpvoted}

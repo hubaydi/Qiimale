@@ -12,9 +12,9 @@ import {
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { href: "/add-place", key: "addPlace", icon: Building2 },
-  { href: "/add-category", key: "addCategory", icon: Tag },
-  { href: "/add-city", key: "addCity", icon: MapPin },
+  { href: "/places/add-place", key: "addPlace", icon: Building2 },
+  { href: "/categories/add-category", key: "addCategory", icon: Tag },
+  { href: "/cities/add-city", key: "addCity", icon: MapPin },
 ] as const;
 
 export function AddMenu({ className }: { className?: string }) {
@@ -26,7 +26,7 @@ export function AddMenu({ className }: { className?: string }) {
         <button
           type="button"
           className={cn(
-            "inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 cursor-pointer",
+            "inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:shadow-lift hover:bg-primary/90 cursor-pointer",
             className,
           )}
         >

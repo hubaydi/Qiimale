@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Category, City, Place, Review } from "@/payload-types";
 
 const CARD =
-  "rounded-xl border border-border bg-white p-4 hover:border-blue-200 hover:shadow-sm transition-all";
+  "rounded-xl border border-border bg-card p-4 shadow-soft hover:border-primary/30 hover:shadow-lift transition-all";
 const TITLE =
   "font-bold text-foreground hover:text-primary transition-colors text-sm";
 
@@ -54,14 +54,14 @@ function EmptyState({
 }
 
 const STATUS_STYLES: Record<string, [typeof Clock, string]> = {
-  pending: [Clock, "bg-amber-500/10 text-amber-600 dark:text-amber-400"],
+  pending: [Clock, "bg-rating/10 text-rating"],
   approved: [
     CheckCircle2,
     "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   ],
-  rejected: [XCircle, "bg-red-500/10 text-red-600 dark:text-red-400"],
-  hidden: [Clock, "bg-amber-500/10 text-amber-600 dark:text-amber-400"],
-  removed: [XCircle, "bg-red-500/10 text-red-600 dark:text-red-400"],
+  rejected: [XCircle, "bg-destructive/10 text-destructive dark:text-red-400"],
+  hidden: [Clock, "bg-rating/10 text-rating"],
+  removed: [XCircle, "bg-destructive/10 text-destructive dark:text-red-400"],
 };
 
 const statusKey = (s: string) =>
@@ -254,7 +254,7 @@ export function AccountTabs({
             items={items}
             emptyTitle={emptyTitle}
             emptyCta={emptyCta}
-            emptyHref="/add-place"
+            emptyHref="/places/add-place"
           />
         </TabsContent>
       ))}

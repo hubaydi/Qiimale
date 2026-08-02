@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Reveal } from "@/components/motion";
 import { PlaceReviews } from "@/components/PlaceReviews";
 import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
@@ -82,7 +83,10 @@ export default async function PlacePage({
       </div>
 
       {/* Main Info Card */}
-      <div className="rounded-2xl border border-border bg-white text-card-foreground overflow-hidden">
+      <Reveal
+        as="div"
+        className="rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-soft"
+      >
         {imageUrl ? (
           <div className="relative aspect-video w-full bg-muted md:aspect-2/1">
             <Image
@@ -127,7 +131,7 @@ export default async function PlacePage({
                   href={website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors w-fit"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors w-fit"
                 >
                   <ExternalLink size={15} />
                   {(() => {
@@ -166,20 +170,20 @@ export default async function PlacePage({
           <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
             <Link
               href={`/places/${slug}/review`}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-all shadow-sm hover:shadow-md cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all shadow-soft hover:shadow-lift hover:bg-primary/90 cursor-pointer"
             >
               <Plus size={16} />
               {t("writeReview")}
             </Link>
           </div>
         </div>
-      </div>
+      </Reveal>
 
       {/* Reviews Breakdown and List */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Rating distribution sidebar */}
         <div className="md:col-span-1 space-y-6">
-          <div className="rounded-xl border border-border bg-white p-5 space-y-4">
+          <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-soft">
             <h3 className="font-bold text-sm tracking-wide uppercase text-muted-foreground">
               {locale === "so" ? "Qiimaynta" : "Rating breakdown"}
             </h3>
@@ -193,11 +197,11 @@ export default async function PlacePage({
                     <span className="w-3 text-right">{stars}</span>
                     <Star
                       size={12}
-                      className="fill-amber-400 text-amber-400 shrink-0"
+                      className="fill-rating text-rating shrink-0"
                     />
                     <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-amber-400 rounded-full transition-all"
+                        className="h-full bg-rating rounded-full transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>

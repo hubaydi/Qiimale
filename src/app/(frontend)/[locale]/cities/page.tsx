@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
+import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { City } from "@/payload-types";
 
@@ -20,8 +21,8 @@ export default async function CitiesPage() {
 
   const addLink = (
     <Link
-      href="/add-city"
-      className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+      href="/cities/add-city"
+      className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:shadow-lift hover:bg-primary/90"
     >
       <Icons.Plus size={16} />
       {t("Nav.addCity")}
@@ -30,7 +31,7 @@ export default async function CitiesPage() {
 
   if (cities.docs.length === 0) {
     return (
-      <div className="mx-auto max-w-5xl px-4 py-12 text-center">
+      <div className="mx-auto max-w-5xl px-4 py-16 text-center">
         <p className="text-muted-foreground mb-6">{t("Cities.empty")}</p>
         <div className="flex justify-center">{addLink}</div>
       </div>
@@ -38,30 +39,31 @@ export default async function CitiesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600" />
+        <h1 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2.5">
+          <span className="inline-block h-5 w-1 rounded-full bg-primary" />
           {t("Cities.title")}
         </h1>
         {addLink}
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {cities.docs.map((city: City) => (
-          <Link
-            key={city.id}
-            href={`/cities/${city.slug}`}
-            className="group flex flex-col items-center gap-2.5 border border-border bg-white rounded-xl p-5 text-center transition-all duration-200 hover:border-blue-200 hover:shadow-sm"
-          >
-            <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
-              <Icons.MapPin size={20} />
-            </div>
-            <span className="text-sm font-medium text-foreground leading-tight">
-              {city.name}
-            </span>
-          </Link>
+          <StaggerItem key={city.id}>
+            <Link
+              href={`/cities/${city.slug}`}
+              className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
+            >
+              <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                <Icons.MapPin size={20} />
+              </div>
+              <span className="text-sm font-medium text-foreground leading-tight">
+                {city.name}
+              </span>
+            </Link>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </div>
   );
 }

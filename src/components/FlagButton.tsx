@@ -42,7 +42,7 @@ export function FlagButton({
   if (flagged) {
     return (
       <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
-        <Flag size={14} className="fill-current text-amber-500" />
+        <Flag size={14} className="fill-current text-rating" />
         {t("Review.flagged")}
       </span>
     );
@@ -60,7 +60,7 @@ export function FlagButton({
         {t("Review.flag")}
       </button>
       {open && (
-        <div className="absolute left-0 bottom-full mb-1 z-10 rounded border bg-popover text-popover-foreground p-1 text-xs shadow-md min-w-30">
+        <div className="absolute left-0 bottom-full mb-1 z-10 rounded-lg border border-border bg-popover text-popover-foreground p-1 text-xs shadow-lift min-w-30">
           {reasons.map((r) => (
             <button
               key={r}

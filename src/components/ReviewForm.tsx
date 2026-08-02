@@ -106,7 +106,7 @@ export function ReviewForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 max-w-xl bg-white border border-border rounded-2xl p-6 sm:p-8"
+      className="space-y-6 max-w-xl bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-soft"
     >
       <div className="space-y-2">
         <span className="block text-sm font-semibold text-foreground">
@@ -123,11 +123,11 @@ export function ReviewForm({
             onChange={(v) => setValue("rating", v, { shouldValidate: true })}
           />
           {rating > 0 && (
-            <span className="text-sm font-bold text-amber-500">{rating}/5</span>
+            <span className="text-sm font-bold text-rating">{rating}/5</span>
           )}
         </div>
         {errors.rating && (
-          <p className="text-xs font-medium text-red-500">
+          <p className="text-xs font-medium text-destructive">
             {errors.rating.message}
           </p>
         )}
@@ -140,14 +140,14 @@ export function ReviewForm({
           {...register("text")}
           placeholder={t("commentPlaceholder")}
           rows={5}
-          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base placeholder:text-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
+          className="w-full rounded-lg border border-input bg-card px-4 py-3 text-base placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{t("minLength")}</span>
           <span>{text.length} / 20+</span>
         </div>
         {errors.text && (
-          <p className="text-xs font-medium text-red-500">
+          <p className="text-xs font-medium text-destructive">
             {errors.text.message}
           </p>
         )}
@@ -181,7 +181,7 @@ export function ReviewForm({
           ))}
 
           {files.length < 3 && (
-            <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 cursor-pointer transition-all text-center p-2">
+            <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-input hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-center p-2">
               <Upload size={20} className="text-muted-foreground mb-1" />
               <span className="text-xs text-muted-foreground font-medium">
                 Ku dar sawir

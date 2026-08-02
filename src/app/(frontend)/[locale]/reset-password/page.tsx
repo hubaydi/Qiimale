@@ -71,7 +71,7 @@ export default function ResetPasswordPage({
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs font-medium text-red-500">
+              <p className="text-xs font-medium text-destructive">
                 {errors.password.message}
               </p>
             )}

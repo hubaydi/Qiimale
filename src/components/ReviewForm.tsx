@@ -99,7 +99,6 @@ export function ReviewForm({
         return;
       }
       router.push(`/places/${placeSlug}`);
-      router.refresh();
     });
   }
 

@@ -47,7 +47,6 @@ export function AddCategoryForm() {
         return;
       }
       router.push("/account");
-      router.refresh();
     });
   }
 

@@ -53,7 +53,6 @@ export function LoginForm({
         return;
       }
       router.push("/account");
-      router.refresh();
     });
   }
 

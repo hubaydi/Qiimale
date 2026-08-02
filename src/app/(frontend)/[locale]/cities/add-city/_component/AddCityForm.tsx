@@ -43,7 +43,6 @@ export function AddCityForm() {
         return;
       }
       router.push("/account");
-      router.refresh();
     });
   }
 

@@ -4,6 +4,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { NavLinks } from "@/components/NavLinks";
 import { getCurrentUser } from "@/lib/session";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Logo } from "./Logo";
 
 export async function Header() {
   const t = await getTranslations("Nav");
@@ -23,11 +24,8 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/75 backdrop-blur-xl backdrop-saturate-150 shadow-soft supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4">
-        <Link
-          href="/"
-          className="font-jakarta text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
-        >
-          Qiimale
+        <Link href="/" className="transition-colors hover:opacity-80">
+          <Logo />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-2 text-sm">

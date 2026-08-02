@@ -1,12 +1,12 @@
+import { Logo } from "./Logo";
+
 export function Footer({ locale }: { locale: string }) {
   return (
     <footer className="border-t border-border bg-card text-card-foreground">
       <div className="mx-auto max-w-5xl px-4 py-14">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           <div>
-            <span className="font-jakarta text-xl font-bold tracking-tight text-foreground">
-              Qiimale
-            </span>
+            <Logo />
             <p className="mt-2 text-sm text-muted-foreground">
               {locale === "so"
                 ? "Madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada Soomaaliya"

@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -32,11 +33,8 @@ export function MobileNav({
       </SheetTrigger>
       <SheetContent side="right" className="w-72 p-0 flex flex-col">
         <div className="flex items-center gap-2 border-b px-5 py-4">
-          <Link
-            href="/"
-            className="font-jakarta text-lg font-bold text-foreground"
-          >
-            Qiimale
+          <Link href="/" className="transition-opacity hover:opacity-80">
+            <Logo compact={false} />
           </Link>
         </div>
         <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-1">

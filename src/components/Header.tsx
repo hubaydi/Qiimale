@@ -30,7 +30,7 @@ export async function Header() {
           Qiimale
         </Link>
 
-        <nav className="hidden md:flex items-center gap-2 text-sm">
+        <nav className="hidden lg:flex items-center gap-2 text-sm">
           <NavLinks labels={labels} user={user} />
           <LanguageSwitcher />
         </nav>

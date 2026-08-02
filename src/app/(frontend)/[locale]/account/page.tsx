@@ -90,7 +90,7 @@ export default async function AccountPage() {
       {/* Profile header with cover */}
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
         <div className="h-28 sm:h-32 bg-linear-to-r from-primary to-primary/70" />
-        <div className="px-6 pb-6 -mt-10">
+        <div className="px-6 pb-6 max-sm:-mt-10 sm:mt-10">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-card bg-primary/15 font-bold text-2xl text-primary shrink-0 shadow-soft">
               {user.name ? initials : <UserIcon size={32} />}

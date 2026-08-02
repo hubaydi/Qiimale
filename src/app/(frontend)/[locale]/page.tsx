@@ -156,7 +156,7 @@ export default async function HomePage() {
                 />
                 <button
                   type="submit"
-                  className="shrink-0 whitespace-nowrap rounded-xl bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:bg-primary/90 hover:shadow-lift sm:px-5"
+                  className="shrink-0 whitespace-nowrap rounded-xl bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:bg-primary/90 hover:shadow-lift sm:px-5 cursor-pointer"
                 >
                   {t("Home.searchButton")}
                 </button>

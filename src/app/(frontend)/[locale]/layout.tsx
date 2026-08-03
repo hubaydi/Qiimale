@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/site-url";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -27,12 +28,35 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+
   return {
-    title: "Qiimale",
-    description:
-      "Madal loogu talagalay in lagu qiimeeyo goobaha iyo adeegyada Soomaaliya ka jira",
+    metadataBase: new URL(SITE_URL),
+    title: {
+      template: `%s — Qiimale`,
+      default: "Qiimale",
+    },
+    description: so
+      ? "Qiimayn goobo & adeegyo Soomaaliya"
+      : "Review Somali places & services",
+    alternates: {
+      canonical: so ? "/" : "/en",
+      languages: { so: "/", en: "/en" },
+    },
     manifest: "/manifest.webmanifest",
+    openGraph: {
+      type: "website",
+      siteName: "Qiimale",
+      locale: so ? "so_SO" : "en_US",
+    },
+    twitter: { card: "summary_large_image" },
+    robots: { index: true, follow: true },
   };
 }
 

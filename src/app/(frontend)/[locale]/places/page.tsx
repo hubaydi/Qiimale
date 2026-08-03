@@ -3,6 +3,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
+import { visibleContentQuery } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import type { Place } from "@/payload-types";
 
 export async function generateMetadata({
@@ -31,10 +33,11 @@ export default async function PlacesPage() {
   const t = await getTranslations("Places");
   const locale = (await getLocale()) as "so" | "en";
   const payload = await getPayloadClient();
+  const user = await getCurrentUser();
 
   const places = await payload.find({
     collection: "places",
-    where: { status: { equals: "approved" } },
+    where: visibleContentQuery(user),
     limit: 100,
     sort: "-createdAt",
     locale,

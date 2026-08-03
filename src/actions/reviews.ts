@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
+import { canViewOwnPending } from "@/lib/places-logic";
 import { canPublishReview, hasExistingReview } from "@/lib/reviews-logic";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
@@ -37,7 +38,7 @@ export async function submitReview(
     overrideAccess: true,
     user,
   })) as Place | null;
-  if (!place || place.status !== "approved") {
+  if (!place || !canViewOwnPending(place, user)) {
     return error("NOT_FOUND", "Place not found");
   }
 

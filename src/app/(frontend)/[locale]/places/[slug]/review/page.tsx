@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ReviewForm } from "@/components/ReviewForm";
 import { getPayloadClient } from "@/lib/get-payload";
+import { canViewOwnPending } from "@/lib/places-logic";
 import { getCurrentUser } from "@/lib/session";
 import type { Review } from "@/payload-types";
 
@@ -34,7 +35,7 @@ export default async function ReviewPage({
     })
   ).docs[0];
 
-  if (!place || place.status !== "approved") notFound();
+  if (!place || !canViewOwnPending(place, user)) notFound();
 
   const existing = (
     await payload.find({

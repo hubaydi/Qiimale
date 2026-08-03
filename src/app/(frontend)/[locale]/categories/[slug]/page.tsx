@@ -5,6 +5,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
+import { canViewOwnPending, visibleContentQuery } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import type { Place } from "@/payload-types";
 
 type Props = {
@@ -53,9 +55,7 @@ export default async function CategoryDetailPage({ params }: Props) {
 
   const result = await payload.find({
     collection: "categories",
-    where: {
-      and: [{ slug: { equals: slug } }, { status: { equals: "approved" } }],
-    },
+    where: { slug: { equals: slug } },
     limit: 1,
     locale,
     fallbackLocale: "so",
@@ -63,16 +63,13 @@ export default async function CategoryDetailPage({ params }: Props) {
   });
 
   const category = result.docs[0];
-
-  if (!category) notFound();
+  const user = await getCurrentUser();
+  if (!category || !canViewOwnPending(category, user)) notFound();
 
   const places = await payload.find({
     collection: "places",
     where: {
-      and: [
-        { status: { equals: "approved" } },
-        { "category.slug": { equals: slug } },
-      ],
+      and: [visibleContentQuery(user), { "category.slug": { equals: slug } }],
     },
     limit: 50,
     sort: ["-ratingAvg", "-reviewCount"],

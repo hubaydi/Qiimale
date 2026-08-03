@@ -4,6 +4,7 @@ import type { RequiredDataFromCollectionSlug } from "payload";
 import { z } from "zod";
 
 import { getPayloadClient } from "@/lib/get-payload";
+import { canViewOwnPending } from "@/lib/places-logic";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
 
@@ -35,6 +36,28 @@ export async function addPlace(
   if (!user._verified) return error("UNVERIFIED", "Verify email first");
 
   const payload = await getPayloadClient();
+
+  const [city, category] = await Promise.all([
+    payload.findByID({
+      collection: "cities",
+      id: parsed.data.cityId,
+      overrideAccess: true,
+      depth: 0,
+    }),
+    payload.findByID({
+      collection: "categories",
+      id: parsed.data.categoryId,
+      overrideAccess: true,
+      depth: 0,
+    }),
+  ]);
+  if (!city || !canViewOwnPending(city, user)) {
+    return error("VALIDATION", "Selected city is not available");
+  }
+  if (!category || !canViewOwnPending(category, user)) {
+    return error("VALIDATION", "Selected category is not available");
+  }
+
   const created: Place = await payload.create({
     collection: "places",
     // ponytail: slugField auto-generates `slug` from name when generateSlug=true,

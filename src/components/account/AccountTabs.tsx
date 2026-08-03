@@ -167,7 +167,10 @@ export function AccountTabs({
     status: p.status,
     subtitle: p.address ?? undefined,
     date: p.createdAt,
-    href: p.status === "approved" ? `/places/${p.slug}` : undefined,
+    href:
+      p.status === "approved" || p.status === "pending"
+        ? `/places/${p.slug}`
+        : undefined,
   }));
 
   const categoryItems = categories.map((c) => ({
@@ -175,12 +178,20 @@ export function AccountTabs({
     name: c.name,
     status: c.status,
     subtitle: c.description ?? undefined,
+    href:
+      c.status === "approved" || c.status === "pending"
+        ? `/categories/${c.slug}`
+        : undefined,
   }));
 
   const cityItems = cities.map((c) => ({
     id: c.id,
     name: c.name,
     status: c.status,
+    href:
+      c.status === "approved" || c.status === "pending"
+        ? `/cities/${c.slug}`
+        : undefined,
   }));
 
   const listTabs = [

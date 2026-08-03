@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getPayloadClient } from "@/lib/get-payload";
+import { visibleContentQuery } from "@/lib/places-logic";
 import { getCurrentUser } from "@/lib/session";
 import { AddPlaceForm } from "./_component/AddPlaceForm";
 
@@ -14,13 +15,13 @@ export default async function AddPlacePage() {
   const [cities, cats] = await Promise.all([
     payload.find({
       collection: "cities",
-      where: { status: { equals: "approved" } },
+      where: visibleContentQuery(user),
       limit: 100,
       overrideAccess: true,
     }),
     payload.find({
       collection: "categories",
-      where: { status: { equals: "approved" } },
+      where: visibleContentQuery(user),
       limit: 100,
       overrideAccess: true,
     }),
@@ -35,11 +36,16 @@ export default async function AddPlacePage() {
         </p>
       </div>
       <AddPlaceForm
-        cities={cities.docs.map((c) => ({ id: c.id, name: c.name }))}
+        cities={cities.docs.map((c) => ({
+          id: c.id,
+          name: c.name,
+          status: c.status,
+        }))}
         categories={cats.docs.map((c) => ({
           id: c.id,
           name: c.name,
           description: c.description,
+          status: c.status,
         }))}
       />
     </div>

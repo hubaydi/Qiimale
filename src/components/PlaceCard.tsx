@@ -7,7 +7,7 @@ import type { Place } from "@/payload-types";
 
 export function PlaceCard({
   place,
-  locale: _locale,
+  locale,
 }: {
   place: Place;
   locale?: string;
@@ -28,8 +28,13 @@ export function PlaceCard({
   return (
     <Link
       href={`/places/${place.slug}`}
-      className="group flex min-w-0 items-center gap-4 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift hover:border-primary/40"
+      className="group relative flex min-w-0 items-center gap-4 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift hover:border-primary/40"
     >
+      {place.status === "pending" && (
+        <span className="absolute top-2.5 right-2.5 rounded-full bg-rating/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-rating">
+          {locale === "so" ? "Tusaale" : "Preview"}
+        </span>
+      )}
       {imageUrl ? (
         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-28 sm:w-28">
           <Image

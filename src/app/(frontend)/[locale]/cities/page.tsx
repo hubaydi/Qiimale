@@ -4,6 +4,8 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { getPayloadClient } from "@/lib/get-payload";
+import { visibleContentQuery } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import type { City } from "@/payload-types";
 
 export async function generateMetadata({
@@ -32,10 +34,11 @@ export default async function CitiesPage() {
   const t = await getTranslations();
   const locale = (await getLocale()) as "so" | "en";
   const payload = await getPayloadClient();
+  const user = await getCurrentUser();
 
   const cities = await payload.find({
     collection: "cities",
-    where: { status: { equals: "approved" } },
+    where: visibleContentQuery(user),
     limit: 100,
     locale,
     fallbackLocale: "so",
@@ -75,8 +78,13 @@ export default async function CitiesPage() {
           <StaggerItem key={city.id}>
             <Link
               href={`/cities/${city.slug}`}
-              className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
+              className="group relative flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
             >
+              {city.status === "pending" && (
+                <span className="absolute top-2 right-2 rounded-full bg-rating/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-rating">
+                  {locale === "so" ? "Tusaale" : "Preview"}
+                </span>
+              )}
               <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
                 <Icons.MapPin size={20} />
               </div>

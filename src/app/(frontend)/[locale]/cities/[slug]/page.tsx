@@ -5,6 +5,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
+import { canViewOwnPending, visibleContentQuery } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import type { City, Place } from "@/payload-types";
 
 type Props = {
@@ -58,9 +60,7 @@ export default async function CityDetailPage({ params }: Props) {
 
   const result = await payload.find({
     collection: "cities",
-    where: {
-      and: [{ slug: { equals: slug } }, { status: { equals: "approved" } }],
-    },
+    where: { slug: { equals: slug } },
     limit: 1,
     locale,
     fallbackLocale: "so",
@@ -68,15 +68,13 @@ export default async function CityDetailPage({ params }: Props) {
   });
 
   const city = result.docs[0] as City | undefined;
-  if (!city) notFound();
+  const user = await getCurrentUser();
+  if (!city || !canViewOwnPending(city, user)) notFound();
 
   const places = await payload.find({
     collection: "places",
     where: {
-      and: [
-        { status: { equals: "approved" } },
-        { "city.slug": { equals: slug } },
-      ],
+      and: [visibleContentQuery(user), { "city.slug": { equals: slug } }],
     },
     limit: 50,
     sort: ["-ratingAvg", "-reviewCount"],

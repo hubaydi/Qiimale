@@ -6,6 +6,8 @@ import type { Where } from "payload";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
+import { visibleContentQuery } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import type { Place } from "@/payload-types";
 
 export async function generateMetadata({
@@ -39,8 +41,9 @@ export default async function SearchPage({
   const locale = (await getLocale()) as "so" | "en";
   const params = await searchParams;
   const payload = await getPayloadClient();
+  const user = await getCurrentUser();
 
-  const andConditions: Where[] = [{ status: { equals: "approved" } }];
+  const andConditions: Where[] = [visibleContentQuery(user)];
 
   if (params.q) andConditions.push({ name: { contains: params.q } });
 
@@ -61,7 +64,7 @@ export default async function SearchPage({
         collection: "places",
         where: {
           and: [
-            { status: { equals: "approved" } },
+            visibleContentQuery(user),
             { "category.slug": { equals: params.category } },
           ],
         },

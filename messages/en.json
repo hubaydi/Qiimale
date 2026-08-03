@@ -155,6 +155,7 @@
     "stepCategory": "Category",
     "stepDetails": "Details",
     "selectCity": "Select a city",
+    "pendingSuffix": "pending",
     "createCity": "Create new city",
     "cityName": "City name",
     "selectCategory": "Select a category",

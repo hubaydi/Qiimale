@@ -37,6 +37,7 @@ export function StepCategorySelect({
         {categories.map((c) => (
           <option key={c.id} value={c.id}>
             {getLocalizedName(c.name, locale)}
+            {c.status === "pending" ? ` (${t("pendingSuffix")})` : ""}
           </option>
         ))}
       </select>

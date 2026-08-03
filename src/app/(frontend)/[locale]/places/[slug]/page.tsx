@@ -12,6 +12,8 @@ import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
 import { placeMetadata } from "@/lib/place-meta";
+import { canViewOwnPending } from "@/lib/places-logic";
+import { getCurrentUser } from "@/lib/session";
 import { SITE_URL } from "@/lib/site-url";
 import { normalizeUrl } from "@/lib/url";
 import type { Place } from "@/payload-types";
@@ -62,7 +64,8 @@ export default async function PlacePage({
   });
 
   const place = found.docs[0] as Place | undefined;
-  if (!place || place.status !== "approved") notFound();
+  const user = await getCurrentUser();
+  if (!place || !canViewOwnPending(place, user)) notFound();
 
   const category = typeof place.category === "object" ? place.category : null;
   const city = typeof place.city === "object" ? place.city : null;

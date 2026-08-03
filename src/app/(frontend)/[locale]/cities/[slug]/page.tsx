@@ -14,6 +14,8 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as "so" | "en";
+  const t = await getTranslations("Seo");
+  const so = locale === "so";
 
   const payload = await getPayloadClient();
 
@@ -27,14 +29,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     fallbackLocale: "so",
     overrideAccess: true,
   });
-  const city = result.docs[0];
+
+  const city = result.docs[0] as City | undefined;
+  if (!city) return {};
+
+  const title = so
+    ? `${city.name} — Qiimaynta ganacsiyada kuyaalla Magaalada ${city.name}`
+    : `${city.name} — Reviews — Qiimale`;
+
   return {
-    title: city?.name
-      ? `${city.name} — Qiimaynta ganacsiyada kuyaalla Magaalada ${city.name}`
-      : "Qiimale",
-    description:
-      "Eeg Goobaha ugu fiican dadkuna amaaneen ee ku yaaalla Magaalada " +
-      city?.name,
+    title,
+    description: t("cityDescription", { city: city.name }),
+    alternates: {
+      canonical: so ? `/cities/${slug}` : `/en/cities/${slug}`,
+      languages: {
+        so: `/cities/${slug}`,
+        en: `/en/cities/${slug}`,
+      },
+    },
   };
 }
 

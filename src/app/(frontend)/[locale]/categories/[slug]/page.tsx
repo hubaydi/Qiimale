@@ -1,7 +1,7 @@
 import { SearchX } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
@@ -14,6 +14,9 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params;
   const locale = rawLocale as "so" | "en";
+  const t = await getTranslations("Seo");
+  const so = locale === "so";
+
   const payload = await getPayloadClient();
 
   const result = await payload.find({
@@ -28,9 +31,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 
   const category = result.docs[0];
+  if (!category) return {};
+
   return {
-    title: category?.name ? `${category.name} — Qiimale` : "Qiimale",
-    description: `Eeg Goobaha ugu fiican dadkuna amaaneen ee Qaybta  ${category?.name}`,
+    title: `${category.name} — Qiimale`,
+    description: t("categoryDescription", { category: category.name }),
+    alternates: {
+      canonical: so ? `/categories/${slug}` : `/en/categories/${slug}`,
+      languages: {
+        so: `/categories/${slug}`,
+        en: `/en/categories/${slug}`,
+      },
+    },
   };
 }
 

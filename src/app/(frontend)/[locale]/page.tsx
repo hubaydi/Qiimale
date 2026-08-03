@@ -68,6 +68,44 @@ export default async function HomePage() {
     fallbackLocale: "so",
     depth: 1,
   });
+  const featuredCategorySlugs = ["e-commerce", "e-learning"];
+  const featuredCategories = await payload.find({
+    collection: "categories",
+    where: {
+      and: [
+        { status: { equals: "approved" } },
+        { slug: { in: featuredCategorySlugs } },
+      ],
+    },
+    limit: featuredCategorySlugs.length,
+    locale,
+    fallbackLocale: "so",
+    overrideAccess: true,
+  });
+  const featuredBySlug = new Map(
+    featuredCategories.docs.map((cat) => [cat.slug, cat]),
+  );
+  const featuredPlaces = await Promise.all(
+    featuredCategorySlugs.map((slug) =>
+      featuredBySlug.has(slug)
+        ? payload.find({
+            collection: "places",
+            where: {
+              and: [
+                { status: { equals: "approved" } },
+                { "category.slug": { equals: slug } },
+              ],
+            },
+            limit: 8,
+            sort: ["-ratingAvg", "-reviewCount"],
+            overrideAccess: true,
+            locale,
+            fallbackLocale: "so",
+            depth: 1,
+          })
+        : Promise.resolve({ docs: [] as Place[] }),
+    ),
+  );
   const latestPlaces = await payload.find({
     collection: "places",
     where: { status: { equals: "approved" } },
@@ -184,6 +222,34 @@ export default async function HomePage() {
             <p className="text-sm text-muted-foreground">{t("Search.empty")}</p>
           )}
         </section>
+
+        {featuredCategorySlugs.map((slug, i) => {
+          const category = featuredBySlug.get(slug);
+          if (!category) return null;
+          const places = featuredPlaces[i].docs;
+          return (
+            <section key={category.id}>
+              <SectionHeader
+                title={category.name}
+                href={`/categories/${category.slug}`}
+                linkLabel={t("Home.viewAll")}
+              />
+              {places.length > 0 ? (
+                <StaggerGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {places.map((p: Place) => (
+                    <StaggerItem key={p.id}>
+                      <PlaceCard place={p} locale={locale} />
+                    </StaggerItem>
+                  ))}
+                </StaggerGroup>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {t("Search.empty")}
+                </p>
+              )}
+            </section>
+          );
+        })}
 
         {/* Latest places */}
         <section>

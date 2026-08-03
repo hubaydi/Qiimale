@@ -5,22 +5,7 @@ import type { Category, City, Place } from "@/payload-types";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-export async function generateImageMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
-}) {
-  const { slug } = await params;
-  return [
-    {
-      id: slug,
-      size,
-      contentType,
-      alt: "Qiimale place page",
-    },
-  ];
-}
+export const alt = "Qiimale place page";
 
 export default async function Image({
   params,

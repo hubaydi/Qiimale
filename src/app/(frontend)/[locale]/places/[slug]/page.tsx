@@ -1,16 +1,44 @@
 import { ArrowLeft, ExternalLink, MapPin, Plus, Star } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { JsonLd } from "@/components/json-ld";
 import { Reveal } from "@/components/motion";
 import { PlaceReviews } from "@/components/PlaceReviews";
 import { ReviewCard } from "@/components/ReviewCard";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
+import { placeMetadata } from "@/lib/place-meta";
+import { SITE_URL } from "@/lib/site-url";
 import { normalizeUrl } from "@/lib/url";
 import type { Place } from "@/payload-types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { slug, locale } = await params;
+  const payload = await getPayloadClient();
+
+  const found = await payload.find({
+    collection: "places",
+    where: { slug: { equals: slug } },
+    limit: 1,
+    overrideAccess: true,
+    depth: 1,
+    locale: locale as "so" | "en",
+    fallbackLocale: "so",
+  });
+
+  const place = found.docs[0] as Place | undefined;
+  if (!place || place.status !== "approved") return {};
+
+  return placeMetadata(place, locale as "so" | "en");
+}
 
 export default async function PlacePage({
   params,
@@ -231,6 +259,62 @@ export default async function PlacePage({
           emptyHint={t("noReviewsHint")}
         />
       </div>
+
+      {/* JSON-LD Structured Data */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: place.name,
+          description: place.description || undefined,
+          ...(imageUrl ? { image: `${SITE_URL}${imageUrl}` } : {}),
+          ...(city
+            ? {
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: city.name,
+                  ...(place.address ? { streetAddress: place.address } : {}),
+                },
+              }
+            : {}),
+          url: `${SITE_URL}/places/${place.slug}`,
+          ...(totalReviews > 0
+            ? {
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: place.ratingAvg?.toFixed(1) ?? "0",
+                  reviewCount: totalReviews,
+                },
+              }
+            : {}),
+        }}
+      />
+      {reviewDocs.slice(0, 10).map((r) => {
+        let authorName = "Anonymous";
+        if (typeof r.author === "object" && r.author !== null) {
+          const u = r.author as { name?: string };
+          if (u.name) authorName = u.name;
+        }
+        return (
+          <JsonLd
+            key={r.id}
+            data={{
+              "@context": "https://schema.org",
+              "@type": "Review",
+              itemReviewed: {
+                "@type": "LocalBusiness",
+                name: place.name,
+              },
+              author: { "@type": "Person", name: authorName },
+              reviewRating: {
+                "@type": "Rating",
+                ratingValue: r.rating.toString(),
+              },
+              datePublished: r.createdAt,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -176,76 +176,6 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-5xl space-y-16 px-4 py-14">
-        {/* Categories */}
-        <section>
-          <SectionHeader
-            title={t("Home.categories")}
-            href="/categories"
-            linkLabel={t("Home.viewAll")}
-            action={
-              <Link
-                href="/categories/add-category"
-                className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted hover:border-border/70"
-              >
-                <Plus size={14} />
-                {t("Nav.addCategory")}
-              </Link>
-            }
-          />
-          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {categories.docs.map((cat: Category) => (
-              <StaggerItem key={cat.id}>
-                <Link
-                  href={`/categories/${cat.slug}`}
-                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border/70 bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
-                >
-                  <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                    <Tag size={20} />
-                  </div>
-                  <span className="text-sm font-medium text-foreground leading-tight">
-                    {cat.name}
-                  </span>
-                </Link>
-              </StaggerItem>
-            ))}
-          </StaggerGroup>
-        </section>
-
-        {/* Cities */}
-        <section>
-          <SectionHeader
-            title={t("Home.cities")}
-            href="/cities"
-            linkLabel={t("Home.viewAll")}
-            action={
-              <Link
-                href="/cities/add-city"
-                className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted hover:border-border/70"
-              >
-                <Plus size={14} />
-                {t("Nav.addCity")}
-              </Link>
-            }
-          />
-          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {cities.docs.map((city: City) => (
-              <StaggerItem key={city.id}>
-                <Link
-                  href={`/cities/${city.slug}`}
-                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border/70 bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
-                >
-                  <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                    <MapPin size={20} />
-                  </div>
-                  <span className="text-sm font-medium text-foreground leading-tight">
-                    {city.name}
-                  </span>
-                </Link>
-              </StaggerItem>
-            ))}
-          </StaggerGroup>
-        </section>
-
         {/* Top rated */}
         <section>
           <SectionHeader
@@ -319,6 +249,76 @@ export default async function HomePage() {
                 </StaggerItem>
               );
             })}
+          </StaggerGroup>
+        </section>
+
+        {/* Categories */}
+        <section>
+          <SectionHeader
+            title={t("Home.categories")}
+            href="/categories"
+            linkLabel={t("Home.viewAll")}
+            action={
+              <Link
+                href="/categories/add-category"
+                className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted hover:border-border/70"
+              >
+                <Plus size={14} />
+                {t("Nav.addCategory")}
+              </Link>
+            }
+          />
+          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {categories.docs.map((cat: Category) => (
+              <StaggerItem key={cat.id}>
+                <Link
+                  href={`/categories/${cat.slug}`}
+                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border/70 bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
+                >
+                  <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                    <Tag size={20} />
+                  </div>
+                  <span className="text-sm font-medium text-foreground leading-tight">
+                    {cat.name}
+                  </span>
+                </Link>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        </section>
+
+        {/* Cities */}
+        <section>
+          <SectionHeader
+            title={t("Home.cities")}
+            href="/cities"
+            linkLabel={t("Home.viewAll")}
+            action={
+              <Link
+                href="/cities/add-city"
+                className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted hover:border-border/70"
+              >
+                <Plus size={14} />
+                {t("Nav.addCity")}
+              </Link>
+            }
+          />
+          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {cities.docs.map((city: City) => (
+              <StaggerItem key={city.id}>
+                <Link
+                  href={`/cities/${city.slug}`}
+                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border/70 bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30"
+                >
+                  <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                    <MapPin size={20} />
+                  </div>
+                  <span className="text-sm font-medium text-foreground leading-tight">
+                    {city.name}
+                  </span>
+                </Link>
+              </StaggerItem>
+            ))}
           </StaggerGroup>
         </section>
       </div>

@@ -7,7 +7,8 @@
     "latestPlaces": "Latest places",
     "viewAll": "View all",
     "searchButton": "Search",
-    "cities": "Browse by city"
+    "cities": "Browse by city",
+    "heroStats": "{places}+ Places · {reviews}+ Reviews · {cities}+ Cities"
   },
   "Nav": {
     "home": "Home",

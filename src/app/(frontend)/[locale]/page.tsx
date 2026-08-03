@@ -124,6 +124,23 @@ export default async function HomePage() {
     overrideAccess: true,
     depth: 2,
   });
+  const [placesCount, reviewsCount, citiesCount] = await Promise.all([
+    payload.count({
+      collection: "places",
+      where: { status: { equals: "approved" } },
+      overrideAccess: true,
+    }),
+    payload.count({
+      collection: "reviews",
+      where: { status: { equals: "published" } },
+      overrideAccess: true,
+    }),
+    payload.count({
+      collection: "cities",
+      where: { status: { equals: "approved" } },
+      overrideAccess: true,
+    }),
+  ]);
 
   return (
     <div className="-mx-4 -mt-6">
@@ -197,7 +214,13 @@ export default async function HomePage() {
             className="mt-6 flex items-center justify-center gap-2 text-sm text-white/70"
           >
             <MapPin size={14} />
-            <span>200+ Places · 500+ Reviews · 10+ Cities</span>
+            <span>
+              {t("Home.heroStats", {
+                places: placesCount.totalDocs,
+                reviews: reviewsCount.totalDocs,
+                cities: citiesCount.totalDocs,
+              })}
+            </span>
           </Reveal>
         </div>
       </section>

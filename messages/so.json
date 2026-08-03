@@ -7,7 +7,8 @@
     "latestPlaces": "Goobaha ugu dambeeyay",
     "viewAll": "Arag dhamaan",
     "searchButton": "Raadi",
-    "cities": "Dooro magaalo"
+    "cities": "Dooro magaalo",
+    "heroStats": "{places}+ goob · {reviews}+ qiimayn · {cities}+ magaalo"
   },
   "Nav": {
     "home": "Bogga Hore",

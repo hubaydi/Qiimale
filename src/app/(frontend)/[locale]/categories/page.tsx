@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
+import { PlaceCard } from "@/components/PlaceCard";
+import { SectionHeader } from "@/components/SectionHeader";
 import { getPayloadClient } from "@/lib/get-payload";
 import { visibleContentQuery } from "@/lib/places-logic";
 import { getCurrentUser } from "@/lib/session";
-import type { Category } from "@/payload-types";
+import type { Place } from "@/payload-types";
 
 export async function generateMetadata({
   params,
@@ -45,6 +47,26 @@ export default async function CategoriesPage() {
     overrideAccess: true,
   });
 
+  const categoryPlaces = await Promise.all(
+    categories.docs.map((cat) =>
+      payload.find({
+        collection: "places",
+        where: {
+          and: [
+            visibleContentQuery(user),
+            { "category.slug": { equals: cat.slug } },
+          ],
+        },
+        limit: 8,
+        sort: ["-ratingAvg", "-reviewCount"],
+        overrideAccess: true,
+        depth: 1,
+        locale,
+        fallbackLocale: "so",
+      }),
+    ),
+  );
+
   const addLink = (
     <Link
       href="/categories/add-category"
@@ -65,7 +87,7 @@ export default async function CategoriesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
+    <div className="mx-auto max-w-5xl space-y-12 px-4 py-10">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2.5">
           <span className="inline-block h-5 w-1 rounded-full bg-primary" />
@@ -73,30 +95,38 @@ export default async function CategoriesPage() {
         </h1>
         {addLink}
       </div>
-      <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {categories.docs.map((cat: Category) => (
-          <StaggerItem key={cat.id}>
-            <Link
+      {categories.docs.map((cat, i) => {
+        const places = categoryPlaces[i].docs;
+        return (
+          <section key={cat.id}>
+            <SectionHeader
+              title={cat.name}
               href={`/categories/${cat.slug}`}
-              className="group relative flex h-full flex-col justify-center gap-1.5 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-primary/30 min-h-26"
-            >
-              {cat.status === "pending" && (
-                <span className="absolute top-2 right-2 rounded-full bg-rating/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-rating">
-                  {locale === "so" ? "Tusaale" : "Preview"}
-                </span>
-              )}
-              <span className="text-sm font-medium text-foreground leading-tight">
-                {cat.name}
-              </span>
-              {cat.description ? (
-                <span className="line-clamp-2 text-xs text-muted-foreground">
-                  {cat.description}
-                </span>
-              ) : null}
-            </Link>
-          </StaggerItem>
-        ))}
-      </StaggerGroup>
+              linkLabel={t("Home.viewAll")}
+              action={
+                cat.status === "pending" ? (
+                  <span className="rounded-full bg-rating/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-rating">
+                    {locale === "so" ? "Tusaale" : "Preview"}
+                  </span>
+                ) : undefined
+              }
+            />
+            {places.length > 0 ? (
+              <StaggerGroup className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {places.map((p: Place) => (
+                  <StaggerItem key={p.id}>
+                    <PlaceCard place={p} locale={locale} />
+                  </StaggerItem>
+                ))}
+              </StaggerGroup>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {t("Search.empty")}
+              </p>
+            )}
+          </section>
+        );
+      })}
     </div>
   );
 }

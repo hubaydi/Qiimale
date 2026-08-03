@@ -1,5 +1,8 @@
 import type { CollectionConfig } from "payload";
+import { render } from "react-email";
 import { isAdmin, isAdminAccess } from "@/access/isAdmin";
+import ResetPasswordEmail from "@/emails/ResetPasswordEmail";
+import VerifyEmail from "@/emails/VerifyEmail";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -7,16 +10,20 @@ export const Users: CollectionConfig = {
     tokenExpiration: 604800,
     verify: {
       generateEmailSubject: () => "Xaqiiji iimaylkaaga Qiimale",
-      generateEmailHTML: ({ token }) => {
+      generateEmailHTML: async ({ token, user }) => {
         const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/verify?token=${token}`;
-        return `<p>Fadlan xaqiiji iimaylkaaga qiimaynta Qiimale:</p><p><a href="${url}">${url}</a></p>`;
+        return render(
+          VerifyEmail({ name: (user as { name?: string }).name, url }),
+        );
       },
     },
     forgotPassword: {
       generateEmailSubject: () => "Qiimale — erey sir cusub",
-      generateEmailHTML: ({ token } = {}) => {
+      generateEmailHTML: async ({ token, user } = {}) => {
         const url = `${process.env.NEXT_PUBLIC_SERVER_URL || ""}/reset-password?token=${token}`;
-        return `<p>Waxaa la codsaday in ereyga sirta ah ee akoonkaaga Qiimale la beddelo. Haddii adiga uu yahay codsiga, fadlan guji xiriiriyaha hoose:</p><p><a href="${url}">${url}</a></p><p>Haddii aadan codsan, fadlan iska indhatir iimaylkan.</p>`;
+        return render(
+          ResetPasswordEmail({ name: (user as { name?: string }).name, url }),
+        );
       },
     },
   },

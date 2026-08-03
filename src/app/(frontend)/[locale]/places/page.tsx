@@ -1,8 +1,31 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+  const t = await getTranslations("Seo");
+
+  return {
+    title: t("placesTitle"),
+    description: t("placesDescription"),
+    alternates: {
+      canonical: so ? "/places" : "/en/places",
+      languages: {
+        so: "/places",
+        en: "/en/places",
+      },
+    },
+  };
+}
 
 export default async function PlacesPage() {
   const t = await getTranslations("Places");

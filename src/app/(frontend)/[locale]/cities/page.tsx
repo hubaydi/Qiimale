@@ -1,9 +1,32 @@
 import * as Icons from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { City } from "@/payload-types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+  const t = await getTranslations("Seo");
+
+  return {
+    title: t("citiesTitle"),
+    description: t("citiesDescription"),
+    alternates: {
+      canonical: so ? "/cities" : "/en/cities",
+      languages: {
+        so: "/cities",
+        en: "/en/cities",
+      },
+    },
+  };
+}
 
 export default async function CitiesPage() {
   const t = await getTranslations();

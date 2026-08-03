@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { City, Category, Place } from "@/payload-types";
+import type { City, Place } from "@/payload-types";
 import { SITE_URL } from "./site-url";
 
 export function placePageHref(slug: string, locale: "so" | "en"): string {

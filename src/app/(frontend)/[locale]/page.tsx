@@ -1,4 +1,5 @@
 import { ArrowRight, MapPin, Plus, Search, Tag } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
@@ -6,6 +7,7 @@ import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { Input } from "@/components/ui/input";
 import { getPayloadClient } from "@/lib/get-payload";
+import { SITE_URL } from "@/lib/site-url";
 import type { Category, City, Place, Review } from "@/payload-types";
 
 function SectionHeader({
@@ -46,6 +48,33 @@ function SectionHeader({
       </div>
     </Reveal>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+  const t = await getTranslations("Seo");
+
+  return {
+    title: "Qiimale",
+    description: t("homeDescription"),
+    alternates: {
+      canonical: so ? "/" : "/en",
+      languages: { so: "/", en: "/en" },
+    },
+    openGraph: {
+      title: "Qiimale",
+      description: t("homeDescription"),
+      url: so ? SITE_URL : `${SITE_URL}/en`,
+      siteName: "Qiimale",
+      locale: so ? "so_SO" : "en_US",
+      type: "website",
+    },
+  };
 }
 
 export default async function HomePage() {

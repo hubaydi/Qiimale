@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Where } from "payload";
 
@@ -6,6 +7,28 @@ import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Place } from "@/payload-types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+  const t = await getTranslations("Seo");
+
+  return {
+    title: t("searchTitle"),
+    description: t("searchDescription"),
+    alternates: {
+      canonical: so ? "/search" : "/en/search",
+      languages: {
+        so: "/search",
+        en: "/en/search",
+      },
+    },
+  };
+}
 
 export default async function SearchPage({
   searchParams,

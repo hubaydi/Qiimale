@@ -1,9 +1,32 @@
 import { Plus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StaggerGroup, StaggerItem } from "@/components/motion";
 import { getPayloadClient } from "@/lib/get-payload";
 import type { Category } from "@/payload-types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const so = locale === "so";
+  const t = await getTranslations("Seo");
+
+  return {
+    title: t("categoriesTitle"),
+    description: t("categoriesDescription"),
+    alternates: {
+      canonical: so ? "/categories" : "/en/categories",
+      languages: {
+        so: "/categories",
+        en: "/en/categories",
+      },
+    },
+  };
+}
 
 export default async function CategoriesPage() {
   const t = await getTranslations();

@@ -204,5 +204,20 @@
     "SELF_UPVOTE": "Qiimayntaada ma taageeri kartid.",
     "VALIDATION": "Xogtan ma ahan mid saxan.",
     "CONFLICT": "Iimaylkan waa mid diiwaan-gashan."
+  },
+  "Seo": {
+    "titleSuffix": "Qiimale",
+    "homeDescription": "Qiimayn goobo & adeegyo Soomaaliya",
+    "placesTitle": "Goobaha — Qiimale",
+    "placesDescription": "Arag dhamaan goobaha iyo adeegyada Soomaaliya ka jira.",
+    "citiesTitle": "Magaalooyinka — Qiimale",
+    "citiesDescription": "Raadi goobaha iyo adeegyada ku yaalla magaalooyinka Soomaaliya.",
+    "categoriesTitle": "Qaybaha — Qiimale",
+    "categoriesDescription": "Baar goobaha adigoo adeegsanaya noocyada kala duwan.",
+    "searchTitle": "Raadi — Qiimale",
+    "searchDescription": "Raadi goobaha iyo adeegyada Soomaaliya.",
+    "categoryDescription": "Eeg goobaha ugu fiican ee qaybta {category}.",
+    "cityDescription": "Eeg goobaha iyo adeegyada magaalada {city}.",
+    "ogImageAlt": "Qiimale — Qiimayn goobo & adeegyo Soomaaliya"
   }
 }

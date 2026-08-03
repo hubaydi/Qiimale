@@ -204,5 +204,20 @@
     "SELF_UPVOTE": "You can't upvote your own review.",
     "VALIDATION": "Invalid data.",
     "CONFLICT": "This email is already registered."
+  },
+  "Seo": {
+    "titleSuffix": "Qiimale",
+    "homeDescription": "Review Somali places & services",
+    "placesTitle": "Places — Qiimale",
+    "placesDescription": "Browse all places and services in Somalia.",
+    "citiesTitle": "Cities — Qiimale",
+    "citiesDescription": "Find places and services across Somali cities.",
+    "categoriesTitle": "Categories — Qiimale",
+    "categoriesDescription": "Browse places by category.",
+    "searchTitle": "Search — Qiimale",
+    "searchDescription": "Search for places and services in Somalia.",
+    "categoryDescription": "View the best places in {category}.",
+    "cityDescription": "Browse places and services in {city}.",
+    "ogImageAlt": "Qiimale — Review Somali places & services"
   }
 }

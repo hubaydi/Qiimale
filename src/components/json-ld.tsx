@@ -1,6 +1,5 @@
 type JsonLdProps = {
   data: Record<string, unknown>;
-  schema?: string;
 };
 
 export function JsonLd({ data }: JsonLdProps) {

@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaUrl } from "@/lib/media";
+import { SITE_URL } from "@/lib/site-url";
 import type { Category, City, Place } from "@/payload-types";
 
 export const size = { width: 1200, height: 630 };
@@ -55,7 +56,7 @@ export default async function Image({
         alignItems: "center",
         justifyContent: "center",
         background: imageUrl
-          ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${imageUrl})`
+          ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${SITE_URL}${imageUrl})`
           : "linear-gradient(135deg, oklch(0.45 0.24 262) 0%, oklch(0.546 0.222 258) 45%, oklch(0.48 0.2 270) 100%)",
         backgroundSize: "cover",
         backgroundPosition: "center",

@@ -27,7 +27,7 @@ Both `e-commerce` (12 approved places) and `e-learning` (6 approved places) cate
 - Keep the page header (title + "Add category" button).
 - Replace the flat name grid with one section per visible category (using the existing `visibleContentQuery(user)` filter):
   - Section header = category name + "View all" link → `/categories/{slug}`.
-  - Up to 8 approved places sorted top rated, in parallel via `Promise.all`.
+  - Up to 8 visible places (per `visibleContentQuery(user)`, i.e. approved plus the user's own pending) sorted top rated, in parallel via `Promise.all`.
   - Empty categories still render their header + "View all" + empty message.
 - Reuse existing translation keys: `Home.viewAll`, `Search.empty`. No new translations.
 

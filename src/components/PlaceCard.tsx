@@ -32,7 +32,7 @@ export function PlaceCard({
     >
       {place.status === "pending" && (
         <span className="absolute top-2.5 right-2.5 rounded-full bg-rating/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-rating">
-          {locale === "so" ? "Tusaale" : "Preview"}
+          Preview
         </span>
       )}
       {imageUrl ? (

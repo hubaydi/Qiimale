@@ -34,33 +34,42 @@ export function callbackURL(): string {
 
 // --- CSRF state: signature is HMAC; nonce lives in an httpOnly cookie. ---
 
-export function signState(nonce: string): string {
-  const mac = crypto.createHmac("sha256", STATE_SECRET).update(nonce).digest();
-  return `${nonce}.${mac.toString("base64url")}`;
+export function signState(nonce: string, redirect: string): string {
+  const mac = crypto
+    .createHmac("sha256", STATE_SECRET)
+    .update(`${nonce}.${redirect}`)
+    .digest();
+  return `${nonce}.${redirect}.${mac.toString("base64url")}`;
 }
 
 export function verifyState(
   state: string,
   cookieNonce: string | undefined,
-): boolean {
+): string | null {
   const lastDot = state.lastIndexOf(".");
-  if (lastDot === -1) return false;
-  const nonce = state.slice(0, lastDot);
+  if (lastDot === -1) return null;
   const mac = state.slice(lastDot + 1);
-  if (!cookieNonce) return false;
+  const payload = state.slice(0, lastDot);
+  const firstDot = payload.indexOf(".");
+  if (firstDot === -1) return null;
+  const nonce = payload.slice(0, firstDot);
+  const redirect = payload.slice(firstDot + 1);
+  if (!cookieNonce) return null;
   const nonceBuf = Buffer.from(nonce);
   const cookieBuf = Buffer.from(cookieNonce);
   if (nonceBuf.length !== cookieBuf.length || nonceBuf.length === 0)
-    return false;
-  if (!crypto.timingSafeEqual(nonceBuf, cookieBuf)) return false;
+    return null;
+  if (!crypto.timingSafeEqual(nonceBuf, cookieBuf)) return null;
   const expected = crypto
     .createHmac("sha256", STATE_SECRET)
-    .update(nonce)
+    .update(payload)
     .digest("base64url");
   // ponytail: no mac length check before timingSafeEqual — base64url stddev is
   // tiny and Node throws on mismatched lengths; equalLen guard keeps it safe.
-  if (expected.length !== mac.length || expected.length === 0) return false;
-  return crypto.timingSafeEqual(Buffer.from(mac), Buffer.from(expected));
+  if (expected.length !== mac.length || expected.length === 0) return null;
+  if (!crypto.timingSafeEqual(Buffer.from(mac), Buffer.from(expected)))
+    return null;
+  return redirect;
 }
 
 export function setStateCookie(cookies: ReadonlyRequestCookies, nonce: string) {

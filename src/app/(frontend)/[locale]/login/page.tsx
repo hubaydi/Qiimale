@@ -16,9 +16,10 @@ export default async function LoginPage({
 }) {
   const user = await getCurrentUser();
   const params = await searchParams;
+  const redirectParam = params.redirect;
   const redirectTo =
-    params.redirect && isSafeLocalPath(params.redirect)
-      ? params.redirect
+    typeof redirectParam === "string" && isSafeLocalPath(redirectParam)
+      ? redirectParam
       : null;
   if (user) redirect(redirectTo ?? "/");
   return (

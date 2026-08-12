@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { isSafeLocalPath } from "@/lib/login-redirect";
 import {
   callbackURL,
   GOOGLE_AUTH_URL,
@@ -9,13 +10,16 @@ import {
   signState,
 } from "@/lib/oauth";
 
-export async function GET(): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     return new Response("Google OAuth not configured", { status: 503 });
   }
 
+  const redirectParam = new URL(request.url).searchParams.get("redirect") || "";
+  const redirectTarget = isSafeLocalPath(redirectParam) ? redirectParam : "";
+
   const nonce = randomUUID();
-  const state = signState(nonce);
+  const state = signState(nonce, redirectTarget);
   const cookieStore = await cookies();
   setStateCookie(cookieStore, nonce);
 

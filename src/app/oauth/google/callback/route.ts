@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { isSafeLocalPath } from "@/lib/login-redirect";
 import {
   clearStateCookie,
   exchangeCode,
@@ -21,7 +22,8 @@ export async function GET(request: Request): Promise<Response> {
 
   const cookieStore = await cookies();
   const nonce = cookieStore.get("oauth-state")?.value;
-  if (!verifyState(state, nonce)) {
+  const redirectTarget = verifyState(state, nonce);
+  if (redirectTarget === null) {
     clearStateCookie(cookieStore);
     redirect(failureURL("state_mismatch"));
   }
@@ -48,7 +50,11 @@ export async function GET(request: Request): Promise<Response> {
 
   if (!result.ok) redirect(failureURL(result.reason));
   setSessionCookie(cookieStore, result.token);
-  redirect("/account");
+  redirect(
+    redirectTarget && isSafeLocalPath(redirectTarget)
+      ? redirectTarget
+      : "/account",
+  );
 }
 
 function failureURL(reason?: string): string {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import "../globals.css";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -83,6 +84,11 @@ export default async function LocaleLayout({
           <Footer locale={locale} />
         </NextIntlClientProvider>
         <Toaster richColors position="top-center" />
+        <Script
+          src="https://analytics.hobaydi.com/script.js"
+          data-website-id="3b3466fc-0b63-452d-bb0a-c74eae277d3e"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

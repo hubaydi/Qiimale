@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/LoginForm";
+import { isSafeLocalPath } from "@/lib/login-redirect";
 import { getCurrentUser } from "@/lib/session";
 
 export default async function LoginPage({
@@ -10,11 +11,16 @@ export default async function LoginPage({
     reset?: string;
     error?: string;
     reason?: string;
+    redirect?: string;
   }>;
 }) {
   const user = await getCurrentUser();
-  if (user) redirect("/");
   const params = await searchParams;
+  const redirectTo =
+    params.redirect && isSafeLocalPath(params.redirect)
+      ? params.redirect
+      : null;
+  if (user) redirect(redirectTo ?? "/");
   return (
     <LoginForm
       showVerified={params.verified === "true"}
@@ -22,6 +28,7 @@ export default async function LoginPage({
       oauthError={
         params.error === "oauth" ? params.reason || "generic" : undefined
       }
+      redirect={redirectTo}
     />
   );
 }

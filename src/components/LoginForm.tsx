@@ -26,10 +26,12 @@ export function LoginForm({
   showVerified,
   showReset,
   oauthError,
+  redirect,
 }: {
   showVerified?: boolean;
   showReset?: boolean;
   oauthError?: string;
+  redirect?: string | null;
 }) {
   const t = useTranslations("Auth");
   const tErr = useTranslations("Errors");
@@ -55,7 +57,7 @@ export function LoginForm({
 
         return;
       }
-      router.push("/account");
+      router.push(redirect ?? "/account");
     });
   }
 

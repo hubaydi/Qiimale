@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2, Upload, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { uploadMedia } from "@/actions/media";
@@ -12,6 +12,11 @@ import { submitReview } from "@/actions/reviews";
 import { StarRating } from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  clearReviewDraft,
+  loadReviewDraft,
+  saveReviewDraft,
+} from "@/lib/review-draft";
 import type { ActionResult } from "@/lib/types";
 
 async function uploadPhoto(file: File): Promise<string | null> {
@@ -38,6 +43,7 @@ export function ReviewForm({
   existing?: { rating: number; text: string };
 }) {
   const t = useTranslations("Review");
+  const locale = useLocale();
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -60,6 +66,14 @@ export function ReviewForm({
 
   const rating = watch("rating");
   const text = watch("text");
+
+  useEffect(() => {
+    const draft = loadReviewDraft(window.sessionStorage, placeId);
+    if (draft) {
+      setValue("rating", draft.rating, { shouldValidate: true });
+      setValue("text", draft.text, { shouldValidate: true });
+    }
+  }, [placeId, setValue]);
 
   function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = Array.from(e.target.files || []).slice(0, 3);
@@ -90,9 +104,20 @@ export function ReviewForm({
         photoIds,
       });
       if (!res.ok) {
+        if (res.error.code === "UNAUTHENTICATED") {
+          saveReviewDraft(window.sessionStorage, placeId, {
+            rating: data.rating,
+            text: data.text,
+          });
+          router.push(
+            `/login?redirect=${encodeURIComponent(`/${locale}/places/${placeSlug}`)}`,
+          );
+          return;
+        }
         setServerError(res.error.message);
         return;
       }
+      clearReviewDraft(window.sessionStorage, placeId);
       router.push(`/places/${placeSlug}`);
     });
   }

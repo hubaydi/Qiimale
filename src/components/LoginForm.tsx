@@ -26,10 +26,12 @@ export function LoginForm({
   showVerified,
   showReset,
   oauthError,
+  redirect,
 }: {
   showVerified?: boolean;
   showReset?: boolean;
   oauthError?: string;
+  redirect?: string | null;
 }) {
   const t = useTranslations("Auth");
   const tErr = useTranslations("Errors");
@@ -46,6 +48,10 @@ export function LoginForm({
     defaultValues: { email: "", password: "" },
   });
 
+  const googleHref = redirect
+    ? `/oauth/google?redirect=${encodeURIComponent(redirect)}`
+    : "/oauth/google";
+
   function onSubmit(data: LoginFormValues) {
     setServerError(null);
     startTransition(async () => {
@@ -55,7 +61,7 @@ export function LoginForm({
 
         return;
       }
-      router.push("/account");
+      router.push(redirect ?? "/account");
     });
   }
 
@@ -167,7 +173,7 @@ export function LoginForm({
         </div>
 
         <Button asChild variant="outline" size="lg" className="w-full">
-          <a href="/oauth/google">
+          <a href={googleHref}>
             <GoogleIcon className="size-4" />
             <span>{t("google")}</span>
           </a>

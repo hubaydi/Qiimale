@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, MapPin, Plus, Star } from "lucide-react";
+import { ArrowLeft, ExternalLink, MapPin, Star } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Reveal } from "@/components/motion";
 import { PlaceReviews } from "@/components/PlaceReviews";
 import { ReviewCard } from "@/components/ReviewCard";
+import { ReviewForm } from "@/components/ReviewForm";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
@@ -16,7 +17,7 @@ import { canViewOwnPending } from "@/lib/places-logic";
 import { getCurrentUser } from "@/lib/session";
 import { SITE_URL } from "@/lib/site-url";
 import { normalizeUrl } from "@/lib/url";
-import type { Place } from "@/payload-types";
+import type { Place, Review } from "@/payload-types";
 
 export async function generateMetadata({
   params,
@@ -88,6 +89,22 @@ export default async function PlacePage({
   });
 
   const reviewDocs = reviews.docs;
+
+  const existingReview = user
+    ? ((
+        await payload.find({
+          collection: "reviews",
+          where: {
+            and: [
+              { place: { equals: place.id } },
+              { author: { equals: user.id } },
+            ],
+          },
+          limit: 1,
+          overrideAccess: true,
+        })
+      ).docs[0] as Review | undefined)
+    : undefined;
 
   // Calculate rating distribution for visual details
   const ratingDistribution = [0, 0, 0, 0, 0]; // 5, 4, 3, 2, 1 stars
@@ -197,18 +214,21 @@ export default async function PlacePage({
               </span>
             </div>
           </div>
-
-          <div className="mt-6 pt-6 border-t flex flex-wrap gap-4 items-center justify-between">
-            <Link
-              href={`/places/${slug}/review`}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all shadow-soft hover:shadow-lift hover:bg-primary/90 cursor-pointer"
-            >
-              <Plus size={16} />
-              {t("writeReview")}
-            </Link>
-          </div>
         </div>
       </Reveal>
+
+      <section className="space-y-4">
+        <h2 className="font-bold text-xl tracking-tight">{t("writeReview")}</h2>
+        <ReviewForm
+          placeId={place.id}
+          placeSlug={place.slug}
+          existing={
+            existingReview
+              ? { rating: existingReview.rating, text: existingReview.text }
+              : undefined
+          }
+        />
+      </section>
 
       {/* Reviews Breakdown and List */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

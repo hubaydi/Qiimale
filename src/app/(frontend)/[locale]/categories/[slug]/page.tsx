@@ -2,6 +2,7 @@ import { SearchX } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AboutQiimale } from "@/components/AboutQiimale";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { getPayloadClient } from "@/lib/get-payload";
@@ -51,6 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryDetailPage({ params }: Props) {
   const { slug } = await params;
   const locale = (await getLocale()) as "so" | "en";
+  const aboutT = await getTranslations("About");
   const payload = await getPayloadClient();
 
   const result = await payload.find({
@@ -90,6 +92,9 @@ export default async function CategoryDetailPage({ params }: Props) {
             {category.description}
           </p>
         ) : null}
+        <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">
+          {aboutT("categoryIntro", { category: category.name })}
+        </p>
       </Reveal>
       {places.docs.length === 0 ? (
         <p className="text-center text-muted-foreground py-12">
@@ -105,6 +110,8 @@ export default async function CategoryDetailPage({ params }: Props) {
           ))}
         </StaggerGroup>
       )}
+
+      <AboutQiimale compact />
     </div>
   );
 }

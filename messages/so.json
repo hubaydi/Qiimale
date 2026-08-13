@@ -207,9 +207,24 @@
     "VALIDATION": "Xogtan ma ahan mid saxan.",
     "CONFLICT": "Iimaylkan waa mid diiwaan-gashan."
   },
+  "About": {
+    "title": "Waa maxay Qiimale?",
+    "intro": "Qiimale waa madal bilaash ah oo ay bulshadu iska leedahay, loona sameeyay qiimaynta goobaha iyo adeegyada dadku isticmaalaan Soomaaliya oo dhan — makhaayado, jaamacado, shirkado, isbitaalo, dugsiyo, dukaamo iyo adeegyo kale. Akhri qiimayno daacad ah kahor inta aadan dooran, oo la wadaag waayo-aragnimadaada si aad u caawiso qofka kugu xiga.",
+    "whyTitle": "Sababta Qiimale u jirto",
+    "why": "Doorashada la macaamilidda ganacsi ama adeeg Soomaaliya gudaheeda badanaa waa ku nasiibso. Qiimale waxaa loo sameeyay in ay taasi beddesho: qiimayno dhab ah oo ka imanaysa macaamiisha ayaa dhista kalsoonida u dhaxaysa iibsadayaasha iyo iibiyayaasha, Qiimaynuhu waxay abaal-mariyaan ganacsiyada shaqo wanaagsan qabta, waxayna ku dhiirigeliyaan qof walba in uu sii hagaajiyo.",
+    "howTitle": "Sida ay u shaqeyso",
+    "howAddTitle": "Raadi ama ku dar goob",
+    "howAdd": "Baar adigoo adeegsanaya qayb ama magaalo, ama soo gudbi goob cusub si ay bulshadu u qiimeyso.",
+    "howReviewTitle": "Qor qiimayn",
+    "howReview": "Isticmaalayaasha la xaqiijiyay waxay qoraan hal qiimayn goob kasta, oo leh xiddig 1–5, sawiro iyo taageero.",
+    "howTrustTitle": "Qiimayntu way daacad",
+    "howTrust": "Qiimayntu isla markiiba way soo baxdaa; dacwada bulshada iyo kormeerka maamulku waxay ka dhigaan mid la aamini karo.",
+    "cityIntro": "sahami ganacsiyada iyo adeegyada ku yaalla {city} — barbar dhig qiimayno iyo qiimayn dhab ah, oo la wadaag waayo-aragnimadaada si aad u caawiso dadka kale in ay kalsooni ku doortaan.",
+    "categoryIntro": "Sahami kuwa ugu fiican ee qaybta {category} ee Soomaaliya — is-barbar dhig qiimaynaha, oo la wadaag waayo-aragnimadaada si aad u caawiso dadka kale in ay kalsooni ku doortaan."
+  },
   "Seo": {
     "titleSuffix": "Qiimale",
-    "homeDescription": "Qiimayn goobo & adeegyo Soomaaliya",
+    "homeDescription": "Qiimale waa madal qiimayn oo ay bulshadu iska leedahay oo loogu talagalay goobaha iyo adeegyada Soomaaliya. Akhri qiimayno daacad ah, is-barbar dhig qiimaynaha, oo la wadaag waayo-aragnimadaada.",
     "placesTitle": "Goobaha — Qiimale",
     "placesDescription": "Arag dhamaan goobaha iyo adeegyada Soomaaliya ka jira.",
     "citiesTitle": "Magaalooyinka — Qiimale",
@@ -218,8 +233,8 @@
     "categoriesDescription": "Baar goobaha adigoo adeegsanaya noocyada kala duwan.",
     "searchTitle": "Raadi — Qiimale",
     "searchDescription": "Raadi goobaha iyo adeegyada Soomaaliya.",
-    "categoryDescription": "Eeg goobaha ugu fiican ee qaybta {category}.",
-    "cityDescription": "Eeg goobaha iyo adeegyada magaalada {city}.",
+    "categoryDescription": "Raadi kuwa ugu fiican ee qaybta {category} ee Soomaaliya. Akhri qiimayno dhab ah, is-barbar dhig qiimaynaha, oo la wadaag waayo-aragnimadaada Qiimale.",
+    "cityDescription": "Baar ganacsiyada iyo adeegyada ku yaalla {city}, Soomaaliya. Akhri qiimayno dhab ah, is-barbar dhig qiimaynaha, oo la wadaag waayo-aragnimadaada Qiimale.",
     "ogImageAlt": "Qiimale — Qiimayn goobo & adeegyo Soomaaliya"
   }
 }

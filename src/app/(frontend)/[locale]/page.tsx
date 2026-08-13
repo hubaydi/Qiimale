@@ -2,6 +2,7 @@ import { MapPin, Plus, Search, Tag } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AboutQiimale } from "@/components/AboutQiimale";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PlaceCard } from "@/components/PlaceCard";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -226,6 +227,9 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-5xl space-y-16 px-4 py-14">
+        {/* About Qiimale */}
+        <AboutQiimale />
+
         {/* Top rated */}
         <section>
           <SectionHeader

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AboutQiimale } from "@/components/AboutQiimale";
 import { JsonLd } from "@/components/json-ld";
 import { Reveal } from "@/components/motion";
 import { PlaceReviews } from "@/components/PlaceReviews";
@@ -70,7 +71,7 @@ export default async function PlacePage({
 
   const category = typeof place.category === "object" ? place.category : null;
   const city = typeof place.city === "object" ? place.city : null;
-  const imageUrl = mediaUrl(place.image as MediaField, "card");
+  const imageUrl = mediaUrl(place.image as MediaField);
   const imageAlt = mediaAlt(place.image as MediaField, place.name);
   const website = place.website ? normalizeUrl(place.website) : null;
 
@@ -136,13 +137,13 @@ export default async function PlacePage({
         className="rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-soft"
       >
         {imageUrl ? (
-          <div className="relative aspect-video w-full bg-muted md:aspect-2/1">
+          <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-video lg:aspect-[16/9]">
             <Image
               src={imageUrl}
               alt={imageAlt}
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 1024px"
+              sizes="(min-width: 1024px) 896px, (min-width: 640px) 100vw, 100vw"
               className="object-cover"
             />
           </div>
@@ -282,6 +283,9 @@ export default async function PlacePage({
           emptyHint={t("noReviewsHint")}
         />
       </div>
+
+      {/* About Qiimale */}
+      <AboutQiimale compact />
 
       {/* JSON-LD Structured Data */}
       <JsonLd

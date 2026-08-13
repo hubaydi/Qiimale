@@ -207,9 +207,24 @@
     "VALIDATION": "Invalid data.",
     "CONFLICT": "This email is already registered."
   },
+  "About": {
+    "title": "What is Qiimale?",
+    "intro": "Qiimale is a free, community-driven platform for reviewing the places and services people actually use across Somalia — restaurants, universities, companies, hospitals, schools, shops and online services. Read honest reviews before you choose, and share your own experience to help the next person.",
+    "whyTitle": "Why Qiimale exists",
+    "why": "Choosing a business or service in Somalia often means guessing. Qiimale exists to change that: real customer reviews build trust between buyers and sellers, reward businesses that do good work, and push everyone to keep improving.",
+    "howTitle": "How it works",
+    "howAddTitle": "Find or add a place",
+    "howAdd": "Browse by category or city, or submit a new place for the community to review.",
+    "howReviewTitle": "Write a review",
+    "howReview": "Verified users write one review per place with a 1–5 star rating, photos and upvotes.",
+    "howTrustTitle": "Reviews stay honest",
+    "howTrust": "Reviews go live instantly; community flagging and admin moderation keep them trustworthy.",
+    "cityIntro": "Explore businesses and services in {city} — compare real reviews and ratings, and share your own experience to help others choose with confidence.",
+    "categoryIntro": "Explore the best {category} in Somalia — compare real reviews and ratings, and share your own experience to help others choose with confidence."
+  },
   "Seo": {
     "titleSuffix": "Qiimale",
-    "homeDescription": "Review Somali places & services",
+    "homeDescription": "Qiimale is a community review platform for Somali places and services. Read honest reviews, compare ratings and share your own experience.",
     "placesTitle": "Places — Qiimale",
     "placesDescription": "Browse all places and services in Somalia.",
     "citiesTitle": "Cities — Qiimale",
@@ -218,8 +233,8 @@
     "categoriesDescription": "Browse places by category.",
     "searchTitle": "Search — Qiimale",
     "searchDescription": "Search for places and services in Somalia.",
-    "categoryDescription": "View the best places in {category}.",
-    "cityDescription": "Browse places and services in {city}.",
+    "categoryDescription": "Find the best {category} in Somalia. Read real reviews, compare ratings, and share your own experience on Qiimale.",
+    "cityDescription": "Browse businesses and services in {city}, Somalia. Read real reviews, compare ratings, and share your own experience on Qiimale.",
     "ogImageAlt": "Qiimale — Review Somali places & services"
   }
 }

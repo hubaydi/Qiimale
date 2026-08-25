@@ -43,7 +43,13 @@
     "editReview": "Edit your review",
     "pending": "Your place is awaiting admin approval.",
     "address": "Address",
-    "approved": "Approved"
+    "approved": "Approved",
+    "overall": "Overall",
+    "services": "Services",
+    "addService": "Add a service",
+    "attachService": "Attach existing service",
+    "remove": "Remove",
+    "servicePlaceholder": "Service name"
   },
   "Review": {
     "overall": "Overall",
@@ -69,7 +75,8 @@
     "sortHigh": "Highest",
     "sortLow": "Lowest",
     "delete": "Delete",
-    "confirmDelete": "Delete your review?"
+    "confirmDelete": "Delete your review?",
+    "ratingBreakdown": "Rating breakdown"
   },
   "Auth": {
     "register": "Sign up",

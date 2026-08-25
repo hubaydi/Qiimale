@@ -43,7 +43,13 @@
     "editReview": "Wax ka beddel qiimayntaada",
     "pending": "Goobtaada waxay sugaysaa oggolaanshaha maamulka.",
     "address": "Cinwaan",
-    "approved": "La oggolaaday"
+    "approved": "La oggolaaday",
+    "overall": "Guud",
+    "services": "Adeegyada",
+    "addService": "Ku dar adeeg",
+    "attachService": "Ku dar adeeg jira",
+    "remove": "Ka saar",
+    "servicePlaceholder": "Magaca adeegga"
   },
   "Review": {
     "overall": "Guud",
@@ -69,7 +75,8 @@
     "sortHigh": "Ugu sarreya",
     "sortLow": "Ugu hooseya",
     "delete": "Tirtir",
-    "confirmDelete": "Ma hubtaa in aad tirtirayso qiimayntaada?"
+    "confirmDelete": "Ma hubtaa in aad tirtirayso qiimayntaada?",
+    "ratingBreakdown": "Qiimaynta"
   },
   "Auth": {
     "register": "Is Diiwaan geli",

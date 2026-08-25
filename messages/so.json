@@ -41,7 +41,7 @@
     "rating": "Cabbir guud",
     "reviewIntro": "Qiimayn ka bixi goobta \"{name}\", soo gudbi waxa aad kala kulantay si dadka kale uga faaidaystaan.",
     "writeReview": "Qor qiimayn",
-    "writeReviewHint": "Wadaag khibradaada si aad uga caawiso dadka kale doorashada.",
+    "writeReviewHint": "Wadaag khibradaada si aad uga caawiso dadka kale doorashada Goobtan .",
     "visitWebsite": "Booqo websaydhka",
     "editReview": "Wax ka beddel qiimayntaada",
     "pending": "Goobtaada waxay sugaysaa oggolaanshaha maamulka.",
@@ -50,7 +50,7 @@
     "overall": "Guud",
     "services": "Adeegyada",
     "addService": "Ku dar adeeg",
-    "addServiceHint": "Ku dar adeeg cusub goobtan si dadka soo booqda ay u helaan oo u qiimeeyaan.",
+    "addServiceHint": "Ku dar adeeg cusub oo goobtan bixiso si dadka soo booqda ay u helaan dhamaan adeegyada oo u qiimeeyaan.",
     "attachService": "Ku dar adeeg jira",
     "remove": "Ka saar",
     "servicePlaceholder": "Magaca adeegga"

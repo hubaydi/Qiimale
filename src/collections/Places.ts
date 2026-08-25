@@ -33,6 +33,13 @@ export const Places: CollectionConfig = {
       admin: { position: "sidebar" },
     },
     {
+      name: "services",
+      type: "relationship",
+      relationTo: "services",
+      hasMany: true,
+      admin: { position: "sidebar" },
+    },
+    {
       name: "city",
       type: "relationship",
       relationTo: "cities",

@@ -216,6 +216,7 @@ export interface Flag {
 export interface Review {
   id: string;
   place: string | Place;
+  service?: (string | null) | Service;
   author: string | User;
   rating: number;
   text: string;
@@ -244,6 +245,7 @@ export interface Place {
   generateSlug?: boolean | null;
   slug: string;
   category: string | Category;
+  services?: (string | Service)[] | null;
   city: string | City;
   address?: string | null;
   description?: string | null;
@@ -253,6 +255,24 @@ export interface Place {
   submittedBy?: (string | null) | User;
   ratingAvg?: number | null;
   reviewCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  description?: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  submittedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -302,24 +322,6 @@ export interface ReviewUpvote {
   id: string;
   review: string | Review;
   user: string | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services".
- */
-export interface Service {
-  id: string;
-  name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  description?: string | null;
-  status: 'pending' | 'approved' | 'rejected';
-  submittedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -517,6 +519,7 @@ export interface PlacesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   category?: T;
+  services?: T;
   city?: T;
   address?: T;
   description?: T;
@@ -535,6 +538,7 @@ export interface PlacesSelect<T extends boolean = true> {
  */
 export interface ReviewsSelect<T extends boolean = true> {
   place?: T;
+  service?: T;
   author?: T;
   rating?: T;
   text?: T;

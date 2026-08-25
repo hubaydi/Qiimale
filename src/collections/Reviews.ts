@@ -38,6 +38,12 @@ export const Reviews: CollectionConfig = {
       index: true,
     },
     {
+      name: "service",
+      type: "relationship",
+      relationTo: "services",
+      index: true,
+    },
+    {
       name: "author",
       type: "relationship",
       relationTo: "users",

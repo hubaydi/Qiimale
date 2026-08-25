@@ -14,6 +14,7 @@ import {
   Places,
   Reviews,
   ReviewUpvotes,
+  Services,
   Users,
 } from "./collections";
 
@@ -34,6 +35,7 @@ export default buildConfig({
     Places,
     Reviews,
     ReviewUpvotes,
+    Services,
     Users,
   ],
   localization: {

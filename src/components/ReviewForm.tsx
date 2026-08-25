@@ -1,17 +1,13 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2, Upload, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { uploadMedia } from "@/actions/media";
 import { submitReview } from "@/actions/reviews";
 import { StarRating } from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
   clearReviewDraft,
   loadReviewDraft,
@@ -26,62 +22,80 @@ async function uploadPhoto(file: File): Promise<string | null> {
   return res.ok ? res.data.id : null;
 }
 
-const reviewSchema = z.object({
-  rating: z.number().int().min(1),
-  text: z.string().min(3),
-});
-
-type ReviewFormValues = z.infer<typeof reviewSchema>;
+function StarRow({
+  label,
+  value,
+  onSelect,
+}: {
+  label: string;
+  value: number;
+  onSelect: (v: number) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-sm font-medium">{label}</span>
+      <StarRating value={value} size={24} onChange={onSelect} />
+    </div>
+  );
+}
 
 export function ReviewForm({
   placeId,
   placeSlug,
+  services,
   existing,
 }: {
   placeId: string;
   placeSlug: string;
-  existing?: { rating: number; text: string };
+  services: { id: string; name: string }[];
+  existing: { serviceId: string | null; rating: number; text: string }[];
 }) {
   const t = useTranslations("Review");
   const locale = useLocale();
   const router = useRouter();
+
+  const existingMap = new Map(
+    existing.map((e) => [e.serviceId ?? "general", e]),
+  );
+
+  const [target, setTarget] = useState<string | null>(null);
+  const [rating, setRating] = useState(0);
+  const [text, setText] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<ReviewFormValues>({
-    resolver: zodResolver(reviewSchema),
-    defaultValues: {
-      rating: existing?.rating ?? 0,
-      text: existing?.text ?? "",
-    },
-  });
-
-  const rating = watch("rating");
-  const text = watch("text");
-
   useEffect(() => {
     const draft = loadReviewDraft(window.sessionStorage, placeId);
     if (draft) {
-      setValue("rating", draft.rating, { shouldValidate: true });
-      setValue("text", draft.text, { shouldValidate: true });
+      setTarget(draft.serviceId ?? "general");
+      setRating(draft.rating);
+      setText(draft.text);
     }
-  }, [placeId, setValue]);
+  }, [placeId]);
+
+  function ratingFor(id: string): number {
+    if (target === id) return rating;
+    return existingMap.get(id)?.rating ?? 0;
+  }
+
+  function select(id: string, v: number) {
+    setTarget(id);
+    setRating(v);
+    setText(existingMap.get(id)?.text ?? "");
+    setServerError(null);
+  }
+
+  const currentName =
+    target === "general"
+      ? t("overall")
+      : (services.find((s) => s.id === target)?.name ?? "");
 
   function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
-    const selectedFiles = Array.from(e.target.files || []).slice(0, 3);
-    setFiles(selectedFiles);
-
-    // Create preview URLs
-    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviews(newPreviews);
+    const selected = Array.from(e.target.files || []).slice(0, 3);
+    setFiles(selected);
+    setPreviews(selected.map((file) => URL.createObjectURL(file)));
   }
 
   function removeFile(index: number) {
@@ -89,7 +103,12 @@ export function ReviewForm({
     setPreviews((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function onSubmit(data: ReviewFormValues) {
+  function onSubmit() {
+    if (target === null || rating < 1) return;
+    if (text.trim().length < 3) {
+      setServerError(t("minLength"));
+      return;
+    }
     setServerError(null);
     startTransition(async () => {
       const photoIds: string[] = [];
@@ -97,17 +116,19 @@ export function ReviewForm({
         const id = await uploadPhoto(f);
         if (id) photoIds.push(id);
       }
-      const res: ActionResult<{ reviewId: string }> = await submitReview({
+      const res = await submitReview({
         placeId,
-        rating: data.rating,
-        text: data.text,
+        rating,
+        text,
         photoIds,
+        serviceId: target === "general" ? undefined : target,
       });
       if (!res.ok) {
         if (res.error.code === "UNAUTHENTICATED") {
           saveReviewDraft(window.sessionStorage, placeId, {
-            rating: data.rating,
-            text: data.text,
+            rating,
+            text,
+            serviceId: target === "general" ? null : target,
           });
           router.push(
             `/login?redirect=${encodeURIComponent(`/${locale}/places/${placeSlug}`)}`,
@@ -124,118 +145,122 @@ export function ReviewForm({
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
       className="space-y-6 max-w-xl bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-soft"
     >
-      <div className="space-y-2">
-        <span className="block text-sm font-semibold text-foreground">
-          {t("rating")}
-        </span>
-        <div className="flex items-center gap-3">
-          <input
-            type="hidden"
-            {...register("rating", { valueAsNumber: true })}
-          />
-          <StarRating
-            value={rating}
-            size={32}
-            onChange={(v) => setValue("rating", v, { shouldValidate: true })}
-          />
-          {rating > 0 && (
-            <span className="text-sm font-bold text-rating">{rating}/5</span>
-          )}
-        </div>
-        {errors.rating && (
-          <p className="text-xs font-medium text-destructive">
-            {errors.rating.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="text">{t("comment")}</Label>
-        <textarea
-          id="text"
-          {...register("text")}
-          placeholder={t("commentPlaceholder")}
-          rows={5}
-          className="w-full rounded-lg border border-input bg-card px-4 py-3 text-base placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-y"
+      <div className="space-y-3">
+        <StarRow
+          label={t("overall")}
+          value={ratingFor("general")}
+          onSelect={(v) => select("general", v)}
         />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>{t("minLength")}</span>
-          <span>{text.length} / 3+</span>
-        </div>
-        {errors.text && (
-          <p className="text-xs font-medium text-destructive">
-            {errors.text.message}
+        {services.map((s) => (
+          <StarRow
+            key={s.id}
+            label={s.name}
+            value={ratingFor(s.id)}
+            onSelect={(v) => select(s.id, v)}
+          />
+        ))}
+      </div>
+
+      {target === null ? (
+        <p className="text-sm text-muted-foreground">{t("pickTarget")}</p>
+      ) : (
+        <>
+          <p className="text-sm font-semibold text-primary">
+            {target === "general"
+              ? t("overallPrompt", { stars: rating })
+              : t("servicePrompt", { stars: rating, service: currentName })}
           </p>
-        )}
-      </div>
 
-      <div className="space-y-2">
-        <span className="block text-sm font-semibold text-foreground">
-          {t("photos")}
-        </span>
-        <div className="grid grid-cols-3 gap-3">
-          {previews.map((src, i) => (
-            <div
-              key={src}
-              className="relative aspect-square rounded-xl overflow-hidden border group"
-            >
-              {/* biome-ignore lint/performance/noImgElement: local object url preview */}
-              <img
-                src={src}
-                alt={`Preview ${i + 1}`}
-                className="h-full w-full object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => removeFile(i)}
-                className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-black transition-colors"
-                aria-label="Remove image"
-              >
-                <X size={14} />
-              </button>
+          <div className="space-y-2">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={t("commentPlaceholder")}
+              rows={5}
+              className="w-full rounded-lg border border-input bg-card px-4 py-3 text-base placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-y"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{t("minLength")}</span>
+              <span>{text.length} / 3+</span>
             </div>
-          ))}
+          </div>
 
-          {files.length < 3 && (
-            <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-input hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-center p-2">
-              <Upload size={20} className="text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">
-                Ku dar sawir
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={onFiles}
-                className="sr-only"
-              />
-            </label>
+          <div className="space-y-2">
+            <span className="block text-sm font-semibold text-foreground">
+              {t("photos")}
+            </span>
+            <div className="grid grid-cols-3 gap-3">
+              {previews.map((src, i) => (
+                <div
+                  key={src}
+                  className="relative aspect-square rounded-xl overflow-hidden border group"
+                >
+                  {/* biome-ignore lint/performance/noImgElement: local object url preview */}
+                  <img
+                    src={src}
+                    alt={`Preview ${i + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeFile(i)}
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-black transition-colors"
+                    aria-label="Remove image"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+              {files.length < 3 && (
+                <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-input hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-center p-2">
+                  <Upload size={20} className="text-muted-foreground mb-1" />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Ku dar sawir
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={onFiles}
+                    className="sr-only"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
+
+          {serverError && (
+            <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
+              <AlertCircle size={16} className="shrink-0" />
+              <span>{serverError}</span>
+            </div>
           )}
-        </div>
-      </div>
 
-      {serverError && (
-        <div className="flex items-center gap-2 rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">
-          <AlertCircle size={16} className="shrink-0" />
-          <span>{serverError}</span>
-        </div>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Loading...</span>
+                </>
+              ) : (
+                <span>{t("submit")}</span>
+              )}
+            </Button>
+          </div>
+        </>
       )}
-
-      <div className="pt-2">
-        <Button type="submit" className="w-full" size="lg" disabled={isPending}>
-          {isPending ? (
-            <>
-              <Loader2 size={16} className="animate-spin" />
-              <span>Loading...</span>
-            </>
-          ) : (
-            <span>{t("submit")}</span>
-          )}
-        </Button>
-      </div>
     </form>
   );
 }

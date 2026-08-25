@@ -46,6 +46,10 @@
     "approved": "La oggolaaday"
   },
   "Review": {
+    "overall": "Guud",
+    "pickTarget": "Dooro xiddig si aad u qiimayso goobta ama adeeg gaar ah.",
+    "servicePrompt": "Waxaad dooratay {stars} xiddig adeegga {service}. Hadda qor qiimayn ku saabsan adeeggan.",
+    "overallPrompt": "Waxaad dooratay {stars} xiddig. Hadda qor qiimayn.",
     "rating": "Xiddig",
     "comment": "Faallo",
     "commentPlaceholder": "Sheeg sida aad u aragto adeegga...",

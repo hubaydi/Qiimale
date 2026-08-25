@@ -46,6 +46,10 @@
     "approved": "Approved"
   },
   "Review": {
+    "overall": "Overall",
+    "pickTarget": "Select stars to review the place or a specific service.",
+    "servicePrompt": "You selected {stars} stars for {service}. Now leave a review for this service.",
+    "overallPrompt": "You selected {stars} stars. Now leave a review.",
     "rating": "Stars",
     "comment": "Comment",
     "commentPlaceholder": "Tell us how you experienced the service...",

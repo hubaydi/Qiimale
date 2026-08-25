@@ -40,7 +40,7 @@ target a specific service so reviews group under that service's section.
 - `canViewService(service, user)` — same shape as `canViewOwnPending`:
   `approved` → everyone; `pending` → service owner (`submittedBy`) + admin
   only; `rejected` → nobody.
-- A review is *visible* iff it is `published` **and** it has no `service`, or
+- A review is *visible* if it is `published` **and** it has no `service`, or
   its `service` is approved, or the viewer is that service's owner/admin.
 - `visibleServicesQuery(user)` — mirrors `visibleContentQuery`, used to list a
   place's services on the place page (approved + the viewer's own pending).
@@ -55,7 +55,11 @@ target a specific service so reviews group under that service's section.
 - `removeServiceFromPlace({ placeId, serviceId })` — **admin only**. Detaches a
   service from a place.
 - `submitReview` — accepts an optional `serviceId`; validates the service is on
-  the place and visible to the user before storing `service`.
+  the place and visible to the user before storing `service`. The "existing
+  review" lookup narrows from place+author to **place+author+target** (target =
+  a specific service, or no service for the overall review), so a user can hold
+  one review per target — an overall review plus one per service — each
+  submitted one at a time.
 
 ### UI
 
@@ -63,13 +67,25 @@ target a specific service so reviews group under that service's section.
   `CreateModal`/`StepCategorySelect` patterns): multi-select approved services,
   plus inline "create service". Services remain optional; the place can have
   zero (legacy places).
-- **Place page** — replace the flat reviews list with sections: a "General"
-  section for reviews with no service, then one section per service, each
-  showing its own rating avg + review count and its reviews. A logged-in user
-  sees an "add service" control (creates a pending service); admins can also
-  attach existing services and remove them.
-- **ReviewForm** — optional service `<select>` listing the place's visible
-  services.
+- **Place page, services list** — directly under the place description, a
+  vertical list of just the service names the place offers (the services that
+  are visible to the viewer). Below that, the review form and reviews.
+- **Place page, reviews** — a tabbed panel instead of a flat list. Tabs:
+  "Overall" (reviews with no service) + one tab per service. Each tab shows
+  that target's rating avg + review count header, then its reviews with the
+  existing recent/top/high/low sort. Default tab is Overall; tabs collapse to a
+  scrollable pill row on narrow screens. The rating-breakdown sidebar (5→1)
+  reflects the active tab.
+- **Place page, manage services** — a logged-in user sees an "add service"
+  control (creates a pending service); admins can also attach existing services
+  and remove them.
+- **ReviewForm** — a star row per target: one "Overall" row plus one row per
+  visible service. Clicking stars on a row selects that target and sets its
+  rating, then reveals the comment box with a message like "You selected 4
+  stars for Haircut. Now leave a review for this service." One submit creates
+  or updates a single review for the selected target. Pre-fill restores the
+  viewer's existing review for that target (its stars + text); photos stay
+  shared across targets.
 
 ### Stats
 
@@ -105,7 +121,9 @@ target a specific service so reviews group under that service's section.
   `StepServicesSelect`, wire into `AddPlaceForm`.
 - `src/app/(frontend)/[locale]/places/[slug]/page.tsx` — service sections,
   add-service control, pass services to form.
-- `src/components/ReviewForm.tsx` — service selector.
+- `src/components/ReviewForm.tsx` — star rows per target, per-target submit.
+- `src/components/PlaceReviews.tsx` (or a new `ReviewTabs` wrapper) — tabbed
+  review sections with per-tab avg + count.
 - `payload-types.ts` — regenerated.
 
 ## Out of scope

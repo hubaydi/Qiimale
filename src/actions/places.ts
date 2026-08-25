@@ -17,6 +17,7 @@ const schema = z.object({
   address: z.string().optional(),
   description: z.string().max(1000).optional(),
   imageId: z.string().optional(),
+  serviceIds: z.array(z.string()).optional(),
 });
 
 export async function addPlace(
@@ -58,6 +59,26 @@ export async function addPlace(
     return error("VALIDATION", "Selected category is not available");
   }
 
+  const requested = parsed.data.serviceIds ?? [];
+  let serviceIds: string[] = [];
+  if (requested.length) {
+    const found = await payload.find({
+      collection: "services",
+      where: { id: { in: requested } },
+      limit: requested.length,
+      overrideAccess: true,
+    });
+    serviceIds = found.docs
+      .filter(
+        (s) =>
+          s.status === "approved" ||
+          (typeof s.submittedBy === "object"
+            ? s.submittedBy?.id
+            : s.submittedBy) === user.id,
+      )
+      .map((s) => s.id);
+  }
+
   const created: Place = await payload.create({
     collection: "places",
     // ponytail: slugField auto-generates `slug` from name when generateSlug=true,
@@ -66,6 +87,7 @@ export async function addPlace(
       name: parsed.data.name,
       generateSlug: true,
       category: parsed.data.categoryId,
+      services: serviceIds,
       city: parsed.data.cityId,
       address: parsed.data.address,
       description: parsed.data.description,

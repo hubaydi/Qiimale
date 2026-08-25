@@ -76,7 +76,9 @@
     "sortLow": "Lowest",
     "delete": "Delete",
     "confirmDelete": "Delete your review?",
-    "ratingBreakdown": "Rating breakdown"
+    "ratingBreakdown": "Rating breakdown",
+    "noReviews": "No reviews yet.",
+    "noReviewsHint": "Be the first to review!"
   },
   "Auth": {
     "register": "Sign up",

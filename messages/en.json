@@ -43,9 +43,19 @@
     "editReview": "Edit your review",
     "pending": "Your place is awaiting admin approval.",
     "address": "Address",
-    "approved": "Approved"
+    "approved": "Approved",
+    "overall": "Overall",
+    "services": "Services",
+    "addService": "Add a service",
+    "attachService": "Attach existing service",
+    "remove": "Remove",
+    "servicePlaceholder": "Service name"
   },
   "Review": {
+    "overall": "Overall",
+    "pickTarget": "Select stars to review the place or a specific service.",
+    "servicePrompt": "You selected {stars} stars for {service}. Now leave a review for this service.",
+    "overallPrompt": "You selected {stars} stars. Now leave a review.",
     "rating": "Stars",
     "comment": "Comment",
     "commentPlaceholder": "Tell us how you experienced the service...",
@@ -65,7 +75,10 @@
     "sortHigh": "Highest",
     "sortLow": "Lowest",
     "delete": "Delete",
-    "confirmDelete": "Delete your review?"
+    "confirmDelete": "Delete your review?",
+    "ratingBreakdown": "Rating breakdown",
+    "noReviews": "No reviews yet.",
+    "noReviewsHint": "Be the first to review!"
   },
   "Auth": {
     "register": "Sign up",
@@ -162,6 +175,11 @@
     "selectCategory": "Select a category",
     "createCategory": "Create new category",
     "categoryName": "Category name",
+    "stepServices": "Services",
+    "selectServices": "Select services (optional)",
+    "createService": "Create new service",
+    "serviceName": "Service name",
+    "noServices": "No services yet. Create one below.",
     "back": "Back",
     "next": "Next",
     "create": "Create",

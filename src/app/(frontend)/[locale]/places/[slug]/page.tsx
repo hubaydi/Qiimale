@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, MapPin, Star } from "lucide-react";
+import { ArrowLeft, ExternalLink, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,19 +6,25 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AboutQiimale } from "@/components/AboutQiimale";
 import { JsonLd } from "@/components/json-ld";
+import { ManageServices } from "@/components/ManageServices";
 import { Reveal } from "@/components/motion";
-import { PlaceReviews } from "@/components/PlaceReviews";
 import { ReviewCard } from "@/components/ReviewCard";
 import { ReviewForm } from "@/components/ReviewForm";
+import {
+  type ReviewsTab,
+  ServiceReviewTabs,
+} from "@/components/ServiceReviewTabs";
 import { StarRating } from "@/components/StarRating";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
 import { placeMetadata } from "@/lib/place-meta";
 import { canViewOwnPending } from "@/lib/places-logic";
+import { computeStats } from "@/lib/reviews-logic";
+import { canViewService, reviewIsVisible } from "@/lib/services-logic";
 import { getCurrentUser } from "@/lib/session";
 import { SITE_URL } from "@/lib/site-url";
 import { normalizeUrl } from "@/lib/url";
-import type { Place, Review } from "@/payload-types";
+import type { Place, Review, Service } from "@/payload-types";
 
 export async function generateMetadata({
   params,
@@ -89,31 +95,99 @@ export default async function PlacePage({
     depth: 2,
   });
 
-  const reviewDocs = reviews.docs;
+  const reviewDocs = reviews.docs.filter((r) => reviewIsVisible(r, user));
 
-  const existingReview = user
-    ? ((
-        await payload.find({
-          collection: "reviews",
-          where: {
-            and: [
-              { place: { equals: place.id } },
-              { author: { equals: user.id } },
-            ],
-          },
-          limit: 1,
-          overrideAccess: true,
-        })
-      ).docs[0] as Review | undefined)
-    : undefined;
+  const services = ((place.services ?? []) as (string | Service)[])
+    .filter(
+      (s) => typeof s === "object" && s !== null && canViewService(s, user),
+    )
+    .map((s) => s as Service);
 
-  // Calculate rating distribution for visual details
-  const ratingDistribution = [0, 0, 0, 0, 0]; // 5, 4, 3, 2, 1 stars
-  for (const r of reviewDocs) {
-    if (r.rating >= 1 && r.rating <= 5) {
-      ratingDistribution[5 - r.rating]++;
+  const availableServices =
+    user?.role === "admin"
+      ? (
+          (
+            await payload.find({
+              collection: "services",
+              where: { status: { equals: "approved" } },
+              limit: 500,
+              overrideAccess: true,
+            })
+          ).docs as Service[]
+        )
+          .filter((s) => !services.some((v) => v.id === s.id))
+          .map((s) => ({ id: s.id, name: s.name }))
+      : [];
+
+  const existingReviews = user
+    ? (
+        (
+          await payload.find({
+            collection: "reviews",
+            where: {
+              and: [
+                { place: { equals: place.id } },
+                { author: { equals: user.id } },
+              ],
+            },
+            limit: 100,
+            overrideAccess: true,
+            depth: 0,
+          })
+        ).docs as Review[]
+      ).map((r) => ({
+        serviceId: typeof r.service === "string" ? r.service : null,
+        rating: r.rating,
+        text: r.text,
+      }))
+    : [];
+
+  function distributionOf(
+    list: Review[],
+  ): [number, number, number, number, number] {
+    const d = [0, 0, 0, 0, 0];
+    for (const r of list) {
+      if (r.rating >= 1 && r.rating <= 5) d[5 - r.rating]++;
     }
+    return d as [number, number, number, number, number];
   }
+
+  function toTab(id: string, label: string, list: Review[]): ReviewsTab {
+    const stats = computeStats(list.map((r) => r.rating));
+    return {
+      id,
+      label,
+      rating: stats.avg,
+      count: list.length,
+      distribution: distributionOf(list),
+      reviews: list.map((r) => ({
+        id: r.id,
+        rating: r.rating,
+        upvoteCount: r.upvoteCount || 0,
+        createdAt: r.createdAt,
+      })),
+      cards: list.map((r) => (
+        <ReviewCard key={r.id} review={r} locale={locale} />
+      )),
+    };
+  }
+
+  const generalTab = toTab(
+    "general",
+    t("overall"),
+    reviewDocs.filter((r) => !r.service),
+  );
+  const serviceTabs = services.map((s) =>
+    toTab(
+      s.id,
+      s.name,
+      reviewDocs.filter((r) => {
+        const sid = typeof r.service === "string" ? r.service : r.service?.id;
+        return sid === s.id;
+      }),
+    ),
+  );
+  const tabs = [generalTab, ...serviceTabs];
   const totalReviews = place.reviewCount || 0;
 
   return (
@@ -198,6 +272,25 @@ export default async function PlacePage({
                   {place.description}
                 </p>
               )}
+
+              {services.length > 0 && (
+                <div className="pt-2">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {t("services")}
+                  </span>
+                  <ul className="mt-2 space-y-1">
+                    {services.map((s) => (
+                      <li
+                        key={s.id}
+                        className="flex items-center gap-2 text-sm text-foreground/80"
+                      >
+                        <span className="text-primary">•</span>
+                        {s.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-37.5 shrink-0 text-center">
@@ -218,71 +311,26 @@ export default async function PlacePage({
         </div>
       </Reveal>
 
+      {user && (
+        <ManageServices
+          placeId={place.id}
+          attached={services.map((s) => ({ id: s.id, name: s.name }))}
+          isAdmin={user.role === "admin"}
+          available={availableServices}
+        />
+      )}
+
       <section className="space-y-4">
         <h2 className="font-bold text-xl tracking-tight">{t("writeReview")}</h2>
         <ReviewForm
           placeId={place.id}
           placeSlug={place.slug}
-          existing={
-            existingReview
-              ? { rating: existingReview.rating, text: existingReview.text }
-              : undefined
-          }
+          services={services.map((s) => ({ id: s.id, name: s.name }))}
+          existing={existingReviews}
         />
       </section>
 
-      {/* Reviews Breakdown and List */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Rating distribution sidebar */}
-        <div className="md:col-span-1 space-y-6">
-          <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-soft">
-            <h3 className="font-bold text-sm tracking-wide uppercase text-muted-foreground">
-              {locale === "so" ? "Qiimaynta" : "Rating breakdown"}
-            </h3>
-            <div className="space-y-2">
-              {[5, 4, 3, 2, 1].map((stars) => {
-                const count = ratingDistribution[5 - stars];
-                const percentage =
-                  totalReviews > 0 ? (count / totalReviews) * 100 : 0;
-                return (
-                  <div key={stars} className="flex items-center gap-2 text-xs">
-                    <span className="w-3 text-right">{stars}</span>
-                    <Star
-                      size={12}
-                      className="fill-rating text-rating shrink-0"
-                    />
-                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-rating rounded-full transition-all"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                    <span className="w-8 text-right text-muted-foreground">
-                      {count}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Reviews List */}
-        <PlaceReviews
-          reviews={reviewDocs.map((r) => ({
-            id: r.id,
-            rating: r.rating,
-            upvoteCount: r.upvoteCount || 0,
-            createdAt: r.createdAt,
-          }))}
-          cards={reviewDocs.map((r) => (
-            <ReviewCard key={r.id} review={r} locale={locale} />
-          ))}
-          title={locale === "so" ? "Faallooyin" : "Reviews"}
-          emptyTitle={t("noReviews")}
-          emptyHint={t("noReviewsHint")}
-        />
-      </div>
+      <ServiceReviewTabs tabs={tabs} />
 
       {/* About Qiimale */}
       <AboutQiimale compact />

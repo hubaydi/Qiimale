@@ -1,4 +1,8 @@
-export type ReviewDraft = { rating: number; text: string };
+export type ReviewDraft = {
+  rating: number;
+  text: string;
+  serviceId?: string | null;
+};
 export type DraftStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 const key = (placeId: string) => `qiimale:review-draft:${placeId}`;
@@ -23,8 +27,10 @@ export function loadReviewDraft(
     if (typeof parsed !== "object" || parsed === null) return null;
     const rating = Number((parsed as { rating?: unknown }).rating);
     const text = String((parsed as { text?: unknown }).text ?? "");
+    const serviceIdRaw = (parsed as { serviceId?: unknown }).serviceId;
+    const serviceId = typeof serviceIdRaw === "string" ? serviceIdRaw : null;
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) return null;
-    return { rating, text };
+    return { rating, text, serviceId };
   } catch {
     return null;
   }

@@ -43,9 +43,19 @@
     "editReview": "Wax ka beddel qiimayntaada",
     "pending": "Goobtaada waxay sugaysaa oggolaanshaha maamulka.",
     "address": "Cinwaan",
-    "approved": "La oggolaaday"
+    "approved": "La oggolaaday",
+    "overall": "Guud",
+    "services": "Adeegyada",
+    "addService": "Ku dar adeeg",
+    "attachService": "Ku dar adeeg jira",
+    "remove": "Ka saar",
+    "servicePlaceholder": "Magaca adeegga"
   },
   "Review": {
+    "overall": "Guud",
+    "pickTarget": "Dooro xiddig si aad u qiimayso goobta ama adeeg gaar ah.",
+    "servicePrompt": "Waxaad dooratay {stars} xiddig adeegga {service}. Hadda qor qiimayn ku saabsan adeeggan.",
+    "overallPrompt": "Waxaad dooratay {stars} xiddig. Hadda qor qiimayn.",
     "rating": "Xiddig",
     "comment": "Faallo",
     "commentPlaceholder": "Sheeg sida aad u aragto adeegga...",
@@ -65,7 +75,10 @@
     "sortHigh": "Ugu sarreya",
     "sortLow": "Ugu hooseya",
     "delete": "Tirtir",
-    "confirmDelete": "Ma hubtaa in aad tirtirayso qiimayntaada?"
+    "confirmDelete": "Ma hubtaa in aad tirtirayso qiimayntaada?",
+    "ratingBreakdown": "Qiimaynta",
+    "noReviews": "Wax qiimayn ah weli ma jirto.",
+    "noReviewsHint": "Noqo qofka u horeeya ee qiimeeya!"
   },
   "Auth": {
     "register": "Is Diiwaan geli",
@@ -162,6 +175,11 @@
     "selectCategory": "Dooro qayb",
     "createCategory": "Ku dar qayb cusub",
     "categoryName": "Magaca qaybta",
+    "stepServices": "Adeegyada",
+    "selectServices": "Dooro adeegyo (ikhtiyaar)",
+    "createService": "Ku dar adeeg cusub",
+    "serviceName": "Magaca adeegga",
+    "noServices": "Weli adeegyo ma jiraan. Ku dar mid hoos.",
     "back": "Laabo",
     "next": "Xiga",
     "create": "Abuur",

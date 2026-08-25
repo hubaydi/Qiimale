@@ -19,14 +19,26 @@ describe("reviewDraft", () => {
     const s = createMockStorage();
     saveReviewDraft(s, "p1", { rating: 4, text: "Waa fiican" });
     saveReviewDraft(s, "p2", { rating: 2, text: "Xun" });
-    expect(loadReviewDraft(s, "p1")).toEqual({ rating: 4, text: "Waa fiican" });
-    expect(loadReviewDraft(s, "p2")).toEqual({ rating: 2, text: "Xun" });
+    expect(loadReviewDraft(s, "p1")).toEqual({
+      rating: 4,
+      text: "Waa fiican",
+      serviceId: null,
+    });
+    expect(loadReviewDraft(s, "p2")).toEqual({
+      rating: 2,
+      text: "Xun",
+      serviceId: null,
+    });
   });
 
   it("is one-shot: reading consumes the draft", () => {
     const s = createMockStorage();
     saveReviewDraft(s, "p1", { rating: 5, text: "A" });
-    expect(loadReviewDraft(s, "p1")).toEqual({ rating: 5, text: "A" });
+    expect(loadReviewDraft(s, "p1")).toEqual({
+      rating: 5,
+      text: "A",
+      serviceId: null,
+    });
     expect(loadReviewDraft(s, "p1")).toBeNull();
   });
 
@@ -40,6 +52,20 @@ describe("reviewDraft", () => {
       JSON.stringify({ rating: 9, text: "x" }),
     );
     expect(loadReviewDraft(s, "bad2")).toBeNull();
+  });
+
+  it("loads serviceId when present", () => {
+    const s = createMockStorage();
+    saveReviewDraft(s, "p1", {
+      rating: 4,
+      text: "Fiican",
+      serviceId: "svc-1",
+    });
+    expect(loadReviewDraft(s, "p1")).toEqual({
+      rating: 4,
+      text: "Fiican",
+      serviceId: "svc-1",
+    });
   });
 
   it("clear removes the draft", () => {

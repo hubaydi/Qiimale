@@ -3,13 +3,14 @@
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export function StepIndicator({ step }: { step: 1 | 2 | 3 }) {
+export function StepIndicator({ step }: { step: 1 | 2 | 3 | 4 }) {
   const t = useTranslations("AddPlace");
 
   const steps = [
     { num: 1, key: "stepCity" },
     { num: 2, key: "stepCategory" },
-    { num: 3, key: "stepDetails" },
+    { num: 3, key: "stepServices" },
+    { num: 4, key: "stepDetails" },
   ] as const;
 
   return (

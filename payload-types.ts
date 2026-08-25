@@ -74,6 +74,7 @@ export interface Config {
     places: Place;
     reviews: Review;
     'review-upvotes': ReviewUpvote;
+    services: Service;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -89,6 +90,7 @@ export interface Config {
     places: PlacesSelect<false> | PlacesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'review-upvotes': ReviewUpvotesSelect<false> | ReviewUpvotesSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -214,6 +216,7 @@ export interface Flag {
 export interface Review {
   id: string;
   place: string | Place;
+  service?: (string | null) | Service;
   author: string | User;
   rating: number;
   text: string;
@@ -242,6 +245,7 @@ export interface Place {
   generateSlug?: boolean | null;
   slug: string;
   category: string | Category;
+  services?: (string | Service)[] | null;
   city: string | City;
   address?: string | null;
   description?: string | null;
@@ -251,6 +255,24 @@ export interface Place {
   submittedBy?: (string | null) | User;
   ratingAvg?: number | null;
   reviewCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  description?: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  submittedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -354,6 +376,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'review-upvotes';
         value: string | ReviewUpvote;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: string | Service;
       } | null)
     | ({
         relationTo: 'users';
@@ -493,6 +519,7 @@ export interface PlacesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   category?: T;
+  services?: T;
   city?: T;
   address?: T;
   description?: T;
@@ -511,6 +538,7 @@ export interface PlacesSelect<T extends boolean = true> {
  */
 export interface ReviewsSelect<T extends boolean = true> {
   place?: T;
+  service?: T;
   author?: T;
   rating?: T;
   text?: T;
@@ -533,6 +561,20 @@ export interface ReviewsSelect<T extends boolean = true> {
 export interface ReviewUpvotesSelect<T extends boolean = true> {
   review?: T;
   user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  description?: T;
+  status?: T;
+  submittedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }

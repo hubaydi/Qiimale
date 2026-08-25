@@ -5,8 +5,9 @@ import type {
   PayloadRequest,
 } from "payload";
 import { computeStats } from "@/lib/reviews-logic";
+import { reviewIsVisible } from "@/lib/services-logic";
 
-async function resync(args: {
+export async function resyncPlaceStats(args: {
   payload: Payload;
   placeId: string;
   req: PayloadRequest;
@@ -21,9 +22,13 @@ async function resync(args: {
       ],
     },
     limit: 100000,
+    depth: 1,
     req: args.req,
   });
-  const stats = computeStats(full.docs.map((d) => d.rating));
+  const ratings = full.docs
+    .filter((r) => reviewIsVisible(r, null))
+    .map((r) => r.rating);
+  const stats = computeStats(ratings);
   await args.payload.update({
     collection: "places",
     id: args.placeId,
@@ -40,7 +45,7 @@ export const recomputeOnReviewChange: CollectionAfterChangeHook = async ({
 }) => {
   const placeId = typeof doc.place === "string" ? doc.place : doc.place?.id;
   if (!placeId) return doc;
-  await resync({ payload: req.payload, placeId, req });
+  await resyncPlaceStats({ payload: req.payload, placeId, req });
   return doc;
 };
 
@@ -54,5 +59,5 @@ export const recomputeOnReviewDelete: CollectionAfterDeleteHook = async ({
       : doc.place.id
     : null;
   if (!placeId) return;
-  await resync({ payload: req.payload, placeId, req });
+  await resyncPlaceStats({ payload: req.payload, placeId, req });
 };

@@ -10,3 +10,10 @@ export interface CategoryOption {
   description?: string | null;
   status?: "pending" | "approved" | "rejected";
 }
+
+export interface ServiceOption {
+  id: string;
+  name: string;
+  description?: string | null;
+  status?: "pending" | "approved" | "rejected";
+}

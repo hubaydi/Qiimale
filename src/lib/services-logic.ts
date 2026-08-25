@@ -18,7 +18,9 @@ export function canViewService(
     typeof service.submittedBy === "object"
       ? service.submittedBy?.id
       : service.submittedBy;
-  return service.status === "pending" && ownerId === user?.id;
+  return (
+    service.status === "pending" && ownerId != null && ownerId === user?.id
+  );
 }
 
 export function reviewIsVisible(

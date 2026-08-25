@@ -22,6 +22,17 @@ describe("canViewService", () => {
   it("allows the owner to view their own pending service", () => {
     expect(canViewService(service("pending", "u1"), { id: "u1" })).toBe(true);
   });
+  it("denies an ownerless pending service to anonymous users", () => {
+    expect(canViewService(service("pending"), null)).toBe(false);
+  });
+  it("recognizes the owner via object submittedBy", () => {
+    expect(
+      canViewService(
+        { status: "pending", submittedBy: { id: "u1" } },
+        { id: "u1" },
+      ),
+    ).toBe(true);
+  });
   it("allows admins to view any service", () => {
     expect(
       canViewService(service("pending", "u1"), { id: "admin", role: "admin" }),

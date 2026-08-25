@@ -5,15 +5,17 @@ import { z } from "zod";
 import { getPayloadClient } from "@/lib/get-payload";
 import { canViewOwnPending } from "@/lib/places-logic";
 import { canPublishReview, hasExistingReview } from "@/lib/reviews-logic";
+import { canViewService } from "@/lib/services-logic";
 import { getCurrentUser } from "@/lib/session";
 import { type ActionResult, error } from "@/lib/types";
-import type { Place, Review } from "@/payload-types";
+import type { Place, Review, Service } from "@/payload-types";
 
 const schema = z.object({
   placeId: z.string(),
   rating: z.number().int().min(1).max(5),
   text: z.string().min(3),
   photoIds: z.array(z.string()).max(3).optional(),
+  serviceId: z.string().optional(),
 });
 
 export async function submitReview(
@@ -37,10 +39,35 @@ export async function submitReview(
     id: parsed.data.placeId,
     overrideAccess: true,
     user,
+    depth: 0,
   })) as Place | null;
   if (!place || !canViewOwnPending(place, user)) {
     return error("NOT_FOUND", "Place not found");
   }
+
+  let serviceId: string | undefined;
+  if (parsed.data.serviceId) {
+    const service = await payload.findByID({
+      collection: "services",
+      id: parsed.data.serviceId,
+      overrideAccess: true,
+      user,
+    });
+    if (!service || !canViewService(service as Service, user)) {
+      return error("NOT_FOUND", "Service not found");
+    }
+    const attached = (place.services ?? []).some(
+      (s) => (typeof s === "string" ? s : s.id) === parsed.data.serviceId,
+    );
+    if (!attached) {
+      return error("NOT_FOUND", "Service not available for this place");
+    }
+    serviceId = parsed.data.serviceId;
+  }
+
+  const serviceFilter = serviceId
+    ? { service: { equals: serviceId } }
+    : { service: { exists: false } };
 
   const existing = await payload.find({
     collection: "reviews",
@@ -48,6 +75,7 @@ export async function submitReview(
       and: [
         { place: { equals: parsed.data.placeId } },
         { author: { equals: user.id } },
+        serviceFilter,
       ],
     },
     limit: 1,
@@ -61,6 +89,7 @@ export async function submitReview(
     status: "published" as const,
     author: user.id,
     place: parsed.data.placeId,
+    service: serviceId,
     photos: (parsed.data.photoIds || []).map((id) => ({ image: id })),
   };
 

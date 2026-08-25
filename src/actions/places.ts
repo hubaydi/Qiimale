@@ -69,13 +69,7 @@ export async function addPlace(
       overrideAccess: true,
     });
     serviceIds = found.docs
-      .filter(
-        (s) =>
-          s.status === "approved" ||
-          (typeof s.submittedBy === "object"
-            ? s.submittedBy?.id
-            : s.submittedBy) === user.id,
-      )
+      .filter((s) => s.status === "approved" || canViewOwnPending(s, user))
       .map((s) => s.id);
   }
 

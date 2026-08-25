@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 import { isAdmin, isAdminAccess } from "@/access/isAdmin";
+import { recomputeOnServiceStatusChange } from "@/hooks/recomputeOnServiceStatusChange";
 
 export const Services: CollectionConfig = {
   slug: "services",
@@ -14,6 +15,9 @@ export const Services: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
     admin: isAdminAccess,
+  },
+  hooks: {
+    afterChange: [recomputeOnServiceStatusChange],
   },
   fields: [
     { name: "name", type: "text", required: true, localized: true },

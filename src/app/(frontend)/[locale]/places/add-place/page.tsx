@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getPayloadClient } from "@/lib/get-payload";
 import { visibleContentQuery } from "@/lib/places-logic";
+import { visibleServicesQuery } from "@/lib/services-logic";
 import { getCurrentUser } from "@/lib/session";
 import { AddPlaceForm } from "./_component/AddPlaceForm";
 
@@ -12,7 +13,7 @@ export default async function AddPlacePage() {
 
   const payload = await getPayloadClient();
 
-  const [cities, cats] = await Promise.all([
+  const [cities, cats, services] = await Promise.all([
     payload.find({
       collection: "cities",
       where: visibleContentQuery(user),
@@ -23,6 +24,12 @@ export default async function AddPlacePage() {
       collection: "categories",
       where: visibleContentQuery(user),
       limit: 100,
+      overrideAccess: true,
+    }),
+    payload.find({
+      collection: "services",
+      where: visibleServicesQuery(user),
+      limit: 200,
       overrideAccess: true,
     }),
   ]);
@@ -46,6 +53,12 @@ export default async function AddPlacePage() {
           name: c.name,
           description: c.description,
           status: c.status,
+        }))}
+        services={services.docs.map((s) => ({
+          id: s.id,
+          name: s.name,
+          description: s.description,
+          status: s.status,
         }))}
       />
     </div>

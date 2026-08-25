@@ -11,6 +11,7 @@ import { createCategory } from "@/actions/categories";
 import { createCity } from "@/actions/cities";
 import { uploadMedia } from "@/actions/media";
 import { addPlace } from "@/actions/places";
+import { createService } from "@/actions/services";
 import { Button } from "@/components/ui/button";
 import type { ActionResult } from "@/lib/types";
 import { CreateModal } from "./CreateModal";
@@ -18,7 +19,8 @@ import { StepCategorySelect } from "./StepCategorySelect";
 import { StepCitySelect } from "./StepCitySelect";
 import { StepDetails } from "./StepDetails";
 import { StepIndicator } from "./StepIndicator";
-import type { CategoryOption, CityOption } from "./types";
+import { StepServicesSelect } from "./StepServicesSelect";
+import type { CategoryOption, CityOption, ServiceOption } from "./types";
 
 const addPlaceSchema = z.object({
   name: z.string().min(5).max(100),
@@ -38,21 +40,26 @@ async function uploadPlaceImage(file: File): Promise<string | null> {
 export function AddPlaceForm({
   cities: initialCities,
   categories: initialCategories,
+  services: initialServices,
 }: {
   cities: CityOption[];
   categories: CategoryOption[];
+  services: ServiceOption[];
 }) {
   const t = useTranslations("AddPlace");
   const tErr = useTranslations("Errors");
   const router = useRouter();
 
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
   const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
   const [cities, setCities] = useState<CityOption[]>(initialCities);
   const [cats, setCats] = useState<CategoryOption[]>(initialCategories);
+  const [services, setServices] = useState<ServiceOption[]>(initialServices);
   const [cityModalOpen, setCityModalOpen] = useState(false);
   const [catModalOpen, setCatModalOpen] = useState(false);
+  const [serviceModalOpen, setServiceModalOpen] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -88,6 +95,7 @@ export function AddPlaceForm({
   function canGoNext(): boolean {
     if (step === 1) return selectedCityId !== null;
     if (step === 2) return selectedCatId !== null;
+    if (step === 3) return true;
     return true;
   }
 
@@ -96,12 +104,14 @@ export function AddPlaceForm({
     setServerError(null);
     if (step === 1) setStep(2);
     else if (step === 2) setStep(3);
+    else if (step === 3) setStep(4);
   }
 
   function handleBack() {
     setServerError(null);
     if (step === 2) setStep(1);
     else if (step === 3) setStep(2);
+    else if (step === 4) setStep(3);
   }
 
   function onSubmit(data: AddPlaceFormValues) {
@@ -117,6 +127,7 @@ export function AddPlaceForm({
         name: data.name,
         categoryId: selectedCatId,
         cityId: selectedCityId,
+        serviceIds: selectedServiceIds,
         address: data.address || "",
         description: data.description || "",
         imageId,
@@ -141,6 +152,17 @@ export function AddPlaceForm({
   ) {
     setCats((prev) => [...prev, { id, name, description }]);
     setSelectedCatId(id);
+  }
+
+  function toggleService(id: string) {
+    setSelectedServiceIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  }
+
+  function handleServiceCreated(id: string, name: string) {
+    setServices((prev) => [...prev, { id, name }]);
+    setSelectedServiceIds((prev) => [...prev, id]);
   }
 
   return (
@@ -168,6 +190,14 @@ export function AddPlaceForm({
           />
         )}
         {step === 3 && (
+          <StepServicesSelect
+            services={services}
+            selectedIds={selectedServiceIds}
+            onToggle={toggleService}
+            onCreate={() => setServiceModalOpen(true)}
+          />
+        )}
+        {step === 4 && (
           <StepDetails
             selectedCityId={selectedCityId}
             selectedCatId={selectedCatId}
@@ -203,7 +233,7 @@ export function AddPlaceForm({
             <div />
           )}
 
-          {step < 3 ? (
+          {step < 4 ? (
             <button
               type="button"
               onClick={handleNext}
@@ -247,6 +277,17 @@ export function AddPlaceForm({
         onSubmitAction={async (name) => {
           const res = await createCategory(name);
           if (res.ok) handleCategoryCreated(res.data.id, name);
+          return res;
+        }}
+      />
+      <CreateModal
+        open={serviceModalOpen}
+        onClose={() => setServiceModalOpen(false)}
+        title={t("createService")}
+        label={t("serviceName")}
+        onSubmitAction={async (name, description) => {
+          const res = await createService(name, description);
+          if (res.ok) handleServiceCreated(res.data.id, name);
           return res;
         }}
       />

@@ -70,6 +70,19 @@ export function ManageServices({
 
   return (
     <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+      <div className="flex items-start gap-3">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Plus size={16} aria-hidden />
+        </span>
+        <div>
+          <h3 className="font-jakarta text-sm font-semibold text-foreground">
+            {t("addService")}
+          </h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {t("addServiceHint")}
+          </p>
+        </div>
+      </div>
       <div className="flex items-center gap-2">
         <input
           value={name}
@@ -106,9 +119,10 @@ export function ManageServices({
             type="button"
             onClick={attach}
             disabled={!attachId || isPending}
-            className="rounded-lg border border-input px-3 py-2 text-sm disabled:opacity-50 cursor-pointer"
+            aria-label={t("attachService")}
+            className="inline-flex items-center justify-center rounded-lg border border-input px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50 cursor-pointer"
           >
-            +
+            <Plus size={16} aria-hidden />
           </button>
         </div>
       )}

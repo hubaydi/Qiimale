@@ -221,7 +221,7 @@ export function ReviewForm({
                 <label className="flex flex-col items-center justify-center aspect-square rounded-xl border-2 border-dashed border-input hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-center p-2">
                   <Upload size={20} className="text-muted-foreground mb-1" />
                   <span className="text-xs text-muted-foreground font-medium">
-                    Ku dar sawir
+                    {t("addPhoto")}
                   </span>
                   <input
                     type="file"
@@ -252,7 +252,7 @@ export function ReviewForm({
               {isPending ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Loading...</span>
+                  <span>{t("submitting")}</span>
                 </>
               ) : (
                 <span>{t("submit")}</span>

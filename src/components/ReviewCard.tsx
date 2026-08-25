@@ -50,14 +50,14 @@ export async function ReviewCard({
   }
 
   return (
-    <article className="rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-soft space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 font-bold text-primary">
+    <article className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-soft transition-shadow hover:shadow-lift sm:p-6">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary to-primary/55 font-jakarta text-sm font-bold text-primary-foreground ring-2 ring-primary/10">
             {author?.name ? author.name.charAt(0).toUpperCase() : "?"}
           </div>
-          <div>
-            <div className="font-semibold text-sm">
+          <div className="min-w-0">
+            <div className="truncate text-sm font-semibold text-foreground">
               {author?.name || t("by", { name: "Macaamiil" })}
             </div>
             <div className="text-xs text-muted-foreground">
@@ -72,10 +72,15 @@ export async function ReviewCard({
             </div>
           </div>
         </div>
-        <StarRating value={review.rating} size={16} />
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <StarRating value={review.rating} size={15} />
+          <span className="rounded-md bg-rating/10 px-1.5 py-0.5 text-xs font-bold text-rating">
+            {review.rating.toFixed(1)}
+          </span>
+        </div>
       </div>
 
-      <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">
+      <p className="mt-4 text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">
         {review.text}
       </p>
 
@@ -105,7 +110,7 @@ export async function ReviewCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between border-t border-border/70 pt-4">
+      <div className="mt-4 flex items-center justify-between border-t border-border/70 pt-4">
         <div className="flex items-center gap-4">
           <UpvoteButton
             reviewId={review.id}

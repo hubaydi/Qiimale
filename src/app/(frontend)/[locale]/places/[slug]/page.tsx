@@ -1,4 +1,11 @@
-import { ArrowLeft, ExternalLink, MapPin } from "lucide-react";
+import {
+  ChevronRight,
+  ExternalLink,
+  Info,
+  MapPin,
+  PenLine,
+  Store,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +22,7 @@ import {
   ServiceReviewTabs,
 } from "@/components/ServiceReviewTabs";
 import { StarRating } from "@/components/StarRating";
+import { Button } from "@/components/ui/button";
 import { getPayloadClient } from "@/lib/get-payload";
 import { type MediaField, mediaAlt, mediaUrl } from "@/lib/media";
 import { placeMetadata } from "@/lib/place-meta";
@@ -50,6 +58,60 @@ export async function generateMetadata({
   return placeMetadata(place, locale as "so" | "en");
 }
 
+/** Circular rating gauge — the page's signature stat, rendered with pure SVG. */
+function RatingRing({
+  value,
+  size = 104,
+  stroke = 9,
+}: {
+  value: number;
+  size?: number;
+  stroke?: number;
+}) {
+  const clamped = Math.min(Math.max(value, 0), 5);
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - clamped / 5);
+
+  return (
+    <div
+      className="relative inline-flex items-center justify-center"
+      role="img"
+      aria-label={`${clamped.toFixed(1)} / 5`}
+    >
+      <svg width={size} height={size} className="-rotate-90" aria-hidden="true">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--muted)"
+          strokeWidth={stroke}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--rating)"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-jakarta text-3xl font-bold leading-none text-foreground">
+          {clamped.toFixed(1)}
+        </span>
+        <span className="mt-1 text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+          / 5
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default async function PlacePage({
   params,
 }: {
@@ -57,6 +119,7 @@ export default async function PlacePage({
 }) {
   const { slug } = await params;
   const t = await getTranslations("Place");
+  const tNav = await getTranslations("Nav");
   const locale = await getLocale();
 
   const payload = await getPayloadClient();
@@ -191,100 +254,146 @@ export default async function PlacePage({
   const totalReviews = place.reviewCount || 0;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4">
-      {/* Back button & Breadcrumb */}
-      <div className="flex items-center gap-2">
+    <div className="mx-auto max-w-5xl space-y-10 py-6 sm:py-10">
+      {/* Breadcrumb */}
+      <nav
+        aria-label="Breadcrumb"
+        className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground"
+      >
+        <Link href="/" className="transition-colors hover:text-foreground">
+          {tNav("home")}
+        </Link>
+        <ChevronRight
+          size={14}
+          className="text-muted-foreground/50"
+          aria-hidden
+        />
         <Link
           href="/search"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="transition-colors hover:text-foreground"
         >
-          <ArrowLeft size={16} />
-          <span>
-            {locale === "so" ? "Ku laabo raadinta" : "Back to search"}
-          </span>
+          {tNav("search")}
         </Link>
-      </div>
+        <ChevronRight
+          size={14}
+          className="text-muted-foreground/50"
+          aria-hidden
+        />
+        <span className="max-w-52 truncate font-medium text-foreground sm:max-w-xs">
+          {place.name}
+        </span>
+      </nav>
 
-      {/* Main Info Card */}
+      {/* Hero card */}
       <Reveal
         as="div"
-        className="rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-soft"
+        className="overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-lift"
       >
-        {imageUrl ? (
-          <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-video lg:aspect-[16/9]">
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 896px, (min-width: 640px) 100vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-        ) : null}
-        <div className="relative p-6 sm:p-8">
-          <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-            <div className="space-y-4">
-              <div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                  {category?.name || "Qayb"}
-                </span>
-                <h1 className="text-3xl font-extrabold tracking-tight mt-2">
-                  {place.name}
-                </h1>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-muted-foreground">
-                {city && (
-                  <div className="flex items-center gap-1">
-                    <MapPin size={16} className="text-primary" />
-                    <span>{city.name}</span>
+        <div className="p-6 sm:p-8 lg:p-10">
+          <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
+            <div className="min-w-0 flex-1 space-y-5">
+              <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+                {imageUrl ? (
+                  <div className="relative size-50 shrink-0 overflow-hidden rounded-2xl border border-border bg-muted shadow-soft">
+                    <Image
+                      src={imageUrl}
+                      alt={imageAlt}
+                      fill
+                      priority
+                      sizes="200px"
+                      className="object-contain p-2"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex size-50 shrink-0 items-center justify-center rounded-2xl border border-border bg-linear-to-br from-muted to-muted/40">
+                    <Store
+                      size={40}
+                      strokeWidth={1.25}
+                      className="text-muted-foreground/30"
+                      aria-hidden
+                    />
                   </div>
                 )}
-                {place.address && (
-                  <div className="flex items-center gap-1 border-l pl-4 border-border">
-                    <span>{place.address}</span>
+
+                <div className="min-w-0 space-y-5">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      <Store size={13} aria-hidden />
+                      {category?.name || "Qayb"}
+                    </span>
+                    <h1 className="mt-3 font-jakarta text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                      {place.name}
+                    </h1>
+                    <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                      {t("reviewIntro", { name: place.name })}
+                    </p>
                   </div>
-                )}
+
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                    {city && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin
+                          size={15}
+                          className="text-primary"
+                          aria-hidden
+                        />
+                        <span className="font-medium text-foreground/80">
+                          {city.name}
+                        </span>
+                      </span>
+                    )}
+                    {place.address && (
+                      <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                        <span
+                          className="size-1 rounded-full bg-border"
+                          aria-hidden
+                        />
+                        <span>{place.address}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  {website && (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="w-fit"
+                    >
+                      <a
+                        href={website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink aria-hidden />
+                        {t("visitWebsite")}
+                      </a>
+                    </Button>
+                  )}
+
+                  {place.description && (
+                    <p className="max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+                      {place.description}
+                    </p>
+                  )}
+                </div>
               </div>
-
-              {website && (
-                <a
-                  href={website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors w-fit"
-                >
-                  <ExternalLink size={15} />
-                  {(() => {
-                    try {
-                      return new URL(website).hostname.replace(/^www\./, "");
-                    } catch {
-                      return website;
-                    }
-                  })()}
-                </a>
-              )}
-
-              {place.description && (
-                <p className="text-sm text-foreground/80 max-w-2xl leading-relaxed pt-2">
-                  {place.description}
-                </p>
-              )}
 
               {services.length > 0 && (
-                <div className="pt-2">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <div>
+                  <h3 className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                     {t("services")}
-                  </span>
-                  <ul className="mt-2 space-y-1">
+                  </h3>
+                  <ul className="mt-2.5 flex flex-wrap gap-2">
                     {services.map((s) => (
                       <li
                         key={s.id}
-                        className="flex items-center gap-2 text-sm text-foreground/80"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-primary/15 bg-primary/5 px-3 py-1 text-xs font-medium text-primary"
                       >
-                        <span className="text-primary">•</span>
+                        <span
+                          className="size-1.5 rounded-full bg-primary"
+                          aria-hidden
+                        />
                         {s.name}
                       </li>
                     ))}
@@ -293,23 +402,44 @@ export default async function PlacePage({
               )}
             </div>
 
-            <div className="flex flex-col items-center justify-center p-4 bg-muted/30 rounded-xl border border-border/50 min-w-37.5 shrink-0 text-center">
-              <span className="text-4xl font-black text-foreground">
-                {place.ratingAvg?.toFixed(1) ?? "0.0"}
-              </span>
-              <div className="my-2">
-                <StarRating
-                  value={Math.round(place.ratingAvg || 0)}
-                  size={18}
-                />
+            <aside className="shrink-0 lg:w-64">
+              <div className="flex flex-col items-center gap-3 rounded-2xl border border-border/70 bg-muted/30 p-6 text-center">
+                <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                  {t("rating")}
+                </span>
+                <RatingRing value={place.ratingAvg || 0} />
+                <div className="flex flex-col items-center gap-1">
+                  <StarRating
+                    value={Math.round(place.ratingAvg || 0)}
+                    size={16}
+                  />
+                  <span className="text-xs text-muted-foreground">
+                    {t("reviews", { count: totalReviews })}
+                  </span>
+                </div>
+                <a
+                  href="#write-review"
+                  className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+                >
+                  <PenLine size={15} aria-hidden />
+                  {t("writeReview")}
+                </a>
               </div>
-              <span className="text-xs text-muted-foreground font-medium">
-                {t("reviews", { count: totalReviews })}
-              </span>
-            </div>
+            </aside>
           </div>
         </div>
       </Reveal>
+
+      {place.status === "pending" && (
+        <div className="flex items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-foreground/90">
+          <Info
+            size={18}
+            className="mt-0.5 shrink-0 text-primary"
+            aria-hidden
+          />
+          <p>{t("pending")}</p>
+        </div>
+      )}
 
       {user && (
         <ManageServices
@@ -320,8 +450,20 @@ export default async function PlacePage({
         />
       )}
 
-      <section className="space-y-4">
-        <h2 className="font-bold text-xl tracking-tight">{t("writeReview")}</h2>
+      <section id="write-review" className="scroll-mt-24 space-y-5">
+        <div className="flex items-center gap-3">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <PenLine size={20} aria-hidden />
+          </span>
+          <div>
+            <h2 className="font-jakarta text-xl font-bold tracking-tight text-foreground">
+              {t("writeReview")}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {t("writeReviewHint")}
+            </p>
+          </div>
+        </div>
         <ReviewForm
           placeId={place.id}
           placeSlug={place.slug}

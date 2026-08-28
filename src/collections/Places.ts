@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 import { isAdmin, isAdminAccess } from "@/access/isAdmin";
+import { notifyAdminOfNewPlace } from "@/hooks/notifyAdminOfNewPlace";
 
 export const Places: CollectionConfig = {
   slug: "places",
@@ -14,6 +15,9 @@ export const Places: CollectionConfig = {
       "reviewCount",
       "ratingAvg",
     ],
+  },
+  hooks: {
+    afterChange: [notifyAdminOfNewPlace],
   },
   access: {
     read: isAdmin,

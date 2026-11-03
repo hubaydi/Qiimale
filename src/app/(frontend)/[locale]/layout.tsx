@@ -86,7 +86,7 @@ export default async function LocaleLayout({
         <Toaster richColors position="top-center" />
         <Script
           src="https://analytics.hobaydi.com/script.js"
-          data-website-id="3b3466fc-0b63-452d-bb0a-c74eae277d3e"
+          data-website-id="b0fd0aef-7e9f-4d64-8b43-936443b3f114"
           strategy="afterInteractive"
         />
       </body>
